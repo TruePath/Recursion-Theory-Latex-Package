@@ -12,6 +12,9 @@
 \RequirePackage{xkeyval}
 \RequirePackage{undertilde}
 \RequirePackage{stmaryrd}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+
 
 \newcommand*{\PMG@arginit}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined}
 
@@ -28,7 +31,7 @@
 }
 
 \newcommand*{\@recthy@abs}[1]{\lvert#1\rvert}
-
+\newcommand*{\@recthy@ensuretext}[1]{\ensuremath{\text{#1}}}
 \AtEndOfPackage{
 \ifrecthy@nomath
 	\@packinfo{No math loading.}
@@ -41,6 +44,9 @@
 
 	\newcommand*{\meet}{\mathbin{\wedge}}
 	\newcommand*{\join}{\mathbin{\vee}}
+	\newcommand*{\Meet}{\mathop{\bigwedge}}
+	\let\MnJoin=\Join
+	\renewcommand*{\Join}{\mathop{\bigvee}}
 	\recthy@strip{abs}
 	\DeclareMathOperator{\dom}{dom}
 	\DeclareMathOperator{\rng}{rng}
@@ -48,10 +54,11 @@
 	\newcommand*{\ordpair}[2]{\left( #1, #2 \right) }
 	%%%%%%%%Function commands
 	\newcommand*{\map}[2]{:#1\mapsto #2}
-	\newcommand*{\functo}[3]{\ensuremath{#1\map{#2}{#3}}}
+	\newcommand*{\functo}[3]{#1\map{#2}{#3}}
 	\newcommand*{\compfunc}{\mathbin{\circ}}
 	\let\compose=\compfunc
 	\let\funcomp=\compfunc
+	\recthy@strip{ensuretext}
 \fi
 }
 
@@ -94,16 +101,16 @@
 \fi
 }
 
-\newcommand*{\@recthy@re}{\ensuretext{r.e.}}
-\newcommand*{\@recthy@ce}{\ensuretext{c.e.}}
-\newcommand*{\@recthy@recursive}{recursive}
-\newcommand*{\@recthy@computable}{computable}
-\newcommand*{\@recthy@recursivelyEnumerable}{recursively enumerable}
-\newcommand*{\@recthy@computablyEnumerable}{computably enumerable}
-\newcommand*{\@recthy@Recursive}{Recursive}
-\newcommand*{\@recthy@Computable}{Computable}
-\newcommand*{\@recthy@RecursivelyEnumerable}{Recursively enumerable}
-\newcommand*{\@recthy@ComputablyEnumerable}{Computably enumerable}
+\newcommand*{\@recthy@re}{\@recthy@ensuretext{r.e.}}
+\newcommand*{\@recthy@ce}{\@recthy@ensuretext{c.e.}}
+\newcommand*{\@recthy@recursive}{\@recthy@ensuretext{recursive}}
+\newcommand*{\@recthy@computable}{\@recthy@ensuretext{computable}}
+\newcommand*{\@recthy@recursivelyEnumerable}{\@recthy@ensuretext{recursively enumerable}}
+\newcommand*{\@recthy@computablyEnumerable}{\@recthy@ensuretext{computably enumerable}}
+\newcommand*{\@recthy@Recursive}{\@recthy@ensuretext{Recursive}}
+\newcommand*{\@recthy@Computable}{\@recthy@ensuretext{Computable}}
+\newcommand*{\@recthy@RecursivelyEnumerable}{\@recthy@ensuretext{Recursively enumerable}}
+\newcommand*{\@recthy@ComputablyEnumerable}{\@recthy@ensuretext{Computably enumerable}}
 \newcommand*{\@recthy@REA}{\ensuremath{\text{REA}}}
 \WithSuffix\def\@recthy@REA[#1]{#1-\REA\relax}
 \newcommand*{\@recthy@CEA}{\ensuremath{\text{CEA}}}
@@ -134,18 +141,22 @@
 	\let\@recthy@computable=\@recthy@recursive
 	\let\@recthy@computablyEnumerable=\@recthy@recursivelyEnumerable
 	\let\@recthy@ComputablyEnumerable=\@recthy@RecursivelyEnumerable
-	\let\@recthy@CEA=\@recthy@REA
 	} %Make all references to ce change to re
-
+	
+	\DeclareOptionX<\@recthy@family>{rea}{%
+		\let\@recthy@CEA=\@recthy@REA
+		}
+		
 \DeclareOptionX<\@recthy@family>{ce}{%
 	\let\@recthy@re=\@recthy@ce
 	\let\@recthy@recursive=\@recthy@computable
 	\let\@recthy@recursivelyEnumerable=\@recthy@computablyEnumerable
 	\let\@recthy@RecursivelyEnumerable=\@recthy@ComputablyEnumerable
-		\let\@recthy@REA=\@recthy@CEA
 	} %Make all references to re change to ce
 
-
+\DeclareOptionX<\@recthy@family>{cea}{%
+			\let\@recthy@REA=\@recthy@CEA
+			}
 % Set stuff
 
 \newcommand*{\@recthy@set}[2]{\ifthenelse{\isempty{#2}}{\left \{  #1 \right \}}{\left \{ #1 \middle | #2\right \}} }
@@ -160,12 +171,17 @@
 \newcommand*{\@recthy@powset}[1]{\mathcal{P}\left(#1\right)}
 \newcommand*{\@recthy@eset}{\emptyset}
 \newcommand*{\@recthy@nin}{\mathrel{\not\in}}
-\newcommand*{\@recthy@setcmpminusSYM}{~}
-\newcommand*{\@recthy@setcmp}[1]{\overline{#1}}
+\newcommand*{\@recthy@setcmpminusSYM}{\backsim}
+\newcommand*{\@recthy@setminuscmp}[1]{\mathop{\@recthy@setcmpminusSYM} #1}
+\newcommand*{\@recthy@setovercmp}[1]{\overline{#1}}
+\let\@recthy@setcmp=\@recthy@setovercmp
+\def\@recthy@setminusSYM{-}
+
 
 \DeclareOptionX<\@recthy@family>{setminussym}{\def\@recthy@setminusSYM{#1}}
-\DeclareOptionX<\@recthy@family>{minussetcmp}{\renewcommand*{\@recthy@setcmp}[1]{\mathop{\@recthy@setcmpminusSYM} #1}}
-\newcommand*{\@recthy@setminus}{\mathbin{\@recthy@setcmpminusSYM}}
+\DeclareOptionX<\@recthy@family>{setcmpminussym}{\def\@recthy@setminusSYM{#1}}
+\DeclareOptionX<\@recthy@family>{minussetcmp}{\let\@recthy@setcmp=\@recthy@setminuscmp}
+\newcommand*{\@recthy@setminus}{\mathbin{\@recthy@setminusSYM}}
 
 
 
@@ -185,10 +201,13 @@
 	\recthy@strip{eset}
 	\recthy@strip{nin}
 	\recthy@strip{setcmp}
-	\def\setminus{\@recthy@setminus}
+	\recthy@strip{setovercmp}
+	\recthy@strip{setminuscmp}
+	\recthy@strip{setminus}
 	\newcommand*{\cross}{\mathbin{\times}}
-	\newcommand*{\crossOperator}{\mathop{\Pi}}
-	\WithSuffix\def\cross[#1][#2]{\crossOperator_{#1}^{#2}}
+	\let\CrossOrig=\Cross
+	\def\Cross{}
+	\renewcommand*{\Cross}{\mathop{\Pi}}
 	\newcommand*{\symdiff}{\mathbin{\Delta}}
 	\DeclareMathOperator{\interior}{int}
 	\DeclareMathOperator{\closure}{cl}
@@ -200,16 +219,25 @@
 	\@packinfo{No quants loading.}
 \else
 	\@packinfo{Quants loading.}
-	\WithSuffix\def\exists[#1]{\left(\exists\, #1 \right)\!}
-	\WithSuffix\def\forall[#1]{\left(\forall\, #1 \right)\!}
-	\WithSuffix\def\nexists[#1]{\left(\nexists\, #1 \right)\!}
-
-
-
+	\WithSuffix\def\exists(#1){\left(\exists\, #1 \right)\!}
+	\WithSuffix\def\forall(#1){\left(\forall\, #1 \right)\!}
+	\WithSuffix\def\nexists(#1){\left(\nexists\, #1 \right)\!}
+	\WithSuffix\def\exists[#1]{\left[\exists\, #1 \right]\!}
+	\WithSuffix\def\forall[#1]{\left[\forall\, #1 \right]\!}
+	\WithSuffix\def\nexists[#1]{\left[\nexists\, #1 \right]\!}
+	\WithSuffix\def\forall*{\forallae}
+	\WithSuffix\def\exists*{\existsinf}
+	\WithSuffix\def\nexists*{\nexistsinf}
+	
+	\newcommand*{\forallae}{\forall^{*}}
+	\WithSuffix\def\forallae(#1){\left(\forallae\, #1\right)\!}
+	\WithSuffix\def\forallae[#1]{\left[\forallae\, #1\right]\!}
 	\newcommand*{\existsinf}{\exists^{\infty}}
-	\WithSuffix\def\existsinf[#1]{\left(\existsinf\, #1\right)\!}
+	\WithSuffix\def\existsinf(#1){\left(\existsinf\, #1\right)\!}
+	\WithSuffix\def\existsinf[#1]{\left[\existsinf\, #1\right]\!}
 	\newcommand*{\nexistsinf}{\nexists^{\infty}}
-	\WithSuffix\def\nexistsinf[#1]{\left(\nexistsinf\, #1\right)\!}
+	\WithSuffix\def\nexistsinf(#1){\left(\nexistsinf\, #1\right)\!}
+	\WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf\, #1\right]\!}
 
 	\newcommand*{\True}{\top}
 	\newcommand*{\False}{\bot}
@@ -234,9 +262,9 @@
 	\newcommand*{\wstrs}{\omega^{<\omega}}
 
 	\newcommand*{\cantor}{2^{\omega}}
-	\WithSuffix\def\cantor*{\left(2\union \diverge \right)^{\omega}}
+	% \WithSuffix\def\cantor*{\left(2\union \diverge \right)^{\omega}}
 	\newcommand*{\baire}{\omega^{\omega}}
-	\WithSuffix\def\baire*{\left(\omega \union \diverge \right)^{\omega}}
+	% \WithSuffix\def\baire*{\left(\omega \union \diverge \right)^{\omega}}
 	\newcommand*{\Baire}{\mathcal{N}}
 \fi
 }
@@ -292,6 +320,7 @@
 	\@packinfo{Trees loading.}
 	\newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
 	\newcommand*{\pruneTree}[2][\infty]{\CBderiv[#1]{#2}}
+	\newcommand*{\hgt}[1]{\lVert #1 \rVert}
 \fi
 }
 
@@ -434,13 +463,15 @@ _{#1}
 
 \newcommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
 \newcommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
-\newcommand*{\Tjoin}{\Tdegjoin}
 \newcommand*{\Tmeet}{\Tdegmeet}
-\newcommand*{\TsetJoin}{\mathbin{\oplus}}
-\WithSuffix\def\TsetJoin[#1][#2]{\mathop{\bigoplus}^{#2}_{#1}}
-\newcommand*{\Tplus}{\TsetJoin}
+\newcommand*{\Tsetjoin}{\mathbin{\oplus}}
+\newcommand*{\TsetJoin}{\mathop{\bigoplus}}
+\newcommand*{\Tplus}{\Tsetjoin}
+\newcommand*{\TPlus}{\TsetJoin}
+\newcommand*{\Tjoin}{\Tsetjoin}
+\newcommand*{\TJoin}{\TsetJoin}
 
-\DeclareOptionX<\@recthy@family>{setjoin}{\def\Tjoin{\TsetJoin}}
+\DeclareOptionX<\@recthy@family>{degjoin}{\def\Tjoin{\Tdegjoin}}
 
 
 
@@ -496,10 +527,11 @@ _{#1}
 	\newcommand*{\kleenengeq}[1][]{\ngeq_{\kleeneO\ifthenelse{\isempty{#1}}{}{,#1}}}
 	\newcommand*{\kleenePlus}{\mathbin{+_{\kleeneO}}}
 	\newcommand*{\kleeneMul}{\cdot_{\kleeneO}}
-	\newcommand*{\kleeneOrd}[1]{\lvert #1\rvert_{\kleeneO}}
+	\newcommand*{\kleeneOrd}[1]{\lVert #1\rVert_{\kleeneO}}
 	\let\kleenehgt=\kleeneOrd
 	\newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
 	\newcommand*{\kleenepred}[1]{{#1}^{-}}
+	\let\hgtO=\kleenehgt
 \fi
 }
 

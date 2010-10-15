@@ -5,10 +5,11 @@
 %  Copyright (c) 2010 . All rights reserved.
 %
 
-\documentclass[11pt,oneside]{amsart}
+\documentclass[11pt,oneside]{article}
 \usepackage{rec-thy}
 \usepackage{multirow}
 \usepackage{booktabs}
+\usepackage{xtab}
 
 \newcommand{\tab}{\hspace{1cm}}
 % Uncomment some of the following if you use the features
@@ -53,41 +54,146 @@
 \end{abstract}
 
 \section{Introduction}
-Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the latex source.  The author hopes that eventually this package may grow to incorporate other areas of mathematical logic but, though some effort has already been made in this direction, the author has chosen to call the package rec-thy.sty so as not to introduce incompatibilities with a future mathlogic.sty.
+This package aims to provide a useful set of \LaTeX macros covering basic computability theory notation.  Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the latex source.  The author hopes that eventually this package may be incorporated into some larger package for typesetting papers in mathematical logic.
+
+While computability theory is now the more popular name for the subject also known as recursion theory the author deliberately choose to title this package rec-thy to avoid confusion with the proliferation of packages for typesetting computer science related disciplines.  While the subject matter of computability theory and theoretical computer science overlap significantly the notational conventions often differ.
 
 \section{Usage}
-Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  
+Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and indented to indicate their relation.
 
-The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  If a single command has multiple aliases they are listed 
+Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.   
 
+\section{Commands}
+A few general conventions are usually followed in the commands.  Whenever an operator can be used as a binary operator (as in \( X \union Y \)) and as an operation on some collection \( \Union_{i \in \omega} X_i \) the binary operator will begin with a lowercase letter \verb=\union= and the operation on the collection will begin with a capital letter \verb=\Union=.  If the first letter is already capitalized then the second letter is used instead.
+
+Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
+
+Unless indicated otherwise all macros are to be used inside math mode.
+
+
+
+\newpage
 \subsection{General Math Commands}
-To disable these commands pass the option \verb=nomath=.
+To disable these commands pass the option \verb=nomath=. \\
 
-\begin{tabular}{l |  l | l}                                
-	\verb=\eqdef= 					& \( \eqdef \) & Definitional equals\\
-	\midrule
-	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\
-	\midrule
-	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\
-	\midrule
-	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\
-	\midrule
-	\verb=x \meet y= 					& \( \meet \) & Meet operation \\
-	\verb=\join= 					& \( \join \) & Join operation \\
-	\verb=\abs{x}= 					& \( \abs{x} \)\\
-	\verb=\dom= 					& \( \dom \) \\
-	\verb=\rng= 					& \( \rng \) \\
-	\verb=f\restr{X}= 				& \( f\restr{X} \) \\
-	\verb=\ordpair{x}{y}= 				& \( \ordpair{x}{y} \)\\
-	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) \\
-	\verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) \\
-	
-	\verb=f \compfunc g=		       		& \multirow{3}{*}{\( f \compose g \)} \\
-	\tab \verb=f \funcomp g=	            		&\\
-	\tab \verb=f \compose g=	            		&\\
-	
-	\verb=\( \ensuretext{blah} \)=	           	& \( \ensuretext{blah} \)\\
-	\verb=\ensuretext{blah}=			&
-\end{tabular}                                                          
+\begin{tabular}{l |  l | l}\toprule                                
+	\verb=\eqdef= 					& \( \eqdef \) & Definitional equals\\ \midrule
+	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\	\midrule
+	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\ \midrule
+	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\\midrule
+	\verb=x \meet y= 				& \( x \meet y \) & \multirow{2}{*}{Meet operation} \\[6pt]
+	\tab \verb=\Meet_{i\in \omega} x_i=		& \( \Meet_{i\in \omega} x_i \) & \\ \midrule
+	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt] 
+	\tab \verb=\Join_{i\in \omega} x_i=		& \( \Join_{i\in \omega} x_i \) & \\ \midrule
+	\verb=\abs{x}= 					& \( \abs{x} \) & Absolute value\\ \midrule
+	\verb=\dom= 					& \( \dom \) & Domain \\ \midrule
+	\verb=\rng= 					& \( \rng \) & Range\\ \midrule
+	\verb=f\restr{X}= 				& \( f\restr{X} \) & Restriction\\ \midrule
+	\verb=\ordpair{x}{y}= 				& \( \ordpair{x}{y} \)& Ordered Pair\\ \midrule
+	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) & \multirow{2}{*}{Function specification} \\ 
+	\tab \verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) &\\ \midrule
+	\verb=f \compfunc g=		       		& \multirow{3}{*}{\( f \compose g \)} & \multirow{3}{*}{Function composition}\\
+	\tab \verb=f \funcomp g=	            		& &\\
+	\tab \verb=f \compose g=	            		& &\\ \midrule
+	\verb=\( \ensuretext{blah} \)=	           	& \multirow{2}{*}{\( \ensuretext{blah} \)}& \multirow{2}{*}{Types argument in text mode} \\
+	\tab \verb=\ensuretext{blah}=			& & \\
+	\bottomrule
+\end{tabular}          \\
+\newpage
+\subsection{Set Notation}      
+To disable these commands pass the option \verb=nosets=.\\
 
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt] 
+	\tab \verb=\set{(x,y)}}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
+	\verb=\card{X}=                          &    \(   \card{X}                   \)    & Cardinality \\ \midrule
+	\verb=X \union Y=                        &    \(   X \union Y                 \)    & \multirow{2}{*}{Union}  \\[6pt] 
+	\tab \verb=\Union_{i \in \omega} X_i=         &    \(   \Union_{i \in \omega} X_i  \)    &  \\ \midrule
+	\verb=X \isect Y=                        &    \(   X \isect Y                 \)    & \multirow{2}{*}{Intersection} \\[6pt] 
+	\tab \verb=\Isect_{i \in \omega} X_i=         &    \(   \Isect_{i \in \omega} X_i  \)    &  \\ \midrule
+	\verb=X \cross Y=                        &    \(   X \cross Y                 \)    & \multirow{2}{*}{Cartesian product (Cross Product)} \\[6pt] 
+	\tab \verb=\Cross_{i \in \omega} X_i=         &    \(   \Cross_{i \in \omega} X_i  \)    &  \\ \midrule
+	\verb=\powset{\omega}=                   &    \(   \powset{\omega}            \)    &  Powerset \\ \midrule
+	\verb=\eset=                             &    \(   \eset                      \)    &  Emptyset abbreviation\\ \midrule
+	\verb=x \nin A=                          &    \(   x \nin A                   \)    &  not an element\\ \midrule
+	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\[6pt] 
+						 &	\( \setminuscmp{X} \)		    & With option \verb=minussetcmp= \\ \midrule
+	\verb=X \setminus Y=                     &    \(   X \setminus Y              \)    & Set difference \\ \midrule
+	\verb=X \symdiff Y=                      &    \(   X \symdiff Y               \)    & Symmetric difference \\ \midrule
+	\verb=\interior X=                       &    \(   \interior X                \)    & Interior \\ \midrule
+	\verb=\closure X=                        &    \(   \closure X                 \)    & Closure \\ \midrule
+		\bottomrule
+	\end{tabular}          \\
+	
+\subsection{Delimiters}      
+To disable these commands pass the option \verb=nodelim=. \\
+
+\begin{tabular}{l |  l | l}\toprule                                
+	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\ 
+	\tab \verb=\godelnum{\phi}=			& &\\
+	\tab \verb=\cornerquote{\phi}=			& &\\ \midrule
+	\verb=\llangle x,y,z \rrangle=			& \( \llangle x,y,z \rrangle \) & Properly spaced double angle brackets\\
+	\bottomrule
+\end{tabular}  
+
+\subsection{Recursive vs. Computable}      
+To disable these commands pass the option \verb=nonames=. To use recursive, r.e. and recursively enumerable everywhere pass the option \verb=re=.  To use computable, c.e. and computably enumerable everywhere pass the option \verb=ce=.  To force REA and CEA use the options \verb=rea= and \verb=cea=. If none of these options are passed the macros will expand as below.  All macros in this section work in both text and math modes.\\
+
+\begin{tabular}{l |  l }\toprule  
+\verb=\re=				 & \re			       \\ \midrule 
+\verb=\ce=                               & \ce                         \\ \midrule
+\verb=\REA=                              & \REA                        \\ \midrule
+\verb=\CEA=                              & \CEA                        \\ \midrule
+\verb=\recursive=                        & \recursive                  \\ \midrule
+\verb=\computable=                       & \computable                 \\ \midrule
+\verb=\recursivelyEnumerable=            & \recursivelyEnumerable      \\ \midrule             
+\verb=\computablyEnumerable=             & \computablyEnumerable       \\ \midrule
+\verb=\Recursive=                        & \Recursive                  \\ \midrule
+\verb=\Computable=                       & \Computable                 \\ \midrule
+\verb=\RecursivelyEnumerable=            & \RecursivelyEnumerable      \\ \midrule
+\verb=\ComputablyEnumerable=             & \ComputablyEnumerable       \\ \midrule
+	\bottomrule
+\end{tabular}
+
+\subsection{Quantifiers \& Connectives}      
+To disable these commands pass the option \verb=noquants=. The commands \verb=\exists= and \verb=\forall= are standard but the package extends them.\\
+
+\begin{tabular}{l |  l | l}\toprule                                
+	\verb=\exists[x < y]=		& \( \exists[x < y ] \) & \\
+	\tab \verb=\exists(x < y)=		& \( \exists(x < y ) \) & \\ \midrule
+	\verb=\exists*=		& \multirow{2}{*}{\( \exists* \)} & \\
+	\tab \verb=\existsinf=	&				  & \\
+	\tab \verb=\exists*[x < y]=		& \( \exists*[x < y ] \) & \\
+	\tab \verb=\exists*(x < y)=		& \( \exists*(x < y ) \) & \\ \midrule
+	\verb=\nexists[x < y]=		& \( \nexists[x < y ] \) & \\
+	\tab \verb=\nexists(x < y)=		& \( \nexists(x < y ) \) & \\ \midrule
+	\verb=\nexists*=		& \multirow{2}{*}{\( \nexists* \)} & \\
+	\tab \verb=\nexistsinf=	&				  & \\
+	\tab \verb=\nexists*[x < y]=		& \( \nexists*[x < y ] \) & \\
+	\tab \verb=\nexists*(x < y)=		& \( \nexists*(x < y ) \) & \\ \midrule
+	\verb=\forall[x < y]=		& \( \forall[x < y ] \) & \\
+	\tab \verb=\forall(x < y)=		& \( \forall(x < y ) \) & \\ \midrule
+	\verb=\forall*=		& \multirow{2}{*}{\( \forall* \)} &\multirow{4}{*}{For almost all.} \\
+	\tab \verb=\forallae=	&				  & \\
+	\tab \verb=\forall*[x < y]=		& \( \forall*[x < y ] \) & \\
+	\tab \verb=\forall*(x < y)=		& \( \forall*(x < y ) \) & \\ \midrule
+	\verb=\True=				& \( \True \) & \\ \midrule
+	\verb=\False=				& \( \False \) & \\ \midrule
+	\verb=\Land \phi_i=				& \( \Land \phi_i \) & Operator form of and\\ \midrule
+	\verb=\Lor \phi_i=				& \( \Lor \phi_i \) & Operator form of or\\ \midrule
+	\verb=\LLand \phi_i=				& \( \LLand \phi_i \) & Infinitary conjunction\\ \midrule
+	\verb=\LLor \phi_i=				& \( \LLor \phi_i \) & Infinitary disjunction\\ 
+	\bottomrule
+\end{tabular}
+\subsection{Spaces}      
+To disable these commands pass the option \verb=nospaces=.\\
+
+\begin{tabular}{l |  l | l}\toprule  
+	\verb=\bstrs=		       & \( \bstrs  \) & Finite binary strings        \\	\midrule
+	\verb=\wstrs=                 & \( \wstrs  \) & Finite sequences of integers \\ 	\midrule
+	\verb=\cantor=                & \( \cantor \) & Cantor space		     \\    \midrule
+	\verb=\baire=                 & \( \baire  \) & Baire space                  \\ 
+	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\ 
+		\bottomrule
+	\end{tabular}
 \end{document}
