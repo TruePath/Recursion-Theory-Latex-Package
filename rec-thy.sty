@@ -531,11 +531,11 @@ _{#1}
 	\newcommand*{\kleenengeq}[1][]{\ngeq_{\kleeneO\ifthenelse{\isempty{#1}}{}{,#1}}}
 	\newcommand*{\kleenePlus}{\mathbin{+_{\kleeneO}}}
 	\newcommand*{\kleeneMul}{\cdot_{\kleeneO}}
-	\newcommand*{\kleeneOrd}[1]{\lVert #1\rVert_{\kleeneO}}
-	\let\kleenehgt=\kleeneOrd
+	\newcommand*{\kleenehgt}[1]{\lVert #1\rVert_{\kleeneO}}
+	\let\hgtO=\kleenehgt
 	\newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
 	\newcommand*{\kleenepred}[1]{{#1}^{-}}
-	\let\hgtO=\kleenehgt
+	
 \fi
 }
 
