@@ -292,4 +292,51 @@ To disable these commands pass the option \verb=notrees=.\\
 	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\ 
 		\bottomrule
 	\end{tabular}
+	
+\subsection{Set Relations}      
+To disable these commands pass the option \verb=nosetrels=.\\  Note that many of these commands are extensions of existing commands.
+
+\begin{tabular}{l |  l | l}\toprule 
+       \verb=X \subset* Y=    		& \( X \subset*    Y\)	& \multirow{2}{*}{All but finitely much of \( X \) is in \( Y \)} \\ 
+  \tab \verb=X \subseteq* Y=            & \( X \subseteq*  Y\)  & \\ \midrule
+       \verb=X \supset* Y=              & \( X \supset*    Y\)  & \multirow{2}{*}{All but finitely much of \( Y \) is in \( X \)} \\ 
+  \tab \verb=X \supseteq* Y=            & \( X \supseteq*  Y\)  & \\ \midrule
+       \verb=X \eq Y=                   & \( X \eq         Y\)  &  Macro for \verb~=~ \\ \midrule
+       \verb=X \eq* Y=                  & \multirow{2}{*}{\( X \eq*        Y\)}  & \multirow{2}{*}{Equal mod finite} \\ 
+  \tab \verb=X \eqae Y=                 & & \\ \midrule
+       \verb=X \infsubset Y=            & \( X \infsubset  Y\)  & \( X \subset Y \land \card{Y \setminus X}=\omega \) \\ \midrule
+       \verb=X \infsubset* Y=           & \( X \infsubset* Y\)  &  \( X \subset* Y \land \card{Y \setminus X}=\omega \) \\ \midrule
+       \verb=X \infsupset Y=            & \( X \infsupset  Y\)  &  \( Y \subset X \land \card{X \setminus Y}=\omega \) \\ \midrule
+       \verb=X \infsupset* Y=           & \( X \infsupset* Y\)  & \( Y \subset* X \land \card{X \setminus Y}=\omega \) \\ \midrule
+       \verb=X \majsubset Y=            & \( X \majsubset  Y\)  & \( X \) is a major subset of \( Y \) \\ \midrule
+       \verb=X \majsupset Y=            & \( X \majsupset  Y\)  & \( Y \) is a major subset of \( X \) \\ 
+		\bottomrule
+	\end{tabular}
+
+\subsection{Set Relations}      
+To disable these commands pass the option \verb=noordinalnotations=.\\
+
+\begin{tabular}{l |  l | l}\toprule 
+	\wck
+	\ordzero
+	\kleeneO
+	\ordNotations
+	\kleeneO(X)
+	\ordNotations(X)
+	\kleeneOuniq
+	\kleeneO*
+	\uniqOrdNotations
+	\kleeneless
+	\kleenel
+	\kleeneleq
+	\kleenegtr
+	\kleenegeq
+	\kleenePlus
+	\kleeneMul
+	\kleeneOrd}
+        t=\kleeneOr
+	\kleenelim
+        \kleenepred
+
+
 \end{document}

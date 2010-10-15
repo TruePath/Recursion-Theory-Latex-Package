@@ -459,8 +459,8 @@ _{#1}
 	\WithSuffix\def\supset*{\supset^{*}}
 	\WithSuffix\def\subseteq*{\subseteq^{*}}
 	\WithSuffix\def\supseteq*{\supseteq^{*}}
-	\WithSuffix\def\subsetneq*{\subsetneq^{*}}
-	\WithSuffix\def\supsetneq*{\supsetneq^{*}}
+	% \WithSuffix\def\subsetneq*{\subsetneq^{*}}
+	% \WithSuffix\def\supsetneq*{\supsetneq^{*}}
 	\providecommand*{\nsupset}{\not\supset}
 	\providecommand*{\nsubset}{\not\subset}
 	\newcommand*{\eq}{=}
@@ -501,13 +501,22 @@ _{#1}
 \newcommand*{\wck}{\ensuremath{\omega^{ck}_1}}
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
 	\newcommand*{\ordzero}{\ensuremath{0}}
-	\newcommand*{\kleeneO}[1][]{\mathcal{O}^{#1}}
-	\WithSuffix\def\kleeneO(#1){\mathcal{O}^{#1}}
-	\WithSuffix\def\kleeneO*{\kleeneOuniq}
-	\newcommand*{\kleeneOuniq}[1][]{\bar{\mathcal{O}}^{#1}}
-	\WithSuffix\def\kleeneOuniq(#1){\bar{\mathcal{O}}^{#1}}
-	\newcommand*{\ordNotations}{\kleeneO}
-	\newcommand*{\uniqOrdNotations}{\kleeneOuniq}
+	
+	\newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\def\kleeneOSYM{\mathcal{O}}\@kleeneObody}
+	\newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
+	^{\@PMG@parenarg}%
+	\fi%
+	\ifdefined\@PMG@braketarg
+	_{\abs{\@PMG@braketarg}}%
+	\fi}
+	\WithSuffix\def\@kleeneObody(#1){\def\@PMG@parenarg{#1}\@kleeneObody}
+	\WithSuffix\def\@kleeneObody[#1]{\def\@PMG@braketarg{#1}\@kleeneObody}
+	\WithSuffix\def\@kleeneObody*{\def\kleeneOSYM{\overline{\mathcal{O}}}\@kleeneObody}
+	
+
+	\newcommand*{\kleeneOuniq}{\kleeneO*}
+	\let\ordNotations=\kleeneO
+	\let\uniqOrdNotations=\kleeneOuniq
 	\newcommand*{\kleeneless}[1][]{<_{\kleeneO\ifthenelse{\isempty{#1}}{}{,#1}}}
 	\let\kleenel=\kleeneless
 	\newcommand*{\kleeneleq}[1][]{\leq_{\kleeneO\ifthenelse{\isempty{#1}}{}{,#1}}}
