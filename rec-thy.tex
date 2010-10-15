@@ -6,10 +6,12 @@
 %
 
 \documentclass[11pt,oneside]{article}
+\usepackage{amsfonts}
 \usepackage{rec-thy}
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
+
 
 \newcommand{\tab}{\hspace{1cm}}
 % Uncomment some of the following if you use the features
@@ -36,10 +38,9 @@
 %\usepackage[pdftex]{graphicx}
 %\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
 
-\title{The rec-thy Latex Package}
-\author{Peter M. Gerdes}
-
-\date{2010-10-14}
+\title{The rec-thy Package}
+\author{Peter M. Gerdes (gerdes@invariant.org)}
+\date{2010-10-14: Version 1.0}
 
 \begin{document}
 
@@ -54,12 +55,14 @@
 \end{abstract}
 
 \section{Introduction}
-This package aims to provide a useful set of \LaTeX macros covering basic computability theory notation.  Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the latex source.  The author hopes that eventually this package may be incorporated into some larger package for typesetting papers in mathematical logic.
+This package aims to provide a useful set of \LaTeX { }macros covering basic computability theory notation.  Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the \LaTeX { }source.  The author hopes that eventually this package may be incorporated into some larger package for typesetting papers in mathematical logic.
 
 While computability theory is now the more popular name for the subject also known as recursion theory the author deliberately choose to title this package rec-thy to avoid confusion with the proliferation of packages for typesetting computer science related disciplines.  While the subject matter of computability theory and theoretical computer science overlap significantly the notational conventions often differ.
 
+Comments, patches, suggestions etc.. are all welcome.
+
 \section{Usage}
-Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and indented to indicate their relation.
+Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX{ } can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and aliases are indented.
 
 Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.   
 
@@ -341,6 +344,59 @@ To disable these commands pass the option \verb=noordinalnotations=.\\
 \tab	\verb=\hgtO{R}=                        & & \\ 
 		\bottomrule
 	\end{tabular}
-                                                                               
+	
+\subsection{Forcing}      
+To disable these commands pass the option \verb=noforcing=.\\ 
+
+\begin{tabular}{l |  l | l}\toprule 
+	\verb=\sigma \forces \phi=	        	& \multirow{2}{*}{\(  \sigma \forces \phi         \)}	& \multirow{2}{*}{\( \sigma \) forces \( \phi \)}\\ 
+	\tab \verb=\sigma \frc \phi=                        &    & \\ 
+	\verb=\sigma \forces(X) \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & \( \phi \) is formula relative to \( X \) \\ 
+	\verb=\sigma \forces[T] \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & Local forcing on \( T \)\\
+	\verb=\sigma \forces* \phi=                    & \(  \sigma \forces* \phi        \)    & Strong forcing \\ 
+	\bottomrule
+\end{tabular}  
+
+\subsection{Syntax}      
+To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas).
+
+\begin{xtabular}{l |  l | l}\toprule 
+	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
+	\verb=\deltan{2}=              & \( \deltan{2}        \)      & \\ \midrule
+	\verb=\deltan[X]{2}=           & \( \deltan[X]{2}     \)      & \\ \midrule
+	\verb=\deltaZeroN[X]{2}=       & \multirow{2}{*}{\( \deltaZeroN[X]{2} \)}      & \\
+	\tab \verb=\deltazn[X]{2}=          &                              & \\ \midrule
+	\verb=\deltaZeroOne[X]=        & \multirow{2}{*}{\( \deltaZeroOne[X]  \)}      & \\ 
+	\tab \verb=\deltazi[X]=             &                              & \\ \midrule         
+	\verb=\deltaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\ 
+	\tab \verb=\deltazii[X]=            &                              & \\ \midrule         
+	\verb=\deltaZeroThree[X]=      & \multirow{2}{*}{\( \deltaZeroThree[X]\)}      & \\ 
+	\tab \verb=\deltaziii[X]=           &                              & \\ \midrule         
+	\verb=\deltaOneN[X]{2}=        & \multirow{2}{*}{\( \deltaOneN[X]{2}  \)}      & \\ 
+	\tab \verb=\deltaIn[X]{2}=          &                              & \\ \midrule         
+	\verb=\deltaOneOne[X]=         & \multirow{2}{*}{\( \deltaOneOne[X]   \)}      & \\ 
+	\tab \verb=\deltaIi[X]=             &                              & \\ \midrule         
+	\verb=\deltaOneTwo[X]=         & \multirow{2}{*}{\( \deltaOneTwo[X]   \)}      & \\ 
+	\tab \verb=\deltaIii[X]=            &                              & \\ \midrule         
+	\verb=\deltaOneThree[X]=       & \multirow{2}{*}{\( \deltaOneThree[X] \)}      & \\ 
+	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule
+	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule
+	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\ 
+		\bottomrule
+\end{xtabular}
+                                      
+	                              
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	                                     
 
 \end{document}

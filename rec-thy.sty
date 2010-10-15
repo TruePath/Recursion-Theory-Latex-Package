@@ -3,7 +3,7 @@
 \newcommand*{\@packinfo}[1]{\PackageInfo{\@curpack}{#1}}
 \newcommand*{\recthy@strip}[1]{%\expandafter\newcommand{\csname #1\endcsname}{}% Makes sure arg isn't already a command
 \expandafter\edef\csname #1\endcsname{\expandafter\noexpand\csname @recthy@#1\endcsname}} %leaves us a command \arg defined to do \@recthy@arg
-\ProvidesPackage{\@curpack} [2010/10/14 v.99  Provides commands for writing up recursion theory papers] %file name is package name
+\ProvidesPackage{\@curpack} [2010/10/14 v1.0  Provides commands for writing up recursion theory papers] %file name is package name
 
 
 \RequirePackage{suffix}
@@ -759,6 +759,141 @@ _{#1}
 	\newcommand*{\Csigman}[1]{\CSigma_{#1}}
 	\WithSuffix\def\Csigman[#1]#2{\Csigman{#2}^{#1}}
 	% \WithSuffix\def\Csigman(#1)#2{\Csigman{#2}\!\left(#1\right)}
+
+%%%BOLDFACE
+	
+	\newcommand*{\Deltan}[1]{\utilde{\mathbf{\Delta}}_{#1}}
+	\WithSuffix\def\Deltan[#1]#2{\utilde{\mathbf{\Delta}}^{#1}_{#2}}
+	% \WithSuffix\def\Deltan(#1)#2{\deltan{#2}\!\left(#1\right)}
+	\newcommand*{\DeltaZeroN}[1]{\utilde{\mathbf{\Delta}}^{0}_{#1}}
+	\WithSuffix\def\DeltaZeroN[#1]#2{\utilde{\mathbf{\Delta}}^{0,#1}_{#2}}
+	% \WithSuffix\def\DeltaZeroN(#1)#2{\DeltaZeroN{#2}\!\left(#1\right)}
+	\newcommand*{\DeltaZeroTwo}{\DeltaZeroN{2}}
+	\WithSuffix\def\DeltaZeroTwo[#1]{\DeltaZeroN[#1]{2}}
+	% \WithSuffix\def\DeltaZeroTwo(#1){\DeltaZeroN[#1]{2}}
+	\newcommand*{\DeltaZeroThree}{\DeltaZeroN{3}}
+	\WithSuffix\def\DeltaZeroThree[#1]{\DeltaZeroN[#1]{3}}
+	% \WithSuffix\def\DeltaZeroThree(#1){\DeltaZeroN[#1]{3}}
+	\newcommand*{\DeltaZeroOne}{\DeltaZeroN{1}}
+	\WithSuffix\def\DeltaZeroOne[#1]{\DeltaZeroN[#1]{1}}
+	% \WithSuffix\def\DeltaZeroOne(#1){\DeltaZeroN[#1]{1}}
+	\newcommand*{\DeltaZeroZero}{\DeltaZeroN{0}}
+	\WithSuffix\def\DeltaZeroZero[#1]{\DeltaZeroN[#1]{0}}
+	% \WithSuffix\def\DeltaZeroZero(#1){\DeltaZeroN[#1]{0}}
+
+
+	\newcommand*{\DeltaOneN}[1]{\Deltan{#1}^1}
+	\WithSuffix\def\DeltaOneN[#1]#2{\utilde{\mathbf{\Delta}}^{1,#1}_{#2}}
+	% \WithSuffix\def\DeltaOneN(#1)#2{\DeltaOneN{#2}\!\left(#1\right)}
+	\newcommand*{\DeltaOneOne}{\DeltaOneN{1}}
+	\WithSuffix\def\DeltaOneOne[#1]{\DeltaOneN[#1]{1}}
+	% \WithSuffix\def\DeltaOneOne(#1){\DeltaOneN[#1]{1}}
+	\newcommand*{\DeltaOneTwo}{\DeltaOneN{2}}
+	\WithSuffix\def\DeltaOneTwo[#1]{\DeltaOneN[#1]{2}}
+	% \WithSuffix\def\DeltaOneTwo(#1){\DeltaOneN[#1]{2}}
+	\newcommand*{\DeltaOneThree}{\DeltaOneN{3}}
+	\WithSuffix\def\DeltaOneThree[#1]{\DeltaOneN[#1]{3}}
+	% \WithSuffix\def\DeltaOneThree(#1){\DeltaOneN[#1]{3}}
+
+
+
+	\newcommand*{\Sigman}[1]{\utilde{\mathbf{\Sigma}}_{#1}}
+	\WithSuffix\def\Sigman[#1]#2{\utilde{\mathbf{\Sigma}}^{#1}_{#2}}
+	% \WithSuffix\def\Sigman(#1)#2{\sigman{#2}\!\left(#1\right)}
+	\newcommand*{\SigmaZeroN}[1]{\utilde{\mathbf{\Sigma}}^{0}_{#1}}
+	\WithSuffix\def\SigmaZeroN[#1]#2{\utilde{\mathbf{\Sigma}}^{0,#1}_{#2}}
+	% \WithSuffix\def\SigmaZeroN(#1)#2{\SigmaZeroN{#2}\!\left(#1\right)}
+	\newcommand*{\SigmaZeroOne}{\SigmaZeroN{1}}
+	\WithSuffix\def\SigmaZeroOne[#1]{\SigmaZeroN[#1]{1}}
+	% \WithSuffix\def\SigmaZeroOne(#1){\SigmaZeroN[#1]{1}}
+	\newcommand*{\SigmaZeroTwo}{\SigmaZeroN{2}}
+	\WithSuffix\def\SigmaZeroTwo[#1]{\SigmaZeroN[#1]{2}}
+	% \WithSuffix\def\SigmaZeroTwo(#1){\SigmaZeroN[#1]{2}}
+	\newcommand*{\SigmaZeroThree}{\SigmaZeroN{3}}
+	\WithSuffix\def\SigmaZeroThree[#1]{\SigmaZeroN[#1]{3}}
+	% \WithSuffix\def\SigmaZeroThree(#1){\SigmaZeroN[#1]{3}}
+
+
+
+	\newcommand*{\SigmaOneN}[1]{\utilde{\mathbf{\Sigma}}^1_{#1}}
+	\WithSuffix\def\SigmaOneN[#1]#2{\utilde{\mathbf{\Sigma}}^{1,#1}_{#2}}
+	% \WithSuffix\def\SigmaOneN(#1)#2{\SigmaOneN{#2}\!\left(#1\right)}
+	\newcommand*{\SigmaOneOne}{\SigmaOneN{1}}
+	\WithSuffix\def\SigmaOneOne[#1]{\SigmaOneN[#1]{1}}
+	% \WithSuffix\def\SigmaOneOne(#1){\SigmaOneN[#1]{1}}
+	\newcommand*{\SigmaOneTwo}{\SigmaOneN{2}}
+	\WithSuffix\def\SigmaOneTwo[#1]{\SigmaOneN[#1]{2}}
+	% \WithSuffix\def\SigmaOneTwo(#1){\SigmaOneN[#1]{2}}
+	\newcommand*{\SigmaOneThree}{\SigmaOneN{3}}
+	\WithSuffix\def\SigmaOneThree[#1]{\SigmaOneN[#1]{3}}
+	% \WithSuffix\def\SigmaOneThree(#1){\SigmaOneN[#1]{3}}
+
+
+
+	\newcommand*{\Pin}[1]{\utilde{\mathbf{\Pi}}_{#1}}
+	\WithSuffix\def\Pin[#1]#2{\utilde{\mathbf{\Pi}}^{#1}_{#2}}
+	% \WithSuffix\def\Pin(#1)#2{\pin{#2}\!\left(#1\right)}
+	\newcommand*{\PiZeroN}[1]{\utilde{\mathbf{\Pi}}^0_{#1}}
+	\WithSuffix\def\PiZeroN[#1]#2{\utilde{\mathbf{\Pi}}^{0,#1}_{#2}}
+	% \WithSuffix\def\PiZeroN(#1)#2{\PiZeroN{#2}\left(#1\right)}
+	\newcommand*{\PiZeroOne}{\PiZeroN{1}}
+	\WithSuffix\def\PiZeroOne[#1]{\PiZeroN[#1]{1}}
+	% \WithSuffix\def\PiZeroOne(#1){\PiZeroN[#1]{1}}
+	\newcommand*{\PiZeroTwo}{\PiZeroN{2}}
+	\WithSuffix\def\PiZeroTwo[#1]{\PiZeroN[#1]{2}}
+	% \WithSuffix\def\PiZeroTwo(#1){\PiZeroN[#1]{2}}
+	\newcommand*{\PiZeroThree}{\PiZeroN{3}}
+	\WithSuffix\def\PiZeroThree[#1]{\PiZeroN[#1]{3}}
+	% \WithSuffix\def\PiZeroThree(#1){\PiZeroN[#1]{3}}
+
+	\newcommand*{\PiOneN}[1]{\utilde{\mathbf{\Pi}}^1_{#1}}
+	\WithSuffix\def\PiOneN[#1]#2{\utilde{\mathbf{\Pi}}^{1,#1}_{#2}}
+	% \WithSuffix\def\PiOneN(#1)#2{\PiOneN{#2}\!\left(#1\right)}
+	\newcommand*{\PiOneOne}{\PiOneN{1}}
+	\WithSuffix\def\PiOneOne[#1]{\PiOneN[#1]{1}}
+	% \WithSuffix\def\PiOneOne(#1){\PiOneN[#1]{1}}
+	\newcommand*{\PiOneTwo}{\PiOneN{2}}
+	\WithSuffix\def\PiOneTwo[#1]{\PiOneN[#1]{2}}
+	% \WithSuffix\def\PiOneTwo(#1){\PiOneN[#1]{2}}
+	\newcommand*{\PiOneThree}{\PiOneN{3}}
+	\WithSuffix\def\PiOneThree[#1]{\PiOneN[#1]{3}}
+	% \WithSuffix\def\PiOneThree(#1){\PiOneN[#1]{3}}
+
+
+
+	%%%ABREVIATIONS
+	\newcommand*{\Deltaz}{\deltaN{0}}
+	\newcommand*{\Deltazn}{\DeltaZeroN}
+	\newcommand*{\Deltazii}{\DeltaZeroTwo}
+	\newcommand*{\Deltazi}{\DeltaZeroOne}
+	\newcommand*{\Deltazz}{\DeltaZeroZero}
+	\newcommand*{\Deltaziii}{\DeltaZeroThree}
+	\newcommand*{\DeltaIn}{\DeltaOneN}
+	\newcommand*{\DeltaIi}{\DeltaOneOne}
+	\newcommand*{\Deltaoneone}{\DeltaOneOne}
+	\newcommand*{\DeltaIii}{\DeltaOneTwo}
+	\newcommand*{\DeltaIiii}{\DeltaOneThree}
+	\newcommand*{\Sigmazn}{\SigmaZeroN}
+	\newcommand*{\Sigmazi}{\SigmaZeroOne}
+	\newcommand*{\Sigmazii}{\SigmaZeroTwo}
+	\newcommand*{\Sigmaziii}{\SigmaZeroThree}
+	\newcommand*{\SigmaIn}{\SigmaOneN}
+	\newcommand*{\SigmaIi}{\SigmaOneOne}
+	\newcommand*{\SigmaIii}{\SigmaOneTwo}
+	\newcommand*{\SigmaIiii}{\SigmaOneThree}
+	\newcommand*{\Pizn}{\PiZeroN}
+	\newcommand*{\Pizi}{\PiZeroOne}
+	\newcommand*{\Pizii}{\PiZeroTwo}
+	\newcommand*{\Piziii}{\PiZeroThree}
+	\newcommand*{\PiIn}{\PiOneN}
+	\newcommand*{\PiIi}{\PiOneOne}
+	\newcommand*{\PiIii}{\PiOneTwo}
+	\newcommand*{\PiIiii}{\PiOneThree}
+	
+
+
+
+
 
 \fi
 }
