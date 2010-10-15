@@ -7,8 +7,10 @@
 
 \documentclass[11pt,oneside]{amsart}
 \usepackage{rec-thy}
+\usepackage{multirow}
+\usepackage{booktabs}
 
-
+\newcommand{\tab}{\hspace{1cm}}
 % Uncomment some of the following if you use the features
 %
 % Running Headers and footers
@@ -33,8 +35,8 @@
 %\usepackage[pdftex]{graphicx}
 %\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
 
-\title{A LaTeX Article}
-\author{  }
+\title{The rec-thy Latex Package}
+\author{Peter M. Gerdes}
 
 \date{2010-10-14}
 
@@ -47,9 +49,45 @@
 
 
 \begin{abstract}
+	The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
 \end{abstract}
 
 \section{Introduction}
+Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the latex source.  The author hopes that eventually this package may grow to incorporate other areas of mathematical logic but, though some effort has already been made in this direction, the author has chosen to call the package rec-thy.sty so as not to introduce incompatibilities with a future mathlogic.sty.
 
-Test
+\section{Usage}
+Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  
+
+The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  If a single command has multiple aliases they are listed 
+
+\subsection{General Math Commands}
+To disable these commands pass the option \verb=nomath=.
+
+\begin{tabular}{l |  l | l}                                
+	\verb=\eqdef= 					& \( \eqdef \) & Definitional equals\\
+	\midrule
+	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\
+	\midrule
+	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\
+	\midrule
+	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\
+	\midrule
+	\verb=x \meet y= 					& \( \meet \) & Meet operation \\
+	\verb=\join= 					& \( \join \) & Join operation \\
+	\verb=\abs{x}= 					& \( \abs{x} \)\\
+	\verb=\dom= 					& \( \dom \) \\
+	\verb=\rng= 					& \( \rng \) \\
+	\verb=f\restr{X}= 				& \( f\restr{X} \) \\
+	\verb=\ordpair{x}{y}= 				& \( \ordpair{x}{y} \)\\
+	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) \\
+	\verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) \\
+	
+	\verb=f \compfunc g=		       		& \multirow{3}{*}{\( f \compose g \)} \\
+	\tab \verb=f \funcomp g=	            		&\\
+	\tab \verb=f \compose g=	            		&\\
+	
+	\verb=\( \ensuretext{blah} \)=	           	& \( \ensuretext{blah} \)\\
+	\verb=\ensuretext{blah}=			&
+\end{tabular}                                                          
+
 \end{document}
