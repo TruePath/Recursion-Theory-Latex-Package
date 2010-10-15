@@ -69,10 +69,73 @@ A few general conventions are usually followed in the commands.  Whenever an ope
 Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
 
 Unless indicated otherwise all macros are to be used inside math mode.
+\subsection{Main Commands}
+\begin{xtabular}{l |  l | l}\toprule 
+	\verb=\murec{x}{f(x)>1}=					& \( 	\murec{x}{f(x)>1}                     \)	& Least \( x \) satisfying condition. \\ \midrule
+	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functions/functionals} \\[6pt]
+	\tab \verb=\recfnl[s]{e}{Y}{x}=                             & \( 	\recfnl[s]{e}{Y}{x}                   	   \)   & \\[6pt]
+	\tab \verb=\recfnl{e}{Y}{}=                                 & \( 	\recfnl{e}{Y}{}                       	   \)   & \\[6pt]
+	\tab \verb=\recfnl{e}{}{x}=                                 & \( 	\recfnl{e}{}{x}                       	   \)   & \\[6pt]
+	\tab \verb=\recfnl{e}{}{}=                                  & \( 	\recfnl{e}{}{}                        	   \)   & \\ \midrule
+	\verb=\recfnl{e}{}{} \cequiv \recfnl{i}{}{}=           & \( 	\recfnl{e}{}{} \cequiv \recfnl{i}{}{} 	   \)   & Equivalent computations\\ \midrule
+	\verb=\recfnl{e}{}{} \ncequiv \recfnl{i}{}{}=          & \( 	\recfnl{e}{}{} \ncequiv \recfnl{i}{}{}	   \)   & Inequivalent computations\\ \midrule
+	\verb=\recfnl{e}{}{x}\conv=                            & \( 	\recfnl{e}{}{x}\conv                  	   \)   &\multirow{2}{*}{Convergence} \\[6pt]
+	\tab \verb=\recfnl{e}{}{x}\conv[s]=                         & \( 	\recfnl{e}{}{x}\conv[s]               	   \)   & \\ \midrule
+	\verb=\recfnl{e}{}{x}\nconv=                           & \( 	\recfnl{e}{}{x}\nconv                 	   \)   &\multirow{2}{*}{Divergence} \\[6pt]
+	\tab \verb=\recfnl{e}{}{x}\nconv[s]=                        & \( 	\recfnl{e}{}{x}\nconv[s]              	   \)   & \\ \midrule
+	\verb=\use{\recfnl{e}{Y}{x}}=                          & \( 	\use{\recfnl{e}{Y}{x}}                	   \)   & Use of a computation. \\ \midrule
+	\verb=\REset{e}=                                       & \( 	\REset{e}                             	   \)   & \multirow{4}{*}{c.e. sets} \\[6pt] 
+	\tab \verb=\REset[s]{e}=                                    & \( 	\REset[s]{e}                          	   \)   & \\[6pt] 
+	\tab \verb=\REset(X){e}=                                    & \( 	\REset(X){e}                          	   \)   & \\[6pt] 
+	\tab \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}                       	   \)   & \\ \midrule
+	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\ 
+	\tab \verb=\reaop*{e}(\eset)=                               &    & \\ \midrule
+	\verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
+	\tab \verb=\reaop{\alpha}(\eset)=                           &    & \\[6pt]
+	\tab \verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
+	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\ \midrule
+	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & Turing degree \\ \midrule
+	\verb=\Tjump{X}=                                       & \multirow{2}{*}{\( 	\Tjump{X}                             	   \)}   & \multirow{2}{*}{Turing jump} \\
+	\tab \verb=\jump{X}=                                        &  & \\ \midrule
+	\verb=\jjump{X}=                                       & \( 	\jjump{X}                             	   \)   & \\ \midrule
+	\verb=\jumpn{X}{n}=                                    & \( 	\jumpn{X}{n}                          	   \)   & \\ \midrule
+	\verb=\Tzero=                                          & \( 	\Tzero                                	   \)   & Computable degree \\ \midrule
+	\verb=\zeroj=                                          & \( 	\zeroj                                	   \)   & \\ \midrule
+	\verb=\zerojj=                                         & \( 	\zerojj                               	   \)   & \\ \midrule
+	\verb=\zerojjj=                                        & \( 	\zerojjj                              	   \)   & \\ \midrule
+	\verb=\zeron{n}=                                       & \( 	\zeron{n}                             	   \)   & \\ \midrule
+	\verb=X \Tequiv Y=                                     & \multirow{2}{*}{\( 	X \Tequiv Y                           	   \)}   & \multirow{2}{*}{Turing equivalence}\\ 
+	\tab \verb=X \Teq Y=                                        &   & \\ \midrule
+	\verb=X \nTequiv Y=                                    & \multirow{2}{*}{\( 	X \nTequiv Y                          	   \)}   & \multirow{2}{*}{Turing inequivalence} \\ 
+	\tab \verb=X \nTeq Y=                                       &    & \\ \midrule
+        \verb=X \Tlneq Y=                                      & \(  X \Tlneq Y                              	   \)   & \\ \midrule
+        \verb=X \Tleq  Y=                                      & \(  X \Tleq  Y                              	   \)   & \\ \midrule
+        \verb=X \Tgneq Y=                                      & \(  X \Tgneq Y                              	   \)   & \\ \midrule
+        \verb=X \Tgeq  Y=                                      & \(  X \Tgeq  Y                              	   \)   & \\ \midrule
+        \verb=X \Tgtr  Y=                                      & \(  X \Tgtr  Y                              	   \)   & \\ \midrule
+        \verb=X \Tless Y=                                      & \(  X \Tless Y                              	   \)   & \\ \midrule
+        \verb=X \nTleq Y=                                      & \(  X \nTleq Y                              	   \)   & \\ \midrule
+        \verb=X \nTgeq Y=                                      & \(  X \nTgeq Y                              	   \)   & \\ \midrule
+	\verb=\Tdeg{d} \Tdegjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \Tdegjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
+	\verb=\Tdeg{d} \Tdegmeet \Tdeg{d'}=                    & \multirow{2}{*}{\( 	\Tdeg{d} \Tdegmeet \Tdeg{d'}          	   \)}   & \multirow{2}{*}{Meet of degrees (when defined)} \\ 
+	\tab \verb=\Tdeg{d} \Tmeet \Tdeg{d'}=                       &    & \\ \midrule
+	\verb=X \Tplus Y=                                      & \multirow{2}{*}{\( 	X \Tplus Y                            	   \)}   & \multirow{4}{*}{Effective join of sets} \\ 
+	\tab \verb=X \Tjoin Y=                                      &  & \\ 
+	\tab \verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\ 
+	\tab \verb=\TJoin_{i \in \omega} X_i=                       &    & \\ \midrule
+	% \verb=\ttSYM=                                          & \( 	\ttSYM                                	   \)   & \\ \midrule
+	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reducibilities\\ \midrule
+	\verb=X \ttleq  Y=                                     & \( 	X \ttleq  Y                           	   \)   & \\ \midrule
+	\verb=X \ttgneq Y=                                     & \( 	X \ttgneq Y                           	   \)   & \\ \midrule
+	\verb=X \ttgeq  Y=                                     & \( 	X \ttgeq  Y                           	   \)   & \\ \midrule
+	\verb=X \ttgtr  Y=                                     & \( 	X \ttgtr  Y                           	   \)   & \\ \midrule
+	\verb=X \ttless Y=                                     & \( 	X \ttless Y                           	   \)   & \\ \midrule
+	\verb=X \ttTleq Y=                                     & \( 	X \ttTleq Y                           	   \)   & \\ \midrule
+        \verb=X \ttTgeq Y=                                     & \(  X \ttTgeq Y                             	   \)   & \\ 
+		\bottomrule
+	\end{xtabular}          \\
 
 
-
-\newpage
 \subsection{General Math Commands}
 To disable these commands pass the option \verb=nomath=. \\
 
@@ -159,23 +222,23 @@ To disable these commands pass the option \verb=nonames=. To use recursive, r.e.
 To disable these commands pass the option \verb=noquants=. The commands \verb=\exists= and \verb=\forall= are standard but the package extends them.\\
 
 \begin{tabular}{l |  l | l}\toprule                                
-	\verb=\exists[x < y]=		& \( \exists[x < y ] \) & \\
+	\verb=\exists[x < y]=		& \( \exists[x < y ] \) & \\[6pt]
 	\tab \verb=\exists(x < y)=		& \( \exists(x < y ) \) & \\ \midrule
-	\verb=\exists*=		& \multirow{2}{*}{\( \exists* \)} & \\
-	\tab \verb=\existsinf=	&				  & \\
-	\tab \verb=\exists*[x < y]=		& \( \exists*[x < y ] \) & \\
+	\verb=\exists*=		& \multirow{2}{*}{\( \exists* \)} & \\[6pt]
+	\tab \verb=\existsinf=	&				  & \\[6pt]
+	\tab \verb=\exists*[x < y]=		& \( \exists*[x < y ] \) & \\[6pt]
 	\tab \verb=\exists*(x < y)=		& \( \exists*(x < y ) \) & \\ \midrule
-	\verb=\nexists[x < y]=		& \( \nexists[x < y ] \) & \\
+	\verb=\nexists[x < y]=		& \( \nexists[x < y ] \) & \\[6pt]
 	\tab \verb=\nexists(x < y)=		& \( \nexists(x < y ) \) & \\ \midrule
-	\verb=\nexists*=		& \multirow{2}{*}{\( \nexists* \)} & \\
-	\tab \verb=\nexistsinf=	&				  & \\
-	\tab \verb=\nexists*[x < y]=		& \( \nexists*[x < y ] \) & \\
+	\verb=\nexists*=		& \multirow{2}{*}{\( \nexists* \)} & \\[6pt]
+	\tab \verb=\nexistsinf=	&				  & \\[6pt]
+	\tab \verb=\nexists*[x < y]=		& \( \nexists*[x < y ] \) & \\[6pt]
 	\tab \verb=\nexists*(x < y)=		& \( \nexists*(x < y ) \) & \\ \midrule
-	\verb=\forall[x < y]=		& \( \forall[x < y ] \) & \\
+	\verb=\forall[x < y]=		& \( \forall[x < y ] \) & \\[6pt]
 	\tab \verb=\forall(x < y)=		& \( \forall(x < y ) \) & \\ \midrule
 	\verb=\forall*=		& \multirow{2}{*}{\( \forall* \)} &\multirow{4}{*}{For almost all.} \\
-	\tab \verb=\forallae=	&				  & \\
-	\tab \verb=\forall*[x < y]=		& \( \forall*[x < y ] \) & \\
+	\tab \verb=\forallae=	&				  & \\[6pt]
+	\tab \verb=\forall*[x < y]=		& \( \forall*[x < y ] \) & \\[6pt]
 	\tab \verb=\forall*(x < y)=		& \( \forall*(x < y ) \) & \\ \midrule
 	\verb=\True=				& \( \True \) & \\ \midrule
 	\verb=\False=				& \( \False \) & \\ \midrule
@@ -192,8 +255,41 @@ To disable these commands pass the option \verb=nospaces=.\\
 	\verb=\bstrs=		       & \( \bstrs  \) & Finite binary strings        \\	\midrule
 	\verb=\wstrs=                 & \( \wstrs  \) & Finite sequences of integers \\ 	\midrule
 	\verb=\cantor=                & \( \cantor \) & Cantor space		     \\    \midrule
-	\verb=\baire=                 & \( \baire  \) & Baire space                  \\ 
+	\verb=\baire=                 & \( \baire  \) & Baire space                  \\[6pt] 
 	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\ 
+		\bottomrule
+	\end{tabular}
+	
+\subsection{Strings}      
+To disable these commands pass the option \verb=nostrings=.\\
+
+\begin{tabular}{l |  l | l}\toprule  
+	\verb=\str{1,0,1}=		     & \(   \str{1,0,1}           \) & \multirow{2}{*}{Strings/Codes for strings}  \\ 
+	\tab \verb=\code{5,8,13}=                & \(   \code{5,8,13}         \) &   \\ \midrule
+	\verb=\EmptyStr=                    & \(   \EmptyStr             \) &  \multirow{2}{*}{Empty string}  \\[6pt] 
+	\tab \verb=\estr=                        & \(   \estr                 \) &   \\ \midrule
+	\verb=\decode{\sigma}{3}=           & \(   \decode{\sigma}{3}    \) & Alternate notation for \( \sigma(3) \)   \\ \midrule
+	\verb=\sigma\concat\tau=            & \(   \sigma\concat\tau     \) & \multirow{2}{*}{Concatenation}   \\[6pt]
+	\tab \verb=\sigma\concat[0]=             & \(   \sigma\concat[0]      \) &   \\ \midrule
+	\verb=\strpred{\sigma}=             & \(   \strpred{\sigma}      \) & The immediate predecessor of \( \sigma \)  \\ \midrule
+	\verb=\lh{\sigma}=                  & \(   \lh{\sigma}           \) & Length of \( \sigma \)  \\ \midrule
+	\verb=\sigma \incompat \tau=        & \(   \sigma \incompat \tau  \) & \multirow{2}{*}{Incompatible strings}  \\
+	\tab \verb=\sigma \incomp \tau=          & \(   \sigma \incomp \tau   \) &   \\ \midrule
+	\verb=\sigma \compat \tau=          & \(   \sigma \compat \tau   \) &  Compatible strings \\ \midrule
+	\verb=\pair{x}{y}=                  & \(   \pair{x}{y}           \) & Code for the pair \( (x,y) \)  \\ \midrule
+	\verb=\setcol{X}{n}=                & \(   \setcol{X}{n}         \) & \( \set{y}{\pair{n}{y} \in X} \)  \\ \midrule
+	\verb=\setcol{X}{\leq n}=           & \(   \setcol{X}{\leq n}    \) & \( \set{ \pair{x}{y}}{\pair{x}{y} \in X \land x \leq n} \)   \\ 
+		\bottomrule
+	\end{tabular}
+	
+\subsection{Trees}      
+To disable these commands pass the option \verb=notrees=.\\
+
+\begin{tabular}{l |  l | l}\toprule  	
+	\verb=\CBderiv{T}=		      & \(  \CBderiv{T}		      \) & \multirow{2}{*}{Cantor-Bendixson Derivative} \\[6pt] 
+	\tab \verb=\CBderiv[\alpha]{T}=           & \(  \CBderiv[\alpha]{T}       \) & \\ \midrule
+	\verb=\pruneTree{T}=                 & \(  \pruneTree{T}             \) & \( \set{\sigma \in T}{\exists(g)(g \in [T] \land \sigma \subset g)} \) \\ \midrule
+	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\ 
 		\bottomrule
 	\end{tabular}
 \end{document}

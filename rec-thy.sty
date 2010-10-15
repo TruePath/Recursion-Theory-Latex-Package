@@ -14,13 +14,14 @@
 \RequirePackage{stmaryrd}
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
-
+\RequirePackage{marvosym}
+\DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
 
 \newcommand*{\PMG@arginit}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined}
 
 \newcommand*{\@recthy@family}{\@currname.\@currext} %The default family for this package...filename.ext
 %Define boolean options true if option passed false otherwise
-\define@boolkeys{\@recthy@family}[recthy@]{nohyphenation,nomath,nodelim,nosets,noquants,nospaces,nostrings,notrees,nopair,nonames,nostars,noresetprops,noordinalnotations,nosyntax,nodegclasses,noforcing} %of form \ifrecthy@nosets etc...
+\define@boolkeys{\@recthy@family}[recthy@]{nohyphenation,nomath,nodelim,nosets,noquants,nospaces,nostrings,notrees,nopair,nonames,nosetrels,noordinalnotations,nosyntax,nodegclasses,noforcing} %of form \ifrecthy@nosets etc...
 
 \AtEndOfPackage{
 \ifrecthy@nohyphenation
@@ -293,7 +294,7 @@
 	\newcommand*{\code}{\str}
 	\newcommand*{\EmptyStr}{\@recthy@EmptyStr}
 	\newcommand*{\estr}{\EmptyStr}
-	\newcommand*{\decode}[2]{(#1)_{\tiny #2}}
+	\newcommand*{\decode}[2]{(#1)_{#2}}
 	\newcommand*{\godelpair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
 	\newcommand*{\gpair}{\godelpair}
 	\newcommand*{\concat}{\mathbin{\@recthy@concatSYM}}
@@ -319,7 +320,7 @@
 \else
 	\@packinfo{Trees loading.}
 	\newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
-	\newcommand*{\pruneTree}[2][\infty]{\CBderiv[#1]{#2}}
+	\newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
 	\newcommand*{\hgt}[1]{\lVert #1 \rVert}
 \fi
 }
@@ -377,48 +378,6 @@ _{#1}
 \newcommand*{\oneREAop}[1]{J_{#1}}
 \let\iREAop=\oneREAop
 \WithSuffix\def\reaop*#1{\oneREAop{#1}}
-
-
-%re set relations
-\AtEndOfPackage{
-\ifrecthy@nostars
-	\@packinfo{No setrels loading.}
-\else
-	\@packinfo{setrels loading.}
-
-	\WithSuffix\def\subset*{\subset^{*}}
-	\WithSuffix\def\supset*{\supset^{*}}
-	\WithSuffix\def\subseteq*{\subseteq^{*}}
-	\WithSuffix\def\supseteq*{\supseteq^{*}}
-	\WithSuffix\def\subsetneq*{\subsetneq^{*}}
-	\WithSuffix\def\supsetneq*{\supsetneq^{*}}
-	\providecommand*{\nsupset}{\not\supset}
-	\providecommand*{\nsubset}{\not\subset}
-	\newcommand*{\eq}{=}
-	\WithSuffix\def\eq*{=^{*}}
-	\newcommand*{\eqae}{=^{*}}
-
-
-	\newcommand*{\infsubset}{\subset_{\infty}}
-	\WithSuffix\def\infsubset*{\infsubset^{*}}
-	\let\subsetnaeq=\infsubset
-	\newcommand*{\infsupset}{\supset_{\infty}}
-	\WithSuffix\def\infsupset*{\infsupset^{*}}
-	\let\supsetnaeq=\infsupset
-\fi
-}
-
-\AtEndOfPackage{
-\ifrecthy@noresetprops
-	\@packinfo{No resetrels loading.}
-\else
-	\@packinfo{setrels loading.}
-	\newcommand*{\majsubset}{\subset_{m}}
-	\newcommand*{\majsupset}{\supset_{m}}
-\fi
-}
-
-
 %converges
 
 %%Computational  Classes
@@ -486,6 +445,42 @@ _{#1}
 \newcommand*{\ttless}{<_{\@recthy@ttSYM}}
 \newcommand*{\ttTleq}{\nleq_{\@recthy@ttSYM}}
 \newcommand*{\ttTgeq}{\ngeq_{\@recthy@ttSYM}}
+
+
+
+%re set relations
+\AtEndOfPackage{
+\ifrecthy@nosetrels
+	\@packinfo{No setrels loading.}
+\else
+	\@packinfo{setrels loading.}
+
+	\WithSuffix\def\subset*{\subset^{*}}
+	\WithSuffix\def\supset*{\supset^{*}}
+	\WithSuffix\def\subseteq*{\subseteq^{*}}
+	\WithSuffix\def\supseteq*{\supseteq^{*}}
+	\WithSuffix\def\subsetneq*{\subsetneq^{*}}
+	\WithSuffix\def\supsetneq*{\supsetneq^{*}}
+	\providecommand*{\nsupset}{\not\supset}
+	\providecommand*{\nsubset}{\not\subset}
+	\newcommand*{\eq}{=}
+	\WithSuffix\def\eq*{=^{*}}
+	\newcommand*{\eqae}{=^{*}}
+
+
+	\newcommand*{\infsubset}{\subset_{\infty}}
+	\WithSuffix\def\infsubset*{\infsubset^{*}}
+	\let\subsetnaeq=\infsubset
+	\newcommand*{\infsupset}{\supset_{\infty}}
+	\WithSuffix\def\infsupset*{\infsupset^{*}}
+	\let\supsetnaeq=\infsupset
+	\newcommand*{\majsubset}{\subset_{m}}
+	\newcommand*{\majsupset}{\supset_{m}}
+\fi
+}
+
+
+
 
 
 
