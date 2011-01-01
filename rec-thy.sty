@@ -3,8 +3,12 @@
 \newcommand*{\@packinfo}[1]{\PackageInfo{\@curpack}{#1}}
 \newcommand*{\recthy@strip}[1]{%\expandafter\newcommand{\csname #1\endcsname}{}% Makes sure arg isn't already a command
 \expandafter\edef\csname #1\endcsname{\expandafter\noexpand\csname @recthy@#1\endcsname}} %leaves us a command \arg defined to do \@recthy@arg
-\ProvidesPackage{\@curpack} [2010/10/14 v1.0  Provides commands for writing up recursion theory papers] %file name is package name
+\ProvidesPackage{\@curpack} [2011/01/01 v1.2  Provides commands for writing up recursion theory papers] %file name is package name
 
+% Release Notes
+% Version 1.2
+% Added mrref option
+% Fixed horrific option processing bug
 
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
@@ -21,13 +25,74 @@
 
 \newcommand*{\@recthy@family}{\@currname.\@currext} %The default family for this package...filename.ext
 %Define boolean options true if option passed false otherwise
-\define@boolkeys{\@recthy@family}[recthy@]{nohyphenation,nomath,nodelim,nosets,noquants,nospaces,nostrings,notrees,nopair,nonames,nosetrels,noordinalnotations,nosyntax,nodegclasses,noforcing} %of form \ifrecthy@nosets etc...
 
+
+\newif\ifrecthy@nohyphenation		\recthy@nohyphenationfalse
+\newif\ifrecthy@mrref			\recthy@mrreffalse
+\newif\ifrecthy@nomath			\recthy@nomathfalse
+\newif\ifrecthy@nodelim			\recthy@nodelimfalse
+\newif\ifrecthy@nonames			\recthy@nonamesfalse
+\newif\ifrecthy@nosets			\recthy@nosetsfalse
+\newif\ifrecthy@noquants		\recthy@noquantsfalse
+\newif\ifrecthy@nospaces		\recthy@nospacesfalse
+\newif\ifrecthy@nostrings		\recthy@nostringsfalse
+\newif\ifrecthy@notrees			\recthy@notreesfalse
+\newif\ifrecthy@nopair			\recthy@nopairfalse
+\newif\ifrecthy@nonames			\recthy@nonamesfalse
+\newif\ifrecthy@nosetrels		\recthy@nosetrelsfalse
+\newif\ifrecthy@noordinalnotations	\recthy@noordinalnotationsfalse
+\newif\ifrecthy@nosyntax		\recthy@nosyntaxfalse
+\newif\ifrecthy@nodegclasses		\recthy@nodegclassesfalse
+\newif\ifrecthy@noforcing		\recthy@noforcingfalse
+\newif\ifrecthy@nodegrees		\recthy@nodegreesfalse
+\newif\ifrecthy@nocomputations		\recthy@nocomputationsfalse
+                                                                             
+\DeclareOption{nohyphenation}{\recthy@nohyphenationtrue}
+\DeclareOption{mrref}{\recthy@mrreftrue}
+\DeclareOption{nomath}{\recthy@nomathtrue}
+\DeclareOption{nodelim}{\recthy@nodelimtrue}
+\DeclareOption{nonames}{\recthy@nonamestrue}
+\DeclareOption{nosets}{\recthy@nosetstrue}
+\DeclareOption{noquants}{\recthy@noquantstrue}
+\DeclareOption{nospaces}{\recthy@nospacestrue}
+\DeclareOption{nostrings}{\recthy@nostringstrue}
+\DeclareOption{notrees}{\recthy@notreestrue}
+\DeclareOption{nopair}{\recthy@nopairtrue}
+\DeclareOption{nosetrels}{\recthy@nosetrelstrue}
+\DeclareOption{noordinalnotations}{\recthy@noordinalnotationstrue}
+\DeclareOption{nosyntax}{\recthy@nosyntaxtrue}
+\DeclareOption{nodegclasses}{\recthy@nodegclassestrue}
+\DeclareOption{noforcing}{\recthy@noforcingtrue}
+\DeclareOption{nodegrees}{\recthy@nodegreestrue}
+\DeclareOption{nocomputations}{\recthy@nocomputationstrue}                                                                             
+
+\DeclareOption{degjoin}{\def\Tjoin{\Tdegjoin}}
+	
 \AtEndOfPackage{
 \ifrecthy@nohyphenation
 	\@packinfo{No hyphenation loading.}
 \else
 \hyphenation{ra-tion-als ra-tion-al Harrington Slaman Cholak Knight Gerdes Lange}
+\fi
+}
+
+
+\AtEndOfPackage{
+\ifrecthy@mrref
+	\@packinfo{MRref helper loading}
+	\RequirePackage{hyperref}
+	\def\recthy@checkMR MR#1#2#3 #4\relax%
+	  {\ifx#1M%
+	     \ifx#2R\recthy@MR{#3}\else\recthy@MR{#1#2#3}\fi
+	   \else
+	     \recthy@MR{#1#2#3}%
+	   \fi}
+	\def\MR#1{\recthy@checkMR MR#1 \relax}
+	\newcommand{\recthy@MR}[1]{\recthy@MRhref{#1}{MR #1}}
+	% % \MRhref is called by the amsart/book/proc definition of \MR.
+	\newcommand{\recthy@MRhref}[2]{\href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}}
+\else
+	\@packinfo{MRref helper not loading}
 \fi
 }
 
@@ -137,25 +202,25 @@
 \fi
 }
 
-\DeclareOptionX<\@recthy@family>{re}{%
+\DeclareOption{reterms}{%
 	\let\@recthy@ce=\@recthy@re
 	\let\@recthy@computable=\@recthy@recursive
 	\let\@recthy@computablyEnumerable=\@recthy@recursivelyEnumerable
 	\let\@recthy@ComputablyEnumerable=\@recthy@RecursivelyEnumerable
 	} %Make all references to ce change to re
 	
-	\DeclareOptionX<\@recthy@family>{rea}{%
+	\DeclareOption{reaterms}{%
 		\let\@recthy@CEA=\@recthy@REA
 		}
 		
-\DeclareOptionX<\@recthy@family>{ce}{%
+\DeclareOption{ceterms}{%
 	\let\@recthy@re=\@recthy@ce
 	\let\@recthy@recursive=\@recthy@computable
 	\let\@recthy@recursivelyEnumerable=\@recthy@computablyEnumerable
 	\let\@recthy@RecursivelyEnumerable=\@recthy@ComputablyEnumerable
 	} %Make all references to re change to ce
 
-\DeclareOptionX<\@recthy@family>{cea}{%
+\DeclareOption{ceaterms}{%
 			\let\@recthy@REA=\@recthy@CEA
 			}
 % Set stuff
@@ -179,9 +244,9 @@
 \def\@recthy@setminusSYM{-}
 
 
-\DeclareOptionX<\@recthy@family>{setminussym}{\def\@recthy@setminusSYM{#1}}
-\DeclareOptionX<\@recthy@family>{setcmpminussym}{\def\@recthy@setminusSYM{#1}}
-\DeclareOptionX<\@recthy@family>{minussetcmp}{\let\@recthy@setcmp=\@recthy@setminuscmp}
+\DeclareOption{setminussym}{\def\@recthy@setminusSYM{#1}}
+\DeclareOption{setcmpminussym}{\def\@recthy@setminusSYM{#1}}
+\DeclareOption{minussetcmp}{\let\@recthy@setcmp=\@recthy@setminuscmp}
 \newcommand*{\@recthy@setminus}{\mathbin{\@recthy@setminusSYM}}
 
 
@@ -278,7 +343,7 @@
 
 %Strings
 
-\newcommand*{\@recthy@EmptyStr}{\str{}}
+\newcommand*{\@recthy@EmptyStr}{\lambda}
 \newcommand*{\@recthy@concatSYM}{\hat{}}
 \DeclareOptionX<\@recthy@family>{emptystr}[]{\def\@recthy@EmptyStr{#1}}
 \DeclareOptionX<\@recthy@family>{concat}[]{\def\@recthy@concatSYM{#1}}
@@ -334,117 +399,6 @@
 % \newcommand*{\truepath}[2][]{\Gamma_{#1}\ifthenelse{\isempty{#2}}{}{(#2)}}
 % \newcommand*{\Tpath}{\truepath}
 
-%%%%%%
-\newcommand*{\murec}[2]{\ensuremath{\mu#1\left( #2 \right) }}
-
-%\newcommand*{\brecfSYM}{\phi}
-\newcommand*{\recfnlSYM}{\Phi}
-% \newcommand*{\recf}[3][]{\recfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}} %If give an empty arg just print function no parens
-%\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
-%\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
-\newcommand*{\recfnl}[4][]{\recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
-	\ifthenelse{\isempty{#4}}%
-	{\ifthenelse{\isempty{#3}}%
-		{}% No args then print no parents
-		{(#3)}
-	}%If no oracle we just refer to the functional without any arguments
-	{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-}}
-
-
-\newcommand*{\cequiv}{\mathrel{\backsimeq}}
-\newcommand*{\ncequiv}{\mathrel{\not\cequiv}}
-\newcommand*{\conv}[1][]{\mathpunct{\downarrow}_{#1}}
-%\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
-\newcommand*{\nconv}[1][]{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
-\newcommand*{\diverge}{\mathpunct{\uparrow}}
-% \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
-\newcommand*{\use}[1]{\mathop{\mathbrush{u}}\!\left[{#1}\right]}
-
-\newcommand*{\REset}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@REsetbody}
-\newcommand*{\@REsetbody}[1]{W\ifdefined\@PMG@parenarg
-^{\@PMG@parenarg}%
-\fi%
-\ifdefined\@PMG@braketarg
-_{#1, {\@PMG@braketarg}}%
-\else
-_{#1}
-\fi}
-\WithSuffix\def\@REsetbody(#1){\def\@PMG@parenarg{#1}\@REsetbody}
-\WithSuffix\def\@REsetbody[#1]{\def\@PMG@braketarg{#1}\@REsetbody}
-\newcommand*{\alphaREAop}[2][]{\mathcal{J}^{#2}_{#1}}
-\let\aREAop=\alphaREAop
-\let\reaop=\alphaREAop
-\newcommand*{\oneREAop}[1]{J_{#1}}
-\let\iREAop=\oneREAop
-\WithSuffix\def\reaop*#1{\oneREAop{#1}}
-%converges
-
-%%Computational  Classes
-
-
-
-%%%%%%Turing Degrees
-\newcommand*{\Tdeg}[1]{\utilde{#1}}
-
-\newcommand*{\Tjump}[1]{#1'}
-\let\jump=\Tjump
-\newcommand*{\jumpn}[2]{#1^{(#2)}}
-\newcommand*{\jjump}[1]{#1''}
-% \newcommand*{\Tzerosym}{\MVZero}
-\newcommand*{\Tzerosym}{\MVZero}
-\newcommand*{\Tzero}{{\Tzerosym}}
-\newcommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
-\newcommand*{\zeroj}{\jump{{\Tzerosym}}}
-\let\Tzeroj=\zeroj
-\newcommand*{\zerojj}{\jump{\jump{{\Tzerosym}}}}
-\newcommand*{\zerojjj}{\jump{\jump{\jump{{\Tzerosym}}}}}
-\let\Tzerojj=\zerojj
-\let\Tzerojjj=\zerojjj
-
-%%Misc Recursion theory stuff
-%turing equivalent
-\newcommand*{\@recthy@TSYM}{\mathbf{T}}
-\newcommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}}
-\newcommand*{\Teq}{\Tequiv}
-\newcommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
-\newcommand*{\nTeq}{\nTequiv}
-%turing below
-
-\newcommand*{\Tlneq}{\lneq_{\@recthy@TSYM}}
-\newcommand*{\Tleq}{\leq_{\@recthy@TSYM}}
-\newcommand*{\Tgneq}{\gneq_{\@recthy@TSYM}}
-\newcommand*{\Tgeq}{\geq_{\@recthy@TSYM}}
-\newcommand*{\Tgtr}{>_{\@recthy@TSYM}}
-\newcommand*{\Tless}{<_{\@recthy@TSYM}}
-\newcommand*{\nTleq}{\nleq_{\@recthy@TSYM}}
-\newcommand*{\nTgeq}{\ngeq_{\@recthy@TSYM}}
-
-\newcommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
-\newcommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
-\newcommand*{\Tmeet}{\Tdegmeet}
-\newcommand*{\Tsetjoin}{\mathbin{\oplus}}
-\newcommand*{\TsetJoin}{\mathop{\bigoplus}}
-\newcommand*{\Tplus}{\Tsetjoin}
-\newcommand*{\TPlus}{\TsetJoin}
-\newcommand*{\Tjoin}{\Tsetjoin}
-\newcommand*{\TJoin}{\TsetJoin}
-
-\DeclareOptionX<\@recthy@family>{degjoin}{\def\Tjoin{\Tdegjoin}}
-
-
-
-
-\newcommand*{\@recthy@ttSYM}{\ensuremath{\text{\tiny tt}}}
-\newcommand*{\ttSYM}{\@recthy@ttSYM}
-\newcommand*{\ttlneq}{\lneq_{\@recthy@ttSYM}}
-\newcommand*{\ttleq}{\leq_{\@recthy@ttSYM}}
-\newcommand*{\ttgneq}{\gneq_{\@recthy@ttSYM}}
-\newcommand*{\ttgeq}{\geq_{\@recthy@ttSYM}}
-\newcommand*{\ttgtr}{>_{\@recthy@ttSYM}}
-\newcommand*{\ttless}{<_{\@recthy@ttSYM}}
-\newcommand*{\ttTleq}{\nleq_{\@recthy@ttSYM}}
-\newcommand*{\ttTgeq}{\ngeq_{\@recthy@ttSYM}}
 
 
 
@@ -574,13 +528,10 @@ _{#1}
 \newcommand*{\@recthy@CDelta}{\vphantom{\Delta}^{\mathcal{C}}\Delta}
 \newcommand*{\@recthy@CSigma}{\vphantom{\Sigma}^{\mathcal{C}}\Sigma}
 \newcommand*{\@recthy@CPi}{\vphantom{\Pi}^{\mathcal{C}}\Pi}
-\newcommand*{\@PMG@syntax}{\@PMG@synsym
 
-}
-
-\DeclareOptionX<\@recthy@family>{cdeltasym}{\def\@recthy@CDelta{#1}}
-\DeclareOptionX<\@recthy@family>{csigmasym}{\def\@recthy@CSigma{#1}}
-\DeclareOptionX<\@recthy@family>{cpisym}{\def\@recthy@CPi{#1}}
+\DeclareOptionX<\@recthy@family>{cdeltasym}[]{\def\@recthy@CDelta{#1}}
+\DeclareOptionX<\@recthy@family>{csigmasym}[]{\def\@recthy@CSigma{#1}}
+\DeclareOptionX<\@recthy@family>{cpisym}[]{\def\@recthy@CPi{#1}}
 
 \AtEndOfPackage{
 \ifrecthy@nosyntax
@@ -916,7 +867,132 @@ _{#1}
 \fi
 }
 
+
+% \ProcessOptions*
 \ProcessOptionsX<\@recthy@family>
+
+\ifrecthy@nocomputations
+	\@packinfo{No computations loading.}
+\else
+%%%%%%
+	\newcommand*{\murec}[2]{\ensuremath{\mu#1\left( #2 \right) }}
+
+	%\newcommand*{\brecfSYM}{\phi}
+	\newcommand*{\recfnlSYM}{\Phi}
+	% \newcommand*{\recf}[3][]{\recfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}} %If give an empty arg just print function no parens
+	%\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
+	%\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
+	\newcommand*{\recfnl}[4][]{\recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+		\ifthenelse{\isempty{#4}}%
+		{\ifthenelse{\isempty{#3}}%
+			{}% No args then print no parents
+			{(#3)}
+		}%If no oracle we just refer to the functional without any arguments
+		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+	}}
+
+
+	\newcommand*{\cequiv}{\mathrel{\backsimeq}}
+	\newcommand*{\ncequiv}{\mathrel{\not\cequiv}}
+	\newcommand*{\conv}[1][]{\mathpunct{\downarrow}_{#1}}
+	%\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
+	\newcommand*{\nconv}[1][]{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
+	\newcommand*{\diverge}{\mathpunct{\uparrow}}
+	% \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
+	\newcommand*{\use}[1]{\mathop{\mathbrush{u}}\!\left[{#1}\right]}
+
+	\newcommand*{\REset}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@REsetbody}
+	\newcommand*{\@REsetbody}[1]{W\ifdefined\@PMG@parenarg
+	^{\@PMG@parenarg}%
+	\fi%
+	\ifdefined\@PMG@braketarg
+	_{#1, {\@PMG@braketarg}}%
+	\else
+	_{#1}
+	\fi}
+	\WithSuffix\def\@REsetbody(#1){\def\@PMG@parenarg{#1}\@REsetbody}
+	\WithSuffix\def\@REsetbody[#1]{\def\@PMG@braketarg{#1}\@REsetbody}
+	\newcommand*{\alphaREAop}[2][]{\mathcal{J}^{#2}_{#1}}
+	\let\aREAop=\alphaREAop
+	\let\reaop=\alphaREAop
+	\newcommand*{\oneREAop}[1]{J_{#1}}
+	\let\iREAop=\oneREAop
+	\WithSuffix\def\reaop*#1{\oneREAop{#1}}
+	%converges
+	
+\fi
+
+
+
+\ifrecthy@nodegrees
+	\@packinfo{No degrees loading.}
+\else
+
+
+	%%%%%%Turing Degrees
+	\newcommand*{\Tdeg}[1]{\utilde{#1}}
+
+	\newcommand*{\Tjump}[1]{#1'}
+	\let\jump=\Tjump
+	\newcommand*{\jumpn}[2]{#1^{(#2)}}
+	\newcommand*{\jjump}[1]{#1''}
+	% \newcommand*{\Tzerosym}{\MVZero}
+	\newcommand*{\Tzerosym}{\MVZero}
+	\newcommand*{\Tzero}{{\Tzerosym}}
+	\newcommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
+	\newcommand*{\zeroj}{\jump{{\Tzerosym}}}
+	\let\Tzeroj=\zeroj
+	\newcommand*{\zerojj}{\jump{\jump{{\Tzerosym}}}}
+	\newcommand*{\zerojjj}{\jump{\jump{\jump{{\Tzerosym}}}}}
+	\let\Tzerojj=\zerojj
+	\let\Tzerojjj=\zerojjj
+
+	%%Misc Recursion theory stuff
+	%turing equivalent
+	\newcommand*{\@recthy@TSYM}{\mathbf{T}}
+	\newcommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}}
+	\newcommand*{\Teq}{\Tequiv}
+	\newcommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
+	\newcommand*{\nTeq}{\nTequiv}
+	%turing below
+
+	\newcommand*{\Tlneq}{\lneq_{\@recthy@TSYM}}
+	\newcommand*{\Tleq}{\leq_{\@recthy@TSYM}}
+	\newcommand*{\Tgneq}{\gneq_{\@recthy@TSYM}}
+	\newcommand*{\Tgeq}{\geq_{\@recthy@TSYM}}
+	\newcommand*{\Tgtr}{>_{\@recthy@TSYM}}
+	\newcommand*{\Tless}{<_{\@recthy@TSYM}}
+	\newcommand*{\nTleq}{\nleq_{\@recthy@TSYM}}
+	\newcommand*{\nTgeq}{\ngeq_{\@recthy@TSYM}}
+
+	\newcommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
+	\newcommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
+	\newcommand*{\Tmeet}{\Tdegmeet}
+	\newcommand*{\Tsetjoin}{\mathbin{\oplus}}
+	\newcommand*{\TsetJoin}{\mathop{\bigoplus}}
+	\newcommand*{\Tplus}{\Tsetjoin}
+	\newcommand*{\TPlus}{\TsetJoin}
+	\newcommand*{\Tjoin}{\Tsetjoin}
+	\newcommand*{\TJoin}{\TsetJoin}
+
+
+
+
+
+
+	\newcommand*{\@recthy@ttSYM}{\ensuremath{\text{\tiny tt}}}
+	\newcommand*{\ttSYM}{\@recthy@ttSYM}
+	\newcommand*{\ttlneq}{\lneq_{\@recthy@ttSYM}}
+	\newcommand*{\ttleq}{\leq_{\@recthy@ttSYM}}
+	\newcommand*{\ttgneq}{\gneq_{\@recthy@ttSYM}}
+	\newcommand*{\ttgeq}{\geq_{\@recthy@ttSYM}}
+	\newcommand*{\ttgtr}{>_{\@recthy@ttSYM}}
+	\newcommand*{\ttless}{<_{\@recthy@ttSYM}}
+	\newcommand*{\ttTleq}{\nleq_{\@recthy@ttSYM}}
+	\newcommand*{\ttTgeq}{\ngeq_{\@recthy@ttSYM}}
+\fi
+
+
 
 
 

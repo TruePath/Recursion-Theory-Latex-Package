@@ -40,7 +40,7 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{2010-10-14: Version 1.0}
+\date{2011-01-01: Version 1.2}
 
 \begin{document}
 
@@ -72,7 +72,9 @@ A few general conventions are usually followed in the commands.  Whenever an ope
 Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
 
 Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above
-\subsection{Main Commands}
+\subsection{Computations}
+To disable these commands pass the option \verb=nocomputations=. \\
+
 \begin{xtabular}{l |  l | l}\toprule 
 	\verb=\murec{x}{f(x)>1}=					& \( 	\murec{x}{f(x)>1}                     \)	& Least \( x \) satisfying condition. \\ \midrule
 	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functions/functionals} \\[6pt]
@@ -96,7 +98,15 @@ Unless indicated otherwise all macros are to be used inside math mode.  Indented
 	\verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
 	\tab \verb=\reaop{\alpha}(\eset)=                           &    & \\[6pt]
 	\verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
-	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\ \midrule
+	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\ 
+		\bottomrule
+	\end{xtabular}          \\
+
+\subsection{Degrees}
+To disable these commands pass the option \verb=nodegrees=. \\
+
+
+\begin{xtabular}{l |  l | l}\toprule 
 	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & Turing degree \\ \midrule
 	\verb=\Tjump{X}=                                       & \multirow{2}{*}{\( 	\Tjump{X}                             	   \)}   & \multirow{2}{*}{Turing jump} \\
 	\tab \verb=\jump{X}=                                        &  & \\ \midrule
@@ -384,10 +394,18 @@ To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes
 	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\ 
 		\bottomrule
 \end{xtabular}
-                                      
+                    
+\subsection{MRref}
+
+Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article.  Unless you have a good reason (like journal formatting guidelines) there is no reason not to always pass this option.  Note this option requires the hyperref package.                    
 	                              
 	
-	
+\section{Release Notes}
+
+\begin{itemize}
+	\item[1.2] Fixed awful option processing bug preventing most options from being recognized and added mrref option.
+	\item[1.0] Initial public release
+\end{itemize}
 	
 	
 	
