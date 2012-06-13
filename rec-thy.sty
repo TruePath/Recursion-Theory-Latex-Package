@@ -167,8 +167,8 @@
 \fi
 }
 
-\newcommand*{\@recthy@re}{\@recthy@ensuretext{r.e.}}
-\newcommand*{\@recthy@ce}{\@recthy@ensuretext{c.e.}}
+\newcommand*{\@recthy@re}{\@recthy@ensuretext{r.e.\ }}
+\newcommand*{\@recthy@ce}{\@recthy@ensuretext{c.e.\ }}
 \newcommand*{\@recthy@recursive}{\@recthy@ensuretext{recursive}}
 \newcommand*{\@recthy@computable}{\@recthy@ensuretext{computable}}
 \newcommand*{\@recthy@recursivelyEnumerable}{\@recthy@ensuretext{recursively enumerable}}
@@ -354,7 +354,7 @@
 	\@packinfo{No strings loading.}
 \else
 	\@packinfo{Strings loading.}
-
+        \newcommand*{\closedn}[1]{{#1}^\blacktriangledown}
 	\newcommand*{\str}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
 	\newcommand*{\code}{\str}
 	\newcommand*{\EmptyStr}{\@recthy@EmptyStr}
@@ -412,15 +412,21 @@
 	\WithSuffix\def\subset*{\subset^{*}}
 	\WithSuffix\def\supset*{\supset^{*}}
 	\WithSuffix\def\subseteq*{\subseteq^{*}}
-	\WithSuffix\def\supseteq*{\supseteq^{*}}
-	% \WithSuffix\def\subsetneq*{\subsetneq^{*}}
-	% \WithSuffix\def\supsetneq*{\supsetneq^{*}}
+	\WithSuffix\def\supseteq*{\supseteq^{*}}  
 	\providecommand*{\nsupset}{\not\supset}
 	\providecommand*{\nsubset}{\not\subset}
+	\WithSuffix\def\nsubset*{\nsubset^{*}}
+	\WithSuffix\def\nsupset*{\nsupset^{*}}
+	\WithSuffix\def\nsubseteq*{\nsubseteq^{*}}
+	\WithSuffix\def\nsupseteq*{\nsupseteq^{*}}
+	% \WithSuffix\def\subsetneq*{\subsetneq^{*}}
+	% \WithSuffix\def\supsetneq*{\supsetneq^{*}}
+
 	\newcommand*{\eq}{=}
 	\WithSuffix\def\eq*{=^{*}}
 	\newcommand*{\eqae}{=^{*}}
-
+        \newcommand*{\neqae}{\neq^{*}}
+	\WithSuffix\def\neq*{\neq^{*}}
 
 	\newcommand*{\infsubset}{\subset_{\infty}}
 	\WithSuffix\def\infsubset*{\infsubset^{*}}
@@ -694,23 +700,96 @@
 
 
 
-	\newcommand*{\Cdeltan}[1]{\CDelta_{#1}}
-	\WithSuffix\def\Cdeltan[#1]#2{\Cdeltan{#2}^{#1}}
-	% \WithSuffix\def\Cdeltan(#1)#2{\Cdeltan{#2}\left(#1\right)}
-
-
-
-
-
+	\newcommand*{\Cdeltan}[1]{\CDelta_{#1}}      
+	\WithSuffix\def\Cdeltan[#1]#2{\Cdeltan{#2}^{#1}} 
 	\newcommand*{\Cpin}[1]{\CPi_{#1}}
-	\WithSuffix\def\Cpin[#1]#2{\Cpin{#2}^{#1}}
-	% \WithSuffix\def\Cpin(#1)#2{\Cpin{#2}\!\left(#1\right)}
-
-
+	\WithSuffix\def\Cpin[#1]#2{\Cpin{#2}^{#1}} 
 	\newcommand*{\Csigman}[1]{\CSigma_{#1}}
 	\WithSuffix\def\Csigman[#1]#2{\Csigman{#2}^{#1}}
-	% \WithSuffix\def\Csigman(#1)#2{\Csigman{#2}\!\left(#1\right)}
+	
+        \newcommand*{\CdeltaZeroN}[1]{\CDelta[0]{#1}}
+	\newcommand*{\CdeltaZeroTwo}{\CdeltaZeroN{2}}
+	\newcommand*{\CdeltaZeroThree}{\CdeltaZeroN{3}}
+	\newcommand*{\CdeltaZeroOne}{\CdeltaZeroN{1}}
+	\newcommand*{\CdeltaZeroZero}{\CdeltaZeroN{0}}
+	\newcommand*{\CdeltaOneN}[1]{\Cdeltan[1]{#1}}
+	\newcommand*{\CdeltaOneOne}{\CdeltaOneN{1}}
+	\newcommand*{\CdeltaOneTwo}{\CdeltaOneN{2}}
+	\newcommand*{\CdeltaOneThree}{\CdeltaOneN{3}}    
+        \newcommand*{\CpiZeroN}[1]{\CPi[0]{#1}} 
+	\newcommand*{\CpiOneN}[1]{\CPi[1]{#1}}
+	\newcommand*{\CpiOneOne}{\CpiOneN{1}}
+	\newcommand*{\CpiOneThree}{\CpiOneN{3}}
+	\newcommand*{\CpiOneTwo}{\CpiOneN{2}}
+	\newcommand*{\CpiZeroOne}{\CpiZeroN{1}}
+	\newcommand*{\CpiZeroThree}{\CpiZeroN{3}}
+	\newcommand*{\CpiZeroTwo}{\CpiZeroN{2}}
+	\newcommand*{\CsigmaOneN}[1]{\CSigma[1]{#1}}
+	\newcommand*{\CsigmaOneOne}{\CsigmaOneN{1}}
+	\newcommand*{\CsigmaOneThree}{\CsigmaOneN{3}}
+	\newcommand*{\CsigmaOneTwo}{\CsigmaOneN{2}}
+	\newcommand*{\CsigmaZeroN}[1]{\CSigma[0]{#1}}
+	\newcommand*{\CsigmaZeroOne}{\CsigmaZeroN{1}}
+	\newcommand*{\CsigmaZeroThree}{\CsigmaZeroN{3}}
+	\newcommand*{\CsigmaZeroTwo}{\CsigmaZeroN{2}}
+	
+	
+	\WithSuffix\def\CsigmaOneN[#1]#2{\Csigma[1,#1]{#2}}
+	\WithSuffix\def\CsigmaOneOne[#1]{\CsigmaOneN[#1]{1}}
+	\WithSuffix\def\CsigmaOneThree[#1]{\CsigmaOneN[#1]{3}}
+	\WithSuffix\def\CsigmaOneTwo[#1]{\CsigmaOneN[#1]{2}}
+	\WithSuffix\def\CsigmaZeroN[#1]#2{\Csigma[0,#1]{#2}}
+	\WithSuffix\def\CsigmaZeroOne[#1]{\CsigmaZeroN[#1]{1}}
+	\WithSuffix\def\CsigmaZeroThree[#1]{\CsigmaZeroN[#1]{3}}
+	\WithSuffix\def\CsigmaZeroTwo[#1]{\CsigmaZeroN[#1]{2}}
+        \WithSuffix\def\CpiOneN[#1]#2{\Cpi[1,#1]{#2}}
+	\WithSuffix\def\CpiOneOne[#1]{\CpiOneN[#1]{1}}
+	\WithSuffix\def\CpiOneThree[#1]{\CpiOneN[#1]{3}}
+	\WithSuffix\def\CpiOneTwo[#1]{\CpiOneN[#1]{2}}
+	\WithSuffix\def\CpiZeroN[#1]#2{\Cpi[0,#1]{#2}}
+	\WithSuffix\def\CpiZeroOne[#1]{\CpiZeroN[#1]{1}}
+	\WithSuffix\def\CpiZeroThree[#1]{\CpiZeroN[#1]{3}}
+	\WithSuffix\def\CpiZeroTwo[#1]{\CpiZeroN[#1]{2}}
+        \WithSuffix\def\CdeltaOneN[#1]#2{\Cdelta[1,#1]{#2}}
+	\WithSuffix\def\CdeltaOneOne[#1]{\CdeltaOneN[#1]{1}}
+	\WithSuffix\def\CdeltaOneTwo[#1]{\CdeltaOneN[#1]{2}}
+	\WithSuffix\def\CdeltaOneThree[#1]{\CdeltaOneN[#1]{3}}
+        \WithSuffix\def\CdeltaZeroZero[#1]{\CdeltaZeroN[#1]{0}}
+ 	\WithSuffix\def\CdeltaZeroN[#1]#2{\Cdelta[0,#1]{#2}}
+        \WithSuffix\def\CdeltaZeroTwo[#1]{\CdeltaZeroN[#1]{2}}
+        \WithSuffix\def\CdeltaZeroThree[#1]{\CdeltaZeroN[#1]{3}}
+        \WithSuffix\def\CdeltaZeroOne[#1]{\CdeltaZeroN[#1]{1}}
+           
 
+	%%%ABREVIATIONS
+	\newcommand*{\Cdeltaz}{\CdeltaN{0}}
+	\newcommand*{\Cdeltazn}{\CdeltaZeroN}
+	\newcommand*{\Cdeltazii}{\CdeltaZeroTwo}
+	\newcommand*{\Cdeltazi}{\CdeltaZeroOne}
+	\newcommand*{\Cdeltazz}{\CdeltaZeroZero}
+	\newcommand*{\Cdeltaziii}{\CdeltaZeroThree}
+	\newcommand*{\CdeltaIn}{\CdeltaOneN}
+	\newcommand*{\CdeltaIi}{\CdeltaOneOne}
+	\newcommand*{\Cdeltaoneone}{\CdeltaOneOne}
+	\newcommand*{\CdeltaIii}{\CdeltaOneTwo}
+	\newcommand*{\CdeltaIiii}{\CdeltaOneThree}
+	\newcommand*{\Csigmazn}{\CsigmaZeroN}
+	\newcommand*{\Csigmazi}{\CsigmaZeroOne}
+	\newcommand*{\Csigmazii}{\CsigmaZeroTwo}
+	\newcommand*{\Csigmaziii}{\CsigmaZeroThree}
+	\newcommand*{\CsigmaIn}{\CsigmaOneN}
+	\newcommand*{\CsigmaIi}{\CsigmaOneOne}
+	\newcommand*{\CsigmaIii}{\CsigmaOneTwo}
+	\newcommand*{\CsigmaIiii}{\CsigmaOneThree}
+	\newcommand*{\Cpizn}{\CpiZeroN}
+	\newcommand*{\Cpizi}{\CpiZeroOne}
+	\newcommand*{\Cpizii}{\CpiZeroTwo}
+	\newcommand*{\Cpiziii}{\CpiZeroThree}
+	\newcommand*{\CpiIn}{\CpiOneN}
+	\newcommand*{\CpiIi}{\CpiOneOne}
+	\newcommand*{\CpiIii}{\CpiOneTwo}
+	\newcommand*{\CpiIiii}{\CpiOneThree}
+	
 %%%BOLDFACE
 	
 	\newcommand*{\Deltan}[1]{\utilde{\mathbf{\Delta}}_{#1}}
