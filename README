@@ -1,10 +1,13 @@
 This directory contains the rec-thy package. This package provides a large
 number of macros to express standard pieces of notation in recursion theory
 aka computability theory. The file rec-thy.pdf (which can be generated from
-rec-thy.tex) provides a guide to usage and examples of almost all the macros.
+rec-thy.tex) provides a guide to usage and examples of almost all the macros
+and package options as well as release notes.
 
 Comments, feedback and patches welcomes.
 
 Author: Peter Gerdes email: gerdes@invariant.org
 
-01/01/2011
+10/15/2010 - v1.0 - Original Release
+01/01/2011 - v1.2
+06/20/2012 - v1.3

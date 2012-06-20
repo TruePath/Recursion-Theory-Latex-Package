@@ -368,7 +368,9 @@ To disable these commands pass the option \verb=noforcing=.\\
 \end{tabular}  
 
 \subsection{Syntax}      
-To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas).
+To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas as this doesn't make sense).  Not all formulas/abbreviations are demonstrated below given the huge number but the enough are included to make it clear what command is required to generate the desired formula class, e.g., substituting pi for delta does what you think it does.
+
+To change the syntax for the computable infinitary formulas you can pass the options \verb=cdeltasym=, \verb=csigmasym= and \verb=cpisym= set equal to the command to produce your desired symbol.  This is UNTESTED and quite likely doesn't work yet.  If you desire this feature and it doesn't work send me a bug report. 
 
 \begin{xtabular}{l |  l | l}\toprule 
 	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
@@ -378,8 +380,8 @@ To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes
 	\tab \verb=\deltazn[X]{2}=          &                              & \\ \midrule
 	\verb=\deltaZeroOne[X]=        & \multirow{2}{*}{\( \deltaZeroOne[X]  \)}      & \\ 
 	\tab \verb=\deltazi[X]=             &                              & \\ \midrule         
-	\verb=\deltaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\ 
-	\tab \verb=\deltazii[X]=            &                              & \\ \midrule         
+	\verb=\sigmaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\ 
+	\tab \verb=\sigmazii[X]=            &                              & \\ \midrule         
 	\verb=\deltaZeroThree[X]=      & \multirow{2}{*}{\( \deltaZeroThree[X]\)}      & \\ 
 	\tab \verb=\deltaziii[X]=           &                              & \\ \midrule         
 	\verb=\deltaOneN[X]{2}=        & \multirow{2}{*}{\( \deltaOneN[X]{2}  \)}      & \\ 
@@ -389,8 +391,12 @@ To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes
 	\verb=\deltaOneTwo[X]=         & \multirow{2}{*}{\( \deltaOneTwo[X]   \)}      & \\ 
 	\tab \verb=\deltaIii[X]=            &                              & \\ \midrule         
 	\verb=\deltaOneThree[X]=       & \multirow{2}{*}{\( \deltaOneThree[X] \)}      & \\ 
-	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule
-	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule
+	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule  
+	\verb=\pizi=              & \( \pizi      \)      & \\ \midrule      
+	\verb=\pizn[X]{n}=              & \( \pizn[X]{n}      \)      & \\ \midrule
+	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule  
+	\verb=\DeltaOneN[X]{n}=         & \( \DeltaOneN[X]{n} \)  & \\ \midrule
+ 
 	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\ 
 		\bottomrule
 \end{xtabular}
@@ -402,9 +408,10 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 	
 \section{Release Notes}
 
-\begin{itemize}
-	\item[1.2] Fixed awful option processing bug preventing most options from being recognized and added mrref option.
-	\item[1.0] Initial public release
+\begin{itemize}  
+	\item[1.3] 06/20/2012 - Added abbreviations for computable infinitary formulas and made a few minor fixes.
+	\item[1.2] 01/01/2011 - Fixed awful option processing bug preventing most options from being recognized and added mrref option.
+	\item[1.0] 10/15/2010 - Initial public release
 \end{itemize}
 	
 	
