@@ -4,7 +4,13 @@ aka computability theory. The file rec-thy.pdf (which can be generated from
 rec-thy.tex) provides a guide to usage and examples of almost all the macros
 and package options as well as release notes.
 
-Comments, feedback and patches welcomes.
+Comments, feedback and patches welcomes.  
+
+Since my goal is to provide something of use to the community (and myself) I 
+see no reason to burden down potential reuse of this material in the future
+with the risk of silly license compatibility issues so I'm releasing this
+into the public domain.  I would *ask* anyone who reuses it not to be a dick 
+about it (give credit, commit upgrades back etc..) 
 
 Author: Peter Gerdes email: gerdes@invariant.org
 
