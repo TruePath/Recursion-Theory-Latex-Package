@@ -10,7 +10,8 @@
 \usepackage{rec-thy}
 \usepackage{multirow}
 \usepackage{booktabs}
-\usepackage{xtab}
+\usepackage{xtab} 
+\usepackage{hyperref}
 
 
 \newcommand{\tab}{\hspace{1cm}}
@@ -59,7 +60,7 @@ This package aims to provide a useful set of \LaTeX { }macros covering basic com
 
 While computability theory is now the more popular name for the subject also known as recursion theory the author deliberately choose to title this package rec-thy to avoid confusion with the proliferation of packages for typesetting computer science related disciplines.  While the subject matter of computability theory and theoretical computer science overlap significantly the notational conventions often differ.
 
-Comments, patches, suggestions etc.. are all welcome.
+Comments, patches, suggestions etc.. are all welcome.  This project is hosted on github at \href{https://github.com/TruePath/Recursion-Theory-Latex-Package}{https://github.com/TruePath/Recursion-Theory-Latex-Package}.
 
 \section{Usage}
 Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX{ } can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and aliases are indented.
