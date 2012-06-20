@@ -6,11 +6,15 @@ and package options as well as release notes.
 
 Comments, feedback and patches welcomes.  
 
-Since my goal is to provide something of use to the community (and myself) I 
-see no reason to burden down potential reuse of this material in the future
-with the risk of silly license compatibility issues so I'm releasing this
-into the public domain.  I would *ask* anyone who reuses it not to be a dick 
-about it (give credit, commit upgrades back etc..) 
+Since my goal is to provide something of use to the community (and myself) 
+and having seen some of the problems that can result from even well 
+intentioned licenses later down the road, e.g., difficulties updating TeX,
+and since I still hold sole copyright I'm releasing this into the public 
+domain (this applies retroactively to  prior releases).  I would *ask* 
+anyone who reuses it not to be a dick about it (give credit, commit upgrades back, 
+rename if forking etc..).  Note, I will assume that any contributions to this
+package are implicitly released into the public domain as well unless told
+otherwise. 
 
 Author: Peter Gerdes email: gerdes@invariant.org
 
