@@ -1,29 +1,51 @@
 \NeedsTeXFormat{LaTeX2e}
-\newcommand*{\@curpack}{\@currname} %rec-thy.sty
-\newcommand*{\@packinfo}[1]{\PackageInfo{\@curpack}{#1}}
+\ProvidesPackage{rec-thy}[2011/01/01 v1.2  Provides commands for writing up recursion theory papers]
+\makeatletter
+% \newcommand*{\@curpack}{\@currname} %rec-thy.sty
+\newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
 \newcommand*{\recthy@strip}[1]{%\expandafter\newcommand{\csname #1\endcsname}{}% Makes sure arg isn't already a command
 \expandafter\edef\csname #1\endcsname{\expandafter\noexpand\csname @recthy@#1\endcsname}} %leaves us a command \arg defined to do \@recthy@arg
-\ProvidesPackage{\@curpack} [2011/01/01 v1.2  Provides commands for writing up recursion theory papers] %file name is package name
+% \ProvidesPackage{\@curpack}  %file name is package name
 
 % Release Notes
 % Version 1.2
 % Added mrref option
 % Fixed horrific option processing bug
-
+\RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
 \RequirePackage{xifthen}
 \RequirePackage{xkeyval}
-\RequirePackage{undertilde}
-\RequirePackage{stmaryrd}
-\RequirePackage{amsmath}
+\RequirePackage{mathtools}
 \RequirePackage{amssymb}
-\RequirePackage{marvosym}
+
+% \RequirePackage{amsmath}
+\RequirePackage{undertilde}
+
 \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
 
-\newcommand*{\PMG@arginit}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined}
+% \ifxetex
+%   \RequirePackage{xltxtra}
+%   \RequirePackage{unicode-math}
+%   % \RequirePackage{fontspec,xunicode}
+%   % \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase} % To support LaTeX quoting style
+%   % \input{/Users/TruePath/Library/texmf/tex/headers/appearence.tex}
+% \else
+%   % \usepackage[utf8]{inputenc}
+%   % \usepackage[T1]{fontenc}
+%   % \RequirePackage{euscript}
+%   % \newcommand*{\matheu}{\EuScript}
 
-\newcommand*{\@recthy@family}{\@currname.\@currext} %The default family for this package...filename.ext
+%   \ifpdf
+% 	\RequirePackage{cmap} % you can search in the pdf for umlauts and ligatures
+%   \fi
+% \fi
+% \RequirePackage{stmaryrd}
+% \RequirePackage{marvosym}
+
+\def\PMG@arginit{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined}
+
+\def\@recthy@family{\@currname.\@currext} %The default family for this package...filename.ext
 %Define boolean options true if option passed false otherwise
 
 
@@ -31,9 +53,11 @@
 \newif\ifrecthy@mrref			\recthy@mrreffalse
 \newif\ifrecthy@nomath			\recthy@nomathfalse
 \newif\ifrecthy@nodelim			\recthy@nodelimfalse
-\newif\ifrecthy@nonames			\recthy@nonamesfalse
-\newif\ifrecthy@nosets			\recthy@nosetsfalse
-\newif\ifrecthy@noquants		\recthy@noquantsfalse
+\newif\ifrecthy@nonames
+\recthy@nonamesfalse
+\newif\ifrecthy@nosets
+\recthy@nosetsfalse
+\newif\ifrecthy@noquants\recthy@noquantsfalse
 \newif\ifrecthy@nospaces		\recthy@nospacesfalse
 \newif\ifrecthy@nostrings		\recthy@nostringsfalse
 \newif\ifrecthy@notrees			\recthy@notreesfalse
@@ -46,7 +70,9 @@
 \newif\ifrecthy@noforcing		\recthy@noforcingfalse
 \newif\ifrecthy@nodegrees		\recthy@nodegreesfalse
 \newif\ifrecthy@nocomputations		\recthy@nocomputationsfalse
-                                                                             
+\newif\ifrecthy@nostructresets \recthy@nostructresetsfalse
+\newif\ifrecthy@noreqhelper \recthy@noreqhelperfalse
+
 \DeclareOption{nohyphenation}{\recthy@nohyphenationtrue}
 \DeclareOption{mrref}{\recthy@mrreftrue}
 \DeclareOption{nomath}{\recthy@nomathtrue}
@@ -64,10 +90,60 @@
 \DeclareOption{nodegclasses}{\recthy@nodegclassestrue}
 \DeclareOption{noforcing}{\recthy@noforcingtrue}
 \DeclareOption{nodegrees}{\recthy@nodegreestrue}
-\DeclareOption{nocomputations}{\recthy@nocomputationstrue}                                                                             
+\DeclareOption{nocomputations}{\recthy@nocomputationstrue}
+\DeclareOption{nostructresets}{\recthy@nostructresetstrue}
+\DeclareOption{noreqhelper}{\recthy@noreqhelpertrue}
 
 \DeclareOption{degjoin}{\def\Tjoin{\Tdegjoin}}
-	
+
+\DeclareOptionX<\@recthy@family>{reqscr}[]{\let\@recthy@reqscr=#1}
+
+\let\@recthy@reqscr=\mathscr
+
+\AtEndOfPackage{
+\ifrecthy@noreqhelper
+	\@packinfo{Not loading requirement assist.}
+\else
+	\@packinfo{Loading requirement assist.}
+	\newcommand*{\req}[3][]{\ensuremath{\ifthenelse{\isempty{#3}}{{\@recthy@reqscr{#2}}^{#1}}{\@recthy@reqscr{#2}^{#1}_{#3}} }}
+	\newbox{\@recthy@reqbox}
+	\def\defreq#1#2\par{
+		\begin{equation}\let\veqno\@@leqno%
+			\tag*{#1}%
+			\begin{lrbox}{\@recthy@reqbox}%
+   \begin{minipage}{\textwidth}#2\end{minipage}%
+   \end{lrbox}%
+   \makebox[0pt]{\usebox{\@recthy@reqbox}}%
+		\end{equation}}
+\fi
+}
+
+
+
+\AtEndOfPackage{
+\ifrecthy@nostructresets
+	\@packinfo{Not loading r.e. set structs w/ containment.}
+\else
+	\@packinfo{Loading r.e. set structs w/ containment.}
+\newcommand*{\promptdif}{\setminus_{\downarrow}}
+\let\setbefore=\promptdif
+\let\promptminus=\promptdif
+\let\promptsetminus=\promptdif
+
+\newcommand*{\StrcE}{\ensuremath{\mathscr{E}}}
+\WithSuffix\def\StrcE*{\ensuremath{\mathscr{E}^{*}}}
+\let\strucE\StrcE
+\newcommand*{\StrcL}[1]{\mathscr{L}(#1)}
+\newcommand*{\StrcStarL}[1]{\mathscr{L}^{*}(#1)}
+\WithSuffix\def\StrcL*{\StrcStarL}
+\newcommand*{\splitof}{\sqsubset}
+\newcommand*{\splitby}{\sqsupset}
+\newcommand*{\StrcR}{\ensuremath{\mathscr{R}}}
+
+
+\fi
+}
+
 \AtEndOfPackage{
 \ifrecthy@nohyphenation
 	\@packinfo{No hyphenation loading.}
@@ -208,11 +284,11 @@
 	\let\@recthy@computablyEnumerable=\@recthy@recursivelyEnumerable
 	\let\@recthy@ComputablyEnumerable=\@recthy@RecursivelyEnumerable
 	} %Make all references to ce change to re
-	
+
 	\DeclareOption{reaterms}{%
 		\let\@recthy@CEA=\@recthy@REA
 		}
-		
+
 \DeclareOption{ceterms}{%
 	\let\@recthy@re=\@recthy@ce
 	\let\@recthy@recursive=\@recthy@computable
@@ -285,6 +361,25 @@
 	\@packinfo{No quants loading.}
 \else
 	\@packinfo{Quants loading.}
+	\newcommand*{\existsuniq}{\exists !}
+	\newcommand*{\nexistsuniq}{\nexists !}
+	\WithSuffix\def\existsuniq(#1){\left(\existsuniq\, #1 \right)\!}
+	\WithSuffix\def\nexistsuniq(#1){\left(\nexistsuniq\, #1 \right)\!}
+	\WithSuffix\def\existsuniq[#1]{\left[\existsuniq\, #1 \right]\!}
+	\WithSuffix\def\nexistsuniq[#1]{\left[\nexistsuniq\, #1 \right]\!}
+
+	\newcommand*{\forallae}{\forall^{*}}
+	\WithSuffix\def\forallae(#1){\left(\forallae\, #1\right)\!}
+	\WithSuffix\def\forallae[#1]{\left[\forallae\, #1\right]\!}
+
+	\newcommand*{\existsinf}{\exists^{\infty}}
+	\WithSuffix\def\existsinf(#1){\left(\existsinf\, #1\right)\!}
+	\WithSuffix\def\existsinf[#1]{\left[\existsinf\, #1\right]\!}
+
+	\newcommand*{\nexistsinf}{\nexists^{\infty}}
+	\WithSuffix\def\nexistsinf(#1){\left(\nexistsinf\, #1\right)\!}
+	\WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf\, #1\right]\!}
+
 	\WithSuffix\def\exists(#1){\left(\exists\, #1 \right)\!}
 	\WithSuffix\def\forall(#1){\left(\forall\, #1 \right)\!}
 	\WithSuffix\def\nexists(#1){\left(\nexists\, #1 \right)\!}
@@ -294,16 +389,10 @@
 	\WithSuffix\def\forall*{\forallae}
 	\WithSuffix\def\exists*{\existsinf}
 	\WithSuffix\def\nexists*{\nexistsinf}
-	
-	\newcommand*{\forallae}{\forall^{*}}
-	\WithSuffix\def\forallae(#1){\left(\forallae\, #1\right)\!}
-	\WithSuffix\def\forallae[#1]{\left[\forallae\, #1\right]\!}
-	\newcommand*{\existsinf}{\exists^{\infty}}
-	\WithSuffix\def\existsinf(#1){\left(\existsinf\, #1\right)\!}
-	\WithSuffix\def\existsinf[#1]{\left[\existsinf\, #1\right]\!}
-	\newcommand*{\nexistsinf}{\nexists^{\infty}}
-	\WithSuffix\def\nexistsinf(#1){\left(\nexistsinf\, #1\right)\!}
-	\WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf\, #1\right]\!}
+	\WithSuffix\def\exists!{\existsuniq}
+
+
+
 
 	\newcommand*{\True}{\top}
 	\newcommand*{\False}{\bot}
@@ -412,7 +501,7 @@
 	\WithSuffix\def\subset*{\subset^{*}}
 	\WithSuffix\def\supset*{\supset^{*}}
 	\WithSuffix\def\subseteq*{\subseteq^{*}}
-	\WithSuffix\def\supseteq*{\supseteq^{*}}  
+	\WithSuffix\def\supseteq*{\supseteq^{*}}
 	\providecommand*{\nsupset}{\not\supset}
 	\providecommand*{\nsubset}{\not\subset}
 	\WithSuffix\def\nsubset*{\nsubset^{*}}
@@ -461,8 +550,8 @@
 \newcommand*{\wck}{\ensuremath{\omega^{ck}_1}}
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
 	\newcommand*{\ordzero}{\ensuremath{0}}
-	
-	\newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\def\kleeneOSYM{\mathcal{O}}\@kleeneObody}
+  \def\kleeneOSYM{\mathcal{O}}
+	\newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
 	\newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
 	^{\@PMG@parenarg}%
 	\fi%
@@ -472,7 +561,9 @@
 	\WithSuffix\def\@kleeneObody(#1){\def\@PMG@parenarg{#1}\@kleeneObody}
 	\WithSuffix\def\@kleeneObody[#1]{\def\@PMG@braketarg{#1}\@kleeneObody}
 	\WithSuffix\def\@kleeneObody*{\def\kleeneOSYM{\overline{\mathcal{O}}}\@kleeneObody}
-	
+
+\newcommand*{\kleeneObelow}[2][]{\kleeneOSYM_{<#2\ifthenelse{\isempty{#1}}{}{, #1}}}
+\let\kleeneOless\kleeneObelow
 
 	\newcommand*{\kleeneOuniq}{\kleeneO*}
 	\let\ordNotations=\kleeneO
@@ -495,7 +586,7 @@
 	\let\hgtO=\kleenehgt
 	\newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
 	\newcommand*{\kleenepred}[1]{{#1}^{-}}
-	
+
 \fi
 }
 
@@ -531,9 +622,9 @@
 
 %%%%%%%%% Formula Classes
 
-\newcommand*{\@recthy@CDelta}{\vphantom{\Delta}^{\mathcal{C}}\Delta}
-\newcommand*{\@recthy@CSigma}{\vphantom{\Sigma}^{\mathcal{C}}\Sigma}
-\newcommand*{\@recthy@CPi}{\vphantom{\Pi}^{\mathcal{C}}\Pi}
+\newcommand*{\@recthy@CDelta}{\prescript{\mathcal{C}}{}{\Delta}}
+\newcommand*{\@recthy@CSigma}{\prescript{\mathcal{C}}{}{\Sigma}}
+\newcommand*{\@recthy@CPi}{\prescript{\mathcal{C}}{}{\Pi}}
 
 \DeclareOptionX<\@recthy@family>{cdeltasym}[]{\def\@recthy@CDelta{#1}}
 \DeclareOptionX<\@recthy@family>{csigmasym}[]{\def\@recthy@CSigma{#1}}
@@ -700,13 +791,13 @@
 
 
 
-	\newcommand*{\Cdeltan}[1]{\CDelta_{#1}}      
-	\WithSuffix\def\Cdeltan[#1]#2{\Cdeltan{#2}^{#1}} 
+	\newcommand*{\Cdeltan}[1]{\CDelta_{#1}}
+	\WithSuffix\def\Cdeltan[#1]#2{\Cdeltan{#2}^{#1}}
 	\newcommand*{\Cpin}[1]{\CPi_{#1}}
-	\WithSuffix\def\Cpin[#1]#2{\Cpin{#2}^{#1}} 
+	\WithSuffix\def\Cpin[#1]#2{\Cpin{#2}^{#1}}
 	\newcommand*{\Csigman}[1]{\CSigma_{#1}}
 	\WithSuffix\def\Csigman[#1]#2{\CSigma_{#2}^{#1}}
-	
+
         \newcommand*{\CdeltaZeroN}[1]{\Cdeltan[0]{#1}}
 	\newcommand*{\CdeltaZeroTwo}{\CdeltaZeroN{2}}
 	\newcommand*{\CdeltaZeroThree}{\CdeltaZeroN{3}}
@@ -715,8 +806,8 @@
 	\newcommand*{\CdeltaOneN}[1]{\Cdeltan[1]{#1}}
 	\newcommand*{\CdeltaOneOne}{\CdeltaOneN{1}}
 	\newcommand*{\CdeltaOneTwo}{\CdeltaOneN{2}}
-	\newcommand*{\CdeltaOneThree}{\CdeltaOneN{3}}    
-        \newcommand*{\CpiZeroN}[1]{\Cpin[0]{#1}} 
+	\newcommand*{\CdeltaOneThree}{\CdeltaOneN{3}}
+        \newcommand*{\CpiZeroN}[1]{\Cpin[0]{#1}}
 	\newcommand*{\CpiOneN}[1]{\Cpin[1]{#1}}
 	\newcommand*{\CpiOneOne}{\CpiOneN{1}}
 	\newcommand*{\CpiOneThree}{\CpiOneN{3}}
@@ -732,8 +823,8 @@
 	\newcommand*{\CsigmaZeroOne}{\CsigmaZeroN{1}}
 	\newcommand*{\CsigmaZeroThree}{\CsigmaZeroN{3}}
 	\newcommand*{\CsigmaZeroTwo}{\CsigmaZeroN{2}}
-	
-	
+
+
 	\WithSuffix\def\CsigmaOneN[#1]#2{\Csigma[1,#1]{#2}}
 	\WithSuffix\def\CsigmaOneOne[#1]{\CsigmaOneN[#1]{1}}
 	\WithSuffix\def\CsigmaOneThree[#1]{\CsigmaOneN[#1]{3}}
@@ -759,7 +850,7 @@
         \WithSuffix\def\CdeltaZeroTwo[#1]{\CdeltaZeroN[#1]{2}}
         \WithSuffix\def\CdeltaZeroThree[#1]{\CdeltaZeroN[#1]{3}}
         \WithSuffix\def\CdeltaZeroOne[#1]{\CdeltaZeroN[#1]{1}}
-           
+
 
 	%%%ABREVIATIONS
 	\newcommand*{\Cdeltaz}{\CdeltaN{0}}
@@ -789,9 +880,9 @@
 	\newcommand*{\CpiIi}{\CpiOneOne}
 	\newcommand*{\CpiIii}{\CpiOneTwo}
 	\newcommand*{\CpiIiii}{\CpiOneThree}
-	
+
 %%%BOLDFACE
-	
+
 	\newcommand*{\Deltan}[1]{\utilde{\mathbf{\Delta}}_{#1}}
 	\WithSuffix\def\Deltan[#1]#2{\utilde{\mathbf{\Delta}}^{#1}_{#2}}
 	% \WithSuffix\def\Deltan(#1)#2{\deltan{#2}\!\left(#1\right)}
@@ -919,7 +1010,7 @@
 	\newcommand*{\PiIi}{\PiOneOne}
 	\newcommand*{\PiIii}{\PiOneTwo}
 	\newcommand*{\PiIiii}{\PiOneThree}
-	
+
 
 
 
@@ -927,6 +1018,7 @@
 
 \fi
 }
+
 
 
 %%%ABREVIATIONS
@@ -942,7 +1034,6 @@
 	\newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
 	\newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
 	\newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
-	\newcommand{\req}[2]{\ensuremath{\mathcal{#1}_{#2}}}
 \fi
 }
 
@@ -970,12 +1061,49 @@
 		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
 	}}
 
+	\newcommand*{\thetafnl}[4][]{\Theta_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+		\ifthenelse{\isempty{#4}}%
+		{\ifthenelse{\isempty{#3}}%
+			{}% No args then print no parents
+			{(#3)}
+		}%If no oracle we just refer to the functional without any arguments
+		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+	}}
+
+	\newcommand*{\psifnl}[4][]{\Psi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+		\ifthenelse{\isempty{#4}}%
+		{\ifthenelse{\isempty{#3}}%
+			{}% No args then print no parents
+			{(#3)}
+		}%If no oracle we just refer to the functional without any arguments
+		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+	}}
+
+	\newcommand*{\phifnl}[4][]{\Phi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+		\ifthenelse{\isempty{#4}}%
+		{\ifthenelse{\isempty{#3}}%
+			{}% No args then print no parents
+			{(#3)}
+		}%If no oracle we just refer to the functional without any arguments
+		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+	}}
+
+	\newcommand*{\upsilonfnl}[4][]{\Upsilon_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+		\ifthenelse{\isempty{#4}}%
+		{\ifthenelse{\isempty{#3}}%
+			{}% No args then print no parents
+			{(#3)}
+		}%If no oracle we just refer to the functional without any arguments
+		{\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+	}}
+
 
 	\newcommand*{\cequiv}{\mathrel{\backsimeq}}
 	\newcommand*{\ncequiv}{\mathrel{\not\cequiv}}
 	\newcommand*{\conv}[1][]{\mathpunct{\downarrow}_{#1}}
 	%\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
-	\newcommand*{\nconv}[1][]{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
+%	\newcommand*{\nconv}[1][]{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
+	\newcommand*{\nconv}[1][]{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
 	\newcommand*{\diverge}{\mathpunct{\uparrow}}
 	% \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
 	\newcommand*{\use}[1]{\mathop{\mathbrush{u}}\!\left[{#1}\right]}
@@ -998,7 +1126,7 @@
 	\let\iREAop=\oneREAop
 	\WithSuffix\def\reaop*#1{\oneREAop{#1}}
 	%converges
-	
+
 \fi
 
 
@@ -1016,7 +1144,7 @@
 	\newcommand*{\jumpn}[2]{#1^{(#2)}}
 	\newcommand*{\jjump}[1]{#1''}
 	% \newcommand*{\Tzerosym}{\MVZero}
-	\newcommand*{\Tzerosym}{\MVZero}
+	\newcommand*{\Tzerosym}{\mathbb{0}}
 	\newcommand*{\Tzero}{{\Tzerosym}}
 	\newcommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
 	\newcommand*{\zeroj}{\jump{{\Tzerosym}}}
@@ -1067,8 +1195,8 @@
 	\newcommand*{\ttgeq}{\geq_{\@recthy@ttSYM}}
 	\newcommand*{\ttgtr}{>_{\@recthy@ttSYM}}
 	\newcommand*{\ttless}{<_{\@recthy@ttSYM}}
-	\newcommand*{\ttTleq}{\nleq_{\@recthy@ttSYM}}
-	\newcommand*{\ttTgeq}{\ngeq_{\@recthy@ttSYM}}
+	\newcommand*{\ttnleq}{\nleq_{\@recthy@ttSYM}}
+	\newcommand*{\ttngeq}{\ngeq_{\@recthy@ttSYM}}
 \fi
 
 

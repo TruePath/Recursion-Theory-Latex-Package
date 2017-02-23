@@ -10,7 +10,7 @@
 \usepackage{rec-thy}
 \usepackage{multirow}
 \usepackage{booktabs}
-\usepackage{xtab} 
+\usepackage{xtab}
 \usepackage{hyperref}
 
 
@@ -65,7 +65,7 @@ Comments, patches, suggestions etc.. are all welcome.  This project is hosted on
 \section{Usage}
 Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX{ } can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and aliases are indented.
 
-Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.   
+Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.
 
 \section{Commands}
 A few general conventions are usually followed in the commands.  Whenever an operator can be used as a binary operator (as in \( X \union Y \)) and as an operation on some collection \( \Union_{i \in \omega} X_i \) the binary operator will begin with a lowercase letter \verb=\union= and the operation on the collection will begin with a capital letter \verb=\Union=.  If the first letter is already capitalized then the second letter is used instead.
@@ -76,7 +76,7 @@ Unless indicated otherwise all macros are to be used inside math mode.  Indented
 \subsection{Computations}
 To disable these commands pass the option \verb=nocomputations=. \\
 
-\begin{xtabular}{l |  l | l}\toprule 
+\begin{xtabular}{l |  l | l}\toprule
 	\verb=\murec{x}{f(x)>1}=					& \( 	\murec{x}{f(x)>1}                     \)	& Least \( x \) satisfying condition. \\ \midrule
 	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functions/functionals} \\[6pt]
 	\verb=\recfnl[s]{e}{Y}{x}=                             & \( 	\recfnl[s]{e}{Y}{x}                   	   \)   & \\[6pt]
@@ -90,16 +90,16 @@ To disable these commands pass the option \verb=nocomputations=. \\
 	\verb=\recfnl{e}{}{x}\nconv=                           & \( 	\recfnl{e}{}{x}\nconv                 	   \)   &\multirow{2}{*}{Divergence} \\[6pt]
 	\tab \verb=\recfnl{e}{}{x}\nconv[s]=                        & \( 	\recfnl{e}{}{x}\nconv[s]              	   \)   & \\ \midrule
 	\verb=\use{\recfnl{e}{Y}{x}}=                          & \( 	\use{\recfnl{e}{Y}{x}}                	   \)   & Use of a computation. \\ \midrule
-	\verb=\REset{e}=                                       & \( 	\REset{e}                             	   \)   & \multirow{4}{*}{c.e. sets} \\[6pt] 
-	 \verb=\REset[s]{e}=                                    & \( 	\REset[s]{e}                          	   \)   & \\[6pt] 
-	 \verb=\REset(X){e}=                                    & \( 	\REset(X){e}                          	   \)   & \\[6pt] 
+	\verb=\REset{e}=                                       & \( 	\REset{e}                             	   \)   & \multirow{4}{*}{c.e. sets} \\[6pt]
+	 \verb=\REset[s]{e}=                                    & \( 	\REset[s]{e}                          	   \)   & \\[6pt]
+	 \verb=\REset(X){e}=                                    & \( 	\REset(X){e}                          	   \)   & \\[6pt]
 	 \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}                       	   \)   & \\ \midrule
-	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\ 
+	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
 	\tab \verb=\reaop*{e}(\eset)=                               &    & \\ \midrule
 	\verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
 	\tab \verb=\reaop{\alpha}(\eset)=                           &    & \\[6pt]
 	\verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
-	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\ 
+	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\
 		\bottomrule
 	\end{xtabular}          \\
 
@@ -107,7 +107,7 @@ To disable these commands pass the option \verb=nocomputations=. \\
 To disable these commands pass the option \verb=nodegrees=. \\
 
 
-\begin{xtabular}{l |  l | l}\toprule 
+\begin{xtabular}{l |  l | l}\toprule
 	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & Turing degree \\ \midrule
 	\verb=\Tjump{X}=                                       & \multirow{2}{*}{\( 	\Tjump{X}                             	   \)}   & \multirow{2}{*}{Turing jump} \\
 	\tab \verb=\jump{X}=                                        &  & \\ \midrule
@@ -118,9 +118,9 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=\zerojj=                                         & \( 	\zerojj                               	   \)   & \\ \midrule
 	\verb=\zerojjj=                                        & \( 	\zerojjj                              	   \)   & \\ \midrule
 	\verb=\zeron{n}=                                       & \( 	\zeron{n}                             	   \)   & \\ \midrule
-	\verb=X \Tequiv Y=                                     & \multirow{2}{*}{\( 	X \Tequiv Y                           	   \)}   & \multirow{2}{*}{Turing equivalence}\\ 
+	\verb=X \Tequiv Y=                                     & \multirow{2}{*}{\( 	X \Tequiv Y                           	   \)}   & \multirow{2}{*}{Turing equivalence}\\
 	\tab \verb=X \Teq Y=                                        &   & \\ \midrule
-	\verb=X \nTequiv Y=                                    & \multirow{2}{*}{\( 	X \nTequiv Y                          	   \)}   & \multirow{2}{*}{Turing inequivalence} \\ 
+	\verb=X \nTequiv Y=                                    & \multirow{2}{*}{\( 	X \nTequiv Y                          	   \)}   & \multirow{2}{*}{Turing inequivalence} \\
 	\tab \verb=X \nTeq Y=                                       &    & \\ \midrule
         \verb=X \Tlneq Y=                                      & \(  X \Tlneq Y                              	   \)   & \\ \midrule
         \verb=X \Tleq  Y=                                      & \(  X \Tleq  Y                              	   \)   & \\ \midrule
@@ -131,11 +131,11 @@ To disable these commands pass the option \verb=nodegrees=. \\
         \verb=X \nTleq Y=                                      & \(  X \nTleq Y                              	   \)   & \\ \midrule
         \verb=X \nTgeq Y=                                      & \(  X \nTgeq Y                              	   \)   & \\ \midrule
 	\verb=\Tdeg{d} \Tdegjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \Tdegjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
-	\verb=\Tdeg{d} \Tdegmeet \Tdeg{d'}=                    & \multirow{2}{*}{\( 	\Tdeg{d} \Tdegmeet \Tdeg{d'}          	   \)}   & \multirow{2}{*}{Meet of degrees (when defined)} \\ 
+	\verb=\Tdeg{d} \Tdegmeet \Tdeg{d'}=                    & \multirow{2}{*}{\( 	\Tdeg{d} \Tdegmeet \Tdeg{d'}          	   \)}   & \multirow{2}{*}{Meet of degrees (when defined)} \\
 	\tab \verb=\Tdeg{d} \Tmeet \Tdeg{d'}=                       &    & \\ \midrule
-	\verb=X \Tplus Y=                                      & \multirow{2}{*}{\( 	X \Tplus Y                            	   \)}   & \multirow{4}{*}{Effective join of sets} \\ 
-	\tab \verb=X \Tjoin Y=                                      &  & \\ 
-	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\ 
+	\verb=X \Tplus Y=                                      & \multirow{2}{*}{\( 	X \Tplus Y                            	   \)}   & \multirow{4}{*}{Effective join of sets} \\
+	\tab \verb=X \Tjoin Y=                                      &  & \\
+	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\
 	\tab \verb=\TJoin_{i \in \omega} X_i=                       &    & \\ \midrule
 	% \verb=\ttSYM=                                          & \( 	\ttSYM                                	   \)   & \\ \midrule
 	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reducibilities\\ \midrule
@@ -144,8 +144,8 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=X \ttgeq  Y=                                     & \( 	X \ttgeq  Y                           	   \)   & \\ \midrule
 	\verb=X \ttgtr  Y=                                     & \( 	X \ttgtr  Y                           	   \)   & \\ \midrule
 	\verb=X \ttless Y=                                     & \( 	X \ttless Y                           	   \)   & \\ \midrule
-	\verb=X \ttTleq Y=                                     & \( 	X \ttTleq Y                           	   \)   & \\ \midrule
-        \verb=X \ttTgeq Y=                                     & \(  X \ttTgeq Y                             	   \)   & \\ 
+	\verb=X \ttnleq Y=                                     & \( 	X \ttnleq Y                           	   \)   & \\ \midrule
+        \verb=X \ttngeq Y=                                     & \(  X \ttngeq Y                             	   \)   & \\
 		\bottomrule
 	\end{xtabular}          \\
 
@@ -153,21 +153,21 @@ To disable these commands pass the option \verb=nodegrees=. \\
 \subsection{General Math Commands}
 To disable these commands pass the option \verb=nomath=. \\
 
-\begin{tabular}{l |  l | l}\toprule                                
+\begin{tabular}{l |  l | l}\toprule
 	\verb=\eqdef= 					& \( \eqdef \) & Definitional equals\\ \midrule
 	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\	\midrule
 	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\ \midrule
 	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\\midrule
 	\verb=x \meet y= 				& \( x \meet y \) & \multirow{2}{*}{Meet operation} \\[6pt]
 	\verb=\Meet_{i\in \omega} x_i=		& \( \Meet_{i\in \omega} x_i \) & \\ \midrule
-	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt] 
+	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt]
 	\verb=\Join_{i\in \omega} x_i=		& \( \Join_{i\in \omega} x_i \) & \\ \midrule
 	\verb=\abs{x}= 					& \( \abs{x} \) & Absolute value\\ \midrule
 	\verb=\dom= 					& \( \dom \) & Domain \\ \midrule
 	\verb=\rng= 					& \( \rng \) & Range\\ \midrule
 	\verb=f\restr{X}= 				& \( f\restr{X} \) & Restriction\\ \midrule
 	\verb=\ordpair{x}{y}= 				& \( \ordpair{x}{y} \)& Ordered Pair\\ \midrule
-	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) & \multirow{2}{*}{Function specification} \\ 
+	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) & \multirow{2}{*}{Function specification} \\
 	\verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) &\\ \midrule
 	\verb=f \compfunc g=		       		& \multirow{3}{*}{\( f \compose g \)} & \multirow{3}{*}{Function composition}\\
 	\tab \verb=f \funcomp g=	            		& &\\
@@ -177,23 +177,23 @@ To disable these commands pass the option \verb=nomath=. \\
 	\bottomrule
 \end{tabular}          \\
 \newpage
-\subsection{Set Notation}      
+\subsection{Set Notation}
 To disable these commands pass the option \verb=nosets=.\\
 
 \begin{tabular}{l |  l | l}\toprule
-	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt] 
+	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt]
 	\verb=\set{(x,y)}}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
 	\verb=\card{X}=                          &    \(   \card{X}                   \)    & Cardinality \\ \midrule
-	\verb=X \union Y=                        &    \(   X \union Y                 \)    & \multirow{2}{*}{Union}  \\[6pt] 
+	\verb=X \union Y=                        &    \(   X \union Y                 \)    & \multirow{2}{*}{Union}  \\[6pt]
 	\verb=\Union_{i \in \omega} X_i=         &    \(   \Union_{i \in \omega} X_i  \)    &  \\ \midrule
-	\verb=X \isect Y=                        &    \(   X \isect Y                 \)    & \multirow{2}{*}{Intersection} \\[6pt] 
+	\verb=X \isect Y=                        &    \(   X \isect Y                 \)    & \multirow{2}{*}{Intersection} \\[6pt]
 	\verb=\Isect_{i \in \omega} X_i=         &    \(   \Isect_{i \in \omega} X_i  \)    &  \\ \midrule
-	\verb=X \cross Y=                        &    \(   X \cross Y                 \)    & \multirow{2}{*}{Cartesian product (Cross Product)} \\[6pt] 
+	\verb=X \cross Y=                        &    \(   X \cross Y                 \)    & \multirow{2}{*}{Cartesian product (Cross Product)} \\[6pt]
 	\verb=\Cross_{i \in \omega} X_i=         &    \(   \Cross_{i \in \omega} X_i  \)    &  \\ \midrule
 	\verb=\powset{\omega}=                   &    \(   \powset{\omega}            \)    &  Powerset \\ \midrule
 	\verb=\eset=                             &    \(   \eset                      \)    &  Emptyset abbreviation\\ \midrule
 	\verb=x \nin A=                          &    \(   x \nin A                   \)    &  not an element\\ \midrule
-	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\[6pt] 
+	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\[6pt]
 						 &	\( \setminuscmp{X} \)		    & With option \verb=minussetcmp= \\ \midrule
 	\verb=X \setminus Y=                     &    \(   X \setminus Y              \)    & Set difference \\ \midrule
 	\verb=X \symdiff Y=                      &    \(   X \symdiff Y               \)    & Symmetric difference \\ \midrule
@@ -201,29 +201,29 @@ To disable these commands pass the option \verb=nosets=.\\
 	\verb=\closure X=                        &    \(   \closure X                 \)    & Closure \\ \midrule
 		\bottomrule
 	\end{tabular}          \\
-	
-\subsection{Delimiters}      
+
+\subsection{Delimiters}
 To disable these commands pass the option \verb=nodelim=. \\
 
-\begin{tabular}{l |  l | l}\toprule                                
-	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\ 
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\
 	\tab \verb=\godelnum{\phi}=			& &\\
 	\tab \verb=\cornerquote{\phi}=			& &\\ \midrule
 	\verb=\llangle x,y,z \rrangle=			& \( \llangle x,y,z \rrangle \) & Properly spaced double angle brackets\\
 	\bottomrule
-\end{tabular}  
+\end{tabular}
 
-\subsection{Recursive vs. Computable}      
+\subsection{Recursive vs. Computable}
 To disable these commands pass the option \verb=nonames=. To use recursive, r.e. and recursively enumerable everywhere pass the option \verb=re=.  To use computable, c.e. and computably enumerable everywhere pass the option \verb=ce=.  To force REA and CEA use the options \verb=rea= and \verb=cea=. If none of these options are passed the macros will expand as below.  All macros in this section work in both text and math modes.\\
 
-\begin{tabular}{l |  l }\toprule  
-\verb=\re=				 & \re			       \\ \midrule 
+\begin{tabular}{l |  l }\toprule
+\verb=\re=				 & \re			       \\ \midrule
 \verb=\ce=                               & \ce                         \\ \midrule
 \verb=\REA=                              & \REA                        \\ \midrule
 \verb=\CEA=                              & \CEA                        \\ \midrule
 \verb=\recursive=                        & \recursive                  \\ \midrule
 \verb=\computable=                       & \computable                 \\ \midrule
-\verb=\recursivelyEnumerable=            & \recursivelyEnumerable      \\ \midrule             
+\verb=\recursivelyEnumerable=            & \recursivelyEnumerable      \\ \midrule
 \verb=\computablyEnumerable=             & \computablyEnumerable       \\ \midrule
 \verb=\Recursive=                        & \Recursive                  \\ \midrule
 \verb=\Computable=                       & \Computable                 \\ \midrule
@@ -232,10 +232,10 @@ To disable these commands pass the option \verb=nonames=. To use recursive, r.e.
 	\bottomrule
 \end{tabular}
 
-\subsection{Quantifiers \& Connectives}      
+\subsection{Quantifiers \& Connectives}
 To disable these commands pass the option \verb=noquants=. The commands \verb=\exists= and \verb=\forall= are standard but the package extends them.\\
 
-\begin{tabular}{l |  l | l}\toprule                                
+\begin{tabular}{l |  l | l}\toprule
 	\verb=\exists[x < y]=		& \( \exists[x < y ] \) & \\[6pt]
 	\verb=\exists(x < y)=		& \( \exists(x < y ) \) & \\ \midrule
 	\verb=\exists*=		& \multirow{2}{*}{\( \exists* \)} & \\[6pt]
@@ -259,28 +259,28 @@ To disable these commands pass the option \verb=noquants=. The commands \verb=\e
 	\verb=\Land \phi_i=				& \( \Land \phi_i \) & Operator form of and\\ \midrule
 	\verb=\Lor \phi_i=				& \( \Lor \phi_i \) & Operator form of or\\ \midrule
 	\verb=\LLand \phi_i=				& \( \LLand \phi_i \) & Infinitary conjunction\\ \midrule
-	\verb=\LLor \phi_i=				& \( \LLor \phi_i \) & Infinitary disjunction\\ 
+	\verb=\LLor \phi_i=				& \( \LLor \phi_i \) & Infinitary disjunction\\
 	\bottomrule
 \end{tabular}
-\subsection{Spaces}      
+\subsection{Spaces}
 To disable these commands pass the option \verb=nospaces=.\\
 
-\begin{tabular}{l |  l | l}\toprule  
+\begin{tabular}{l |  l | l}\toprule
 	\verb=\bstrs=		       & \( \bstrs  \) & Finite binary strings        \\	\midrule
 	\verb=\wstrs=                 & \( \wstrs  \) & Finite sequences of integers \\ 	\midrule
 	\verb=\cantor=                & \( \cantor \) & Cantor space		     \\    \midrule
-	\verb=\baire=                 & \( \baire  \) & Baire space                  \\[6pt] 
-	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\ 
+	\verb=\baire=                 & \( \baire  \) & Baire space                  \\[6pt]
+	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\
 		\bottomrule
 	\end{tabular}
-	
-\subsection{Strings}      
+
+\subsection{Strings}
 To disable these commands pass the option \verb=nostrings=.\\
 
-\begin{tabular}{l |  l | l}\toprule  
-	\verb=\str{1,0,1}=		     & \(   \str{1,0,1}           \) & \multirow{2}{*}{Strings/Codes for strings}  \\ 
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\str{1,0,1}=		     & \(   \str{1,0,1}           \) & \multirow{2}{*}{Strings/Codes for strings}  \\
 	\tab \verb=\code{5,8,13}=                & \(   \code{5,8,13}         \) &   \\ \midrule
-	\verb=\EmptyStr=                    & \(   \EmptyStr             \) &  \multirow{2}{*}{Empty string}  \\[6pt] 
+	\verb=\EmptyStr=                    & \(   \EmptyStr             \) &  \multirow{2}{*}{Empty string}  \\[6pt]
 	\tab \verb=\estr=                        & \(   \estr                 \) &   \\ \midrule
 	\verb=\decode{\sigma}{3}=           & \(   \decode{\sigma}{3}    \) & Alternate notation for \( \sigma(3) \)   \\ \midrule
 	\verb=\sigma\concat\tau=            & \(   \sigma\concat\tau     \) & \multirow{2}{*}{Concatenation}   \\[6pt]
@@ -292,46 +292,46 @@ To disable these commands pass the option \verb=nostrings=.\\
 	\verb=\sigma \compat \tau=          & \(   \sigma \compat \tau   \) &  Compatible strings \\ \midrule
 	\verb=\pair{x}{y}=                  & \(   \pair{x}{y}           \) & Code for the pair \( (x,y) \)  \\ \midrule
 	\verb=\setcol{X}{n}=                & \(   \setcol{X}{n}         \) & \( \set{y}{\pair{n}{y} \in X} \)  \\ \midrule
-	\verb=\setcol{X}{\leq n}=           & \(   \setcol{X}{\leq n}    \) & \( \set{ \pair{x}{y}}{\pair{x}{y} \in X \land x \leq n} \)   \\ 
+	\verb=\setcol{X}{\leq n}=           & \(   \setcol{X}{\leq n}    \) & \( \set{ \pair{x}{y}}{\pair{x}{y} \in X \land x \leq n} \)   \\
 		\bottomrule
 	\end{tabular}
-	
-\subsection{Trees}      
+
+\subsection{Trees}
 To disable these commands pass the option \verb=notrees=.\\
 
-\begin{tabular}{l |  l | l}\toprule  	
-	\verb=\CBderiv{T}=		      & \(  \CBderiv{T}		      \) & \multirow{2}{*}{Cantor-Bendixson Derivative} \\[6pt] 
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\CBderiv{T}=		      & \(  \CBderiv{T}		      \) & \multirow{2}{*}{Cantor-Bendixson Derivative} \\[6pt]
 	\verb=\CBderiv[\alpha]{T}=           & \(  \CBderiv[\alpha]{T}       \) & \\ \midrule
 	\verb=\pruneTree{T}=                 & \(  \pruneTree{T}             \) & \( \set{\sigma \in T}{\exists(g)(g \in [T] \land \sigma \subset g)} \) \\ \midrule
-	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\ 
+	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\
 		\bottomrule
 	\end{tabular}
-	
-\subsection{Set Relations}      
+
+\subsection{Set Relations}
 To disable these commands pass the option \verb=nosetrels=.\\  Note that many of these commands are extensions of existing commands.
 
-\begin{tabular}{l |  l | l}\toprule 
-       \verb=X \subset* Y=    		& \( X \subset*    Y\)	& \multirow{2}{*}{All but finitely much of \( X \) is in \( Y \)} \\ 
+\begin{tabular}{l |  l | l}\toprule
+       \verb=X \subset* Y=    		& \( X \subset*    Y\)	& \multirow{2}{*}{All but finitely much of \( X \) is in \( Y \)} \\
    \verb=X \subseteq* Y=            & \( X \subseteq*  Y\)  & \\ \midrule
-       \verb=X \supset* Y=              & \( X \supset*    Y\)  & \multirow{2}{*}{All but finitely much of \( Y \) is in \( X \)} \\ 
+       \verb=X \supset* Y=              & \( X \supset*    Y\)  & \multirow{2}{*}{All but finitely much of \( Y \) is in \( X \)} \\
    \verb=X \supseteq* Y=            & \( X \supseteq*  Y\)  & \\ \midrule
        \verb=X \eq Y=                   & \( X \eq         Y\)  &  Macro for \verb~=~ \\ \midrule
-       \verb=X \eq* Y=                  & \multirow{2}{*}{\( X \eq*        Y\)}  & \multirow{2}{*}{Equal mod finite} \\ 
+       \verb=X \eq* Y=                  & \multirow{2}{*}{\( X \eq*        Y\)}  & \multirow{2}{*}{Equal mod finite} \\
   \tab \verb=X \eqae Y=                 & & \\ \midrule
        \verb=X \infsubset Y=            & \( X \infsubset  Y\)  & \( X \subset Y \land \card{Y \setminus X}=\omega \) \\ \midrule
        \verb=X \infsubset* Y=           & \( X \infsubset* Y\)  &  \( X \subset* Y \land \card{Y \setminus X}=\omega \) \\ \midrule
        \verb=X \infsupset Y=            & \( X \infsupset  Y\)  &  \( Y \subset X \land \card{X \setminus Y}=\omega \) \\ \midrule
        \verb=X \infsupset* Y=           & \( X \infsupset* Y\)  & \( Y \subset* X \land \card{X \setminus Y}=\omega \) \\ \midrule
        \verb=X \majsubset Y=            & \( X \majsubset  Y\)  & \( X \) is a major subset of \( Y \) \\ \midrule
-       \verb=X \majsupset Y=            & \( X \majsupset  Y\)  & \( Y \) is a major subset of \( X \) \\ 
+       \verb=X \majsupset Y=            & \( X \majsupset  Y\)  & \( Y \) is a major subset of \( X \) \\
 		\bottomrule
 	\end{tabular}
 
-\subsection{Ordinal Notations}      
+\subsection{Ordinal Notations}
 To disable these commands pass the option \verb=noordinalnotations=.\\
 
-\begin{tabular}{l |  l | l}\toprule 
-	\verb=\wck=			        & \( 	\wck                      \)			       & First non-computable ordinal \\ \midrule 
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\wck=			        & \( 	\wck                      \)			       & First non-computable ordinal \\ \midrule
 	\verb=\ordzero=                        & \( 	\ordzero                   \)                          & Notation for ordinal \( 0 \)\\ \midrule
 	\verb=\abs{\alpha}=			& \( \abs{\alpha} \)						& Ordinal \( \alpha \) denotes \\ \midrule
 	\verb=\kleeneO=                        & \multirow{2}{*}{\( 	\kleeneO                   \)}         & \multirow{2}{*}{Set of ordinal notations} \\[6pt]
@@ -351,78 +351,78 @@ To disable these commands pass the option \verb=noordinalnotations=.\\
 	\verb=\alpha \kleeneMul  \beta=        & \( 	\alpha \kleeneMul  \beta   \)                          & Effective multiplication of notations \\  \midrule
 	\verb=\kleenelim{\lambda}{n}=          & \( 	\kleenelim{\lambda}{n}     \)                          & The \( n \)-th element in effective limit defining notation \( \lambda \)\\  \midrule
         \verb=\kleenepred{\alpha}=             & \(  \kleenepred{\alpha}          \)                          & Predecessor of \( \alpha \) if defined \\ \midrule
-	\verb=\kleenehgt{R}=                   & \multirow{2}{*}{\( 	\kleenehgt{R}              \)}        & Heigh of computable relation \( R \) \\ 
-\tab	\verb=\hgtO{R}=                        & & \\ 
+	\verb=\kleenehgt{R}=                   & \multirow{2}{*}{\( 	\kleenehgt{R}              \)}        & Heigh of computable relation \( R \) \\
+\tab	\verb=\hgtO{R}=                        & & \\
 		\bottomrule
 	\end{tabular}
-	
-\subsection{Forcing}      
-To disable these commands pass the option \verb=noforcing=.\\ 
 
-\begin{tabular}{l |  l | l}\toprule 
-	\verb=\sigma \forces \phi=	        	& \multirow{2}{*}{\(  \sigma \forces \phi         \)}	& \multirow{2}{*}{\( \sigma \) forces \( \phi \)}\\ 
-	\tab \verb=\sigma \frc \phi=                        &    & \\ 
-	\verb=\sigma \forces(X) \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & \( \phi \) is formula relative to \( X \) \\ 
+\subsection{Forcing}
+To disable these commands pass the option \verb=noforcing=.\\
+
+\begin{tabular}{l |  l | l}\toprule
+	\verb=\sigma \forces \phi=	        	& \multirow{2}{*}{\(  \sigma \forces \phi         \)}	& \multirow{2}{*}{\( \sigma \) forces \( \phi \)}\\
+	\tab \verb=\sigma \frc \phi=                        &    & \\
+	\verb=\sigma \forces(X) \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & \( \phi \) is formula relative to \( X \) \\
 	\verb=\sigma \forces[T] \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & Local forcing on \( T \)\\
-	\verb=\sigma \forces* \phi=                    & \(  \sigma \forces* \phi        \)    & Strong forcing \\ 
+	\verb=\sigma \forces* \phi=                    & \(  \sigma \forces* \phi        \)    & Strong forcing \\
 	\bottomrule
-\end{tabular}  
+\end{tabular}
 
-\subsection{Syntax}      
+\subsection{Syntax}
 To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas as this doesn't make sense).  Not all formulas/abbreviations are demonstrated below given the huge number but the enough are included to make it clear what command is required to generate the desired formula class, e.g., substituting pi for delta does what you think it does.
 
-To change the syntax for the computable infinitary formulas you can pass the options \verb=cdeltasym=, \verb=csigmasym= and \verb=cpisym= set equal to the command to produce your desired symbol.  This is UNTESTED and quite likely doesn't work yet.  If you desire this feature and it doesn't work send me a bug report. 
+To change the syntax for the computable infinitary formulas you can pass the options \verb=cdeltasym=, \verb=csigmasym= and \verb=cpisym= set equal to the command to produce your desired symbol.  This is UNTESTED and quite likely doesn't work yet.  If you desire this feature and it doesn't work send me a bug report.
 
-\begin{xtabular}{l |  l | l}\toprule 
+\begin{xtabular}{l |  l | l}\toprule
 	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
 	\verb=\deltan{2}=              & \( \deltan{2}        \)      & \\ \midrule
 	\verb=\deltan[X]{2}=           & \( \deltan[X]{2}     \)      & \\ \midrule
 	\verb=\deltaZeroN[X]{2}=       & \multirow{2}{*}{\( \deltaZeroN[X]{2} \)}      & \\
 	\tab \verb=\deltazn[X]{2}=          &                              & \\ \midrule
-	\verb=\deltaZeroOne[X]=        & \multirow{2}{*}{\( \deltaZeroOne[X]  \)}      & \\ 
-	\tab \verb=\deltazi[X]=             &                              & \\ \midrule         
-	\verb=\sigmaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\ 
-	\tab \verb=\sigmazii[X]=            &                              & \\ \midrule         
-	\verb=\deltaZeroThree[X]=      & \multirow{2}{*}{\( \deltaZeroThree[X]\)}      & \\ 
-	\tab \verb=\deltaziii[X]=           &                              & \\ \midrule         
-	\verb=\deltaOneN[X]{2}=        & \multirow{2}{*}{\( \deltaOneN[X]{2}  \)}      & \\ 
-	\tab \verb=\deltaIn[X]{2}=          &                              & \\ \midrule         
-	\verb=\deltaOneOne[X]=         & \multirow{2}{*}{\( \deltaOneOne[X]   \)}      & \\ 
-	\tab \verb=\deltaIi[X]=             &                              & \\ \midrule         
-	\verb=\deltaOneTwo[X]=         & \multirow{2}{*}{\( \deltaOneTwo[X]   \)}      & \\ 
-	\tab \verb=\deltaIii[X]=            &                              & \\ \midrule         
-	\verb=\deltaOneThree[X]=       & \multirow{2}{*}{\( \deltaOneThree[X] \)}      & \\ 
-	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule  
-	\verb=\pizi=              & \( \pizi      \)      & \\ \midrule      
+	\verb=\deltaZeroOne[X]=        & \multirow{2}{*}{\( \deltaZeroOne[X]  \)}      & \\
+	\tab \verb=\deltazi[X]=             &                              & \\ \midrule
+	\verb=\sigmaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\
+	\tab \verb=\sigmazii[X]=            &                              & \\ \midrule
+	\verb=\deltaZeroThree[X]=      & \multirow{2}{*}{\( \deltaZeroThree[X]\)}      & \\
+	\tab \verb=\deltaziii[X]=           &                              & \\ \midrule
+	\verb=\deltaOneN[X]{2}=        & \multirow{2}{*}{\( \deltaOneN[X]{2}  \)}      & \\
+	\tab \verb=\deltaIn[X]{2}=          &                              & \\ \midrule
+	\verb=\deltaOneOne[X]=         & \multirow{2}{*}{\( \deltaOneOne[X]   \)}      & \\
+	\tab \verb=\deltaIi[X]=             &                              & \\ \midrule
+	\verb=\deltaOneTwo[X]=         & \multirow{2}{*}{\( \deltaOneTwo[X]   \)}      & \\
+	\tab \verb=\deltaIii[X]=            &                              & \\ \midrule
+	\verb=\deltaOneThree[X]=       & \multirow{2}{*}{\( \deltaOneThree[X] \)}      & \\
+	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule
+	\verb=\pizi=              & \( \pizi      \)      & \\ \midrule
 	\verb=\pizn[X]{n}=              & \( \pizn[X]{n}      \)      & \\ \midrule
-	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule  
+	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule
 	\verb=\DeltaOneN[X]{n}=         & \( \DeltaOneN[X]{n} \)  & \\ \midrule
- 
-	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\ 
+
+	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\
 		\bottomrule
 \end{xtabular}
-                    
+
 \subsection{MRref}
 
-Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article.  Unless you have a good reason (like journal formatting guidelines) there is no reason not to always pass this option.  Note this option requires the hyperref package.                    
-	                              
-	
+Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article.  Unless you have a good reason (like journal formatting guidelines) there is no reason not to always pass this option.  Note this option requires the hyperref package.
+
+
 \section{Release Notes}
 
-\begin{itemize}  
+\begin{itemize}
 	\item[1.3] 06/20/2012 - Added abbreviations for computable infinitary formulas and made a few minor fixes.
 	\item[1.2] 01/01/2011 - Fixed awful option processing bug preventing most options from being recognized and added mrref option.
 	\item[1.0] 10/15/2010 - Initial public release
 \end{itemize}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	                                     
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
