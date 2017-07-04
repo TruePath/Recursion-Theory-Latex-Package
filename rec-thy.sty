@@ -19,8 +19,7 @@
 \RequirePackage{xkeyval}
 \RequirePackage{mathtools}
 \RequirePackage{amssymb}
-
-% \RequirePackage{amsmath}
+\RequirePackage{amsfonts}
 \RequirePackage{undertilde}
 
 \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
@@ -106,8 +105,8 @@
 	\@packinfo{Not loading requirement assist.}
 \else
 	\@packinfo{Loading requirement assist.}
-	\let\@recthy@reqscr=\mathscr
-	\newcommand*{\req}[3][]{\ensuremath{\ifthenelse{\isempty{#3}}{\@recthy@reqscr{#2}^{#1}}{\@recthy@reqscr{#2}^{#1}_{#3}}}}
+	\newcommand*{\@recthy@reqscr}[1]{\mathscr{#1}}
+	\newcommand*{\req}[3][]{\ensuremath{\ifthenelse{\isempty{#3}}{\@recthy@reqscr{#1}_{#1}}{\@recthy@reqscr{#1}^{#3}_{#2}}}}
 	\newbox{\@recthy@reqbox}
 	\def\defreq#1#2\par{
 		\begin{equation}\let\veqno\@@leqno%
