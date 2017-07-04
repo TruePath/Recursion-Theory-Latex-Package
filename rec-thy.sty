@@ -11,6 +11,7 @@
 % Version 1.2
 % Added mrref option
 % Fixed horrific option processing bug
+\RequirePackage{amsmath}
 \RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
@@ -98,14 +99,15 @@
 
 \DeclareOptionX<\@recthy@family>{reqscr}[]{\let\@recthy@reqscr=#1}
 
-\let\@recthy@reqscr=\mathscr
+
 
 \AtEndOfPackage{
 \ifrecthy@noreqhelper
 	\@packinfo{Not loading requirement assist.}
 \else
 	\@packinfo{Loading requirement assist.}
-	\newcommand*{\req}[3][]{\ensuremath{\ifthenelse{\isempty{#3}}{{\@recthy@reqscr{#2}}^{#1}}{\@recthy@reqscr{#2}^{#1}_{#3}} }}
+	\let\@recthy@reqscr=\mathscr
+	\newcommand*{\req}[3][]{\ensuremath{\ifthenelse{\isempty{#3}}{\@recthy@reqscr{#2}^{#1}}{\@recthy@reqscr{#2}^{#1}_{#3}}}}
 	\newbox{\@recthy@reqbox}
 	\def\defreq#1#2\par{
 		\begin{equation}\let\veqno\@@leqno%
@@ -138,7 +140,8 @@
 \WithSuffix\def\StrcL*{\StrcStarL}
 \newcommand*{\splitof}{\sqsubset}
 \newcommand*{\splitby}{\sqsupset}
-\newcommand*{\StrcR}{\ensuremath{\mathscr{R}}}
+\newcommand*{\StrcR}{\ensuremath{\mathcal{R}}}
+\newcommand*{\StrcD}{\ensuremath{\mathcal{D}}}
 
 
 \fi
@@ -309,10 +312,9 @@
 \newcommand*{\@recthy@Union}{\mathop{\bigcup}}
 \newcommand*{\@recthy@isect}{\mathbin{\cap}}
 \newcommand*{\@recthy@Isect}{\mathop{\bigcap}}
-
+\newcommand*{\@recthy@nin}{\notin}
 \newcommand*{\@recthy@powset}[1]{\mathcal{P}\left(#1\right)}
 \newcommand*{\@recthy@eset}{\emptyset}
-\newcommand*{\@recthy@nin}{\mathrel{\not\in}}
 \newcommand*{\@recthy@setcmpminusSYM}{\backsim}
 \newcommand*{\@recthy@setminuscmp}[1]{\mathop{\@recthy@setcmpminusSYM} #1}
 \newcommand*{\@recthy@setovercmp}[1]{\overline{#1}}
@@ -1037,10 +1039,7 @@
 \fi
 }
 
-
-% \ProcessOptions*
-\ProcessOptionsX<\@recthy@family>
-
+\AtEndOfPackage{
 \ifrecthy@nocomputations
 	\@packinfo{No computations loading.}
 \else
@@ -1137,7 +1136,7 @@
 
 
 	%%%%%%Turing Degrees
-	\newcommand*{\Tdeg}[1]{\utilde{#1}}
+	\newcommand*{\Tdeg}[1]{\utilde{\mathbf{#1}}}
 
 	\newcommand*{\Tjump}[1]{#1'}
 	\let\jump=\Tjump
@@ -1199,7 +1198,12 @@
 	\newcommand*{\ttngeq}{\ngeq_{\@recthy@ttSYM}}
 \fi
 
+}
 
+
+
+% \ProcessOptions*
+\ProcessOptionsX<\@recthy@family>
 
 
 
