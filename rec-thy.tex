@@ -6,12 +6,18 @@
 %
 
 \documentclass[11pt,oneside]{article}
-\usepackage{amsfonts}
+\usepackage{amsmath}
+% \RequirePackage{amsmath}
+\usepackage[disallowspaces,fixamsmath]{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+% \usepackage{amsfonts}
 \usepackage{rec-thy}
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
 \usepackage{hyperref}
+\usepackage{listings}
 
 
 \newcommand{\tab}{\hspace{1cm}}
@@ -73,6 +79,7 @@ A few general conventions are usually followed in the commands.  Whenever an ope
 Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
 
 Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above
+\( \mathfrak{u} \)
 \subsection{Computations}
 To disable these commands pass the option \verb=nocomputations=. \\
 
@@ -148,6 +155,48 @@ To disable these commands pass the option \verb=nodegrees=. \\
         \verb=X \ttngeq Y=                                     & \(  X \ttngeq Y                             	   \)   & \\
 		\bottomrule
 	\end{xtabular}          \\
+\makeatletter
+\subsection{Requirement Assistance}
+To disable these commands pass the option \verb=noreqhelper=. To disable the hyperlinked requirements pass \verb=nohyperreqs=\\
+Math mode is not required for \verb=\req{R}{e\}=
+
+\begin{tabular}{l |  l | l}\toprule
+\verb=\req{R}{e}=			 &  \( \req{R}{e} \) & \multirow{3}{*}{Requirement } \\ \midrule
+\verb=\req[\nu]{R}{e\}=	&  \req[\nu]{R}{e} & \\ \midrule
+\verb=\req*{R}{e\}=			 &  \req{R}{e} & \multirow{3}{*}{Requirement without hyperlinks} \\ \midrule
+\verb=\req*[\nu]{R}{e\}=	&  \req[\nu]{R}{e} & \\ \midrule
+	\bottomrule
+\end{tabular}          \\
+
+We also introduce the following two enviornments for introducing requirements.  The requirement enviornment is used as follows
+
+\begin{lstlisting}[breaklines]
+	\begin{requirement}{\req{R^{*}}{r,j}}
+		\recfnl{r}{B}{} = \REset{j} \implies   \exists[k] \left( \Upsilon^{j}_k(C \Tplus \REset{j}) = B) \lor \REset{j} \Tleq \Tzero \right) 
+	\end{requirement}
+\end{lstlisting}
+
+Giving output 
+
+	\begin{requirement}{\req{R^{*}}{r,j}}
+		\recfnl{r}{B}{} = \REset{j} \implies   \exists[k] \left( \Upsilon^{j}_k(C \Tplus \REset{j}) = B) \lor \REset{j} \Tleq \Tzero \right) 
+	\end{requirement}
+
+The require enfiornment merges the \verb=\req[\nu]{R}{e\}= command directly into the enviornment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third are just indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require enviornment.
+
+\begin{lstlisting}[breaklines]
+\begin{require}{R}{i}
+	\recfnl{i}{B}{} = \REset{i} \implies   \exists[k] \left( \Upsilon^{i}_k(C \Tplus \REset{i}) = B) \lor \REset{j} \Tleq \Tzero \right)
+\end{require}
+\end{lstlisting}
+
+ Giving output 
+
+\begin{require}{R}{i}
+	\recfnl{i}{B}{} = \REset{i} \implies   \exists[k] \left( \Upsilon^{i}_k(C \Tplus \REset{i}) = B) \lor \REset{j} \Tleq \Tzero \right)
+\end{require}
+
+
 
 
 \subsection{General Math Commands}
@@ -174,6 +223,7 @@ To disable these commands pass the option \verb=nomath=. \\
 	\tab \verb=f \compose g=	            		& &\\ \midrule
 	\verb=\( \ensuretext{blah} \)=	           	& \multirow{2}{*}{\( \ensuretext{blah} \)}& \multirow{2}{*}{Types argument in text mode} \\
 	\tab \verb=\ensuretext{blah}=			& & \\
+
 	\bottomrule
 \end{tabular}          \\
 \newpage
@@ -182,7 +232,8 @@ To disable these commands pass the option \verb=nosets=.\\
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt]
-	\verb=\set{(x,y)}}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
+	\verb=\set{(x,y)}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
+	\verb=\set{(x,y)}=			  & 	\(   \set{(x,y)}      \)    &  \\ \midrule
 	\verb=\card{X}=                          &    \(   \card{X}                   \)    & Cardinality \\ \midrule
 	\verb=X \union Y=                        &    \(   X \union Y                 \)    & \multirow{2}{*}{Union}  \\[6pt]
 	\verb=\Union_{i \in \omega} X_i=         &    \(   \Union_{i \in \omega} X_i  \)    &  \\ \midrule
@@ -293,6 +344,21 @@ To disable these commands pass the option \verb=nostrings=.\\
 	\verb=\pair{x}{y}=                  & \(   \pair{x}{y}           \) & Code for the pair \( (x,y) \)  \\ \midrule
 	\verb=\setcol{X}{n}=                & \(   \setcol{X}{n}         \) & \( \set{y}{\pair{n}{y} \in X} \)  \\ \midrule
 	\verb=\setcol{X}{\leq n}=           & \(   \setcol{X}{\leq n}    \) & \( \set{ \pair{x}{y}}{\pair{x}{y} \in X \land x \leq n} \)   \\
+		\bottomrule
+	\end{tabular}
+
+\subsection{Subfunctions}
+To disable these commands pass the option \verb=nosubfuns=.\\
+
+\begin{tabular}{l |  l | l}\toprule
+	\verb=f \subfun g=		       & \( f \subfun g \) & \multirow{8}{*}{Varities of the function extension relation}        \\	\midrule
+	\verb=f \supfun g=		       & \( f \supfun g \) &  \\ 	\midrule
+	\verb=f \nsubfun g=		       & \( f \nsubfun g \) & \\	\midrule
+\verb=f \nsupfun g=		       & \( f \nsupfun g \) & \\	\midrule
+	\verb=f \subfuneq g=		       & \( f \subfuneq g \) & \\	\midrule
+	\verb=f \supfuneq g=		       & \( f \supfuneq g \) &  \\ 	\midrule
+	\verb=f \nsubfuneq g=		       & \( f \nsubfuneq g \) & \\	\midrule
+\verb=f \nsupfuneq g=		       & \( f \nsupfuneq g \) & \\	\midrule
 		\bottomrule
 	\end{tabular}
 
@@ -410,6 +476,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.0] 09/26/2017 - Added support for introducing requirements, the subfunction relation and probably other undocumented features
 	\item[1.3] 06/20/2012 - Added abbreviations for computable infinitary formulas and made a few minor fixes.
 	\item[1.2] 01/01/2011 - Fixed awful option processing bug preventing most options from being recognized and added mrref option.
 	\item[1.0] 10/15/2010 - Initial public release
