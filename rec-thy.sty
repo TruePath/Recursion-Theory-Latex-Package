@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{rec-thy}[2017/09/26 v2.0  Provides commands for writing up recursion theory papers]
+\ProvidesPackage{rec-thy}[2017/09/26 v2.1  Provides commands for writing up recursion theory papers]
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
@@ -11,18 +11,23 @@
 % Version 1.2
 % Added mrref option
 % Fixed horrific option processing bug
-\RequirePackage{amsmath}
+\RequirePackage{ltxcmds}
 \RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
 \RequirePackage{xifthen}
 \RequirePackage{xkeyval}
-\RequirePackage{mathtools}
-\RequirePackage{amssymb}
-\RequirePackage{amsfonts}
-\RequirePackage{undertilde}
-\RequirePackage{ltxcmds}
+\AtBeginDocument{
+\ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
+\ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
+\ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
+\ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
 \ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}}
+\ltx@ifpackageloaded{undertilde}{}{\RequirePackage{undertilde}}
+}
+
+
+
 
 
 % \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
@@ -172,7 +177,7 @@
 	}
 
 	\newenvironment{require}[3][]{
-		\begin{requirement}{\req[#1]{#2}{#3}} \label{\detokenize{req:#2@#1}}
+		\begin{requirement}{\req*[#1]{#2}{#3}} \label{\detokenize{req:#2@#1}}
 	}{
 		\end{requirement}
 	}
