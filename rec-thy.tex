@@ -5,19 +5,54 @@
 %  Copyright (c) 2010 . All rights reserved.
 %
 
-\documentclass[11pt,oneside]{article}
+\documentclass[leqno,11pt]{amsart}
 \usepackage{amsmath}
 % \RequirePackage{amsmath}
 \usepackage[disallowspaces,fixamsmath]{mathtools}
 \usepackage{amssymb}
 \usepackage{amsthm}
 % \usepackage{amsfonts}
-\usepackage{rec-thy}
+% \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+% \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
+\usepackage{mathspec}
+
+\usepackage{unicode-math}
+\unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
+\setmathfont{xits-math.otf}
+\setmathfont{xits-math.otf}[range={cal,bfcal},StylisticSet=1]
+
+\usepackage{hyperxmp}
+\usepackage[unicode,psdextra,pdfusetitle]{hyperref}
+\hypersetup{%
+	%pdfauthor={Peter M. Gerdes},
+            pdfsubject={LaTeX Package for Typesetting Computability Theory},
+            pdfkeywords={LaTeX;LaTex Package;Recursion Theory;Computability Theory;Mathematical Logic;r.e. sets; Turing reducibility;arithmetic hierarchy},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0},
+            breaklinks=true,
+			pdfdisplaydoctitle=true,
+			pdfcontactaddress={107 Ardsley Drive},
+         	pdfcontactcity={Syracuse, NY},
+         	pdfcontactpostcode={13214},
+         	pdfcontactcountry={United States},
+        	pdfcontactphone={256-333-0128},
+        	pdfcontactemail={gerdes@invariant.org},
+        	pdfcontacturl={http://invariant.org},
+        	pdflang={en},
+        	% pdfauthortitle={Technical Assistant, Level III},
+        	% pdfdate={\today},
+        	pdfcopyright={Copyright (C) \today, Peter M. Gerdes},
+        	baseurl={http://invariant.org}
+}
+\usepackage{listings}
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
-\usepackage{hyperref}
-\usepackage{listings}
+\usepackage{rec-thy}
+\usepackage{metalogo}
 
 
 \newcommand{\tab}{\hspace{1cm}}
@@ -25,7 +60,7 @@
 %
 % Running Headers and footers
 %\usepackage{fancyhdr}
-%\usepackage[parfill]{parskip}
+\usepackage[parfill]{parskip}
 %\usepackage{setspace}
 
 % Multipart figures
@@ -47,7 +82,7 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{2011-01-01: Version 2.1}
+\date{\today: Version 2.3}
 
 \begin{document}
 
@@ -58,7 +93,7 @@
 
 
 \begin{abstract}
-	The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
+\noindent The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
 \end{abstract}
 
 \section{Introduction}
@@ -471,18 +506,31 @@ To change the syntax for the computable infinitary formulas you can pass the opt
 \subsection{Proof Cases}
 
 \begin{proof}
-This is an example of the pfcases enviornment
+The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.
+
 \begin{pfcases}
-\case[\( x = y \)]\label{case:first} The first case
+\newpage
+\case[\( x = y \)]\label{case:first}  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
 
-Second paragraph
-\case[\( x = z \land z > q \land z < r \land x + z = r \)] Second case
+Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
 
-Some random text to give a sense of how it looks parameter is added in enumitem for the blank space from the margin of the enclosing list/text to the left edge of the label box. This means there is a redundancy because one of the parameters depends on the others, i.e., it has to be computed from the other values, as described below. There is a new counter length labelindent which defaults to 0 pt. The five parameteres are related in the following way:
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
 \end{pfcases}
+
+We can now reference the case number \ref{case:second}.
+
+
+To skip numbering and instead reference with the argument to \verb=\case= use pfcases*
+\begin{pfcases*}
+\case[\( x = y \)]\label{case*:first}  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+
+Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
+
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
+\end{pfcases*}
 \end{proof}
 
-Now to ref case \ref{case:first}.
+Now to ref case \ref{case*:second}.
 
 \vspace{.5cm}
 
@@ -492,15 +540,20 @@ The above is accomplished with the following code.
 This is an example of the pfcases enviornment
 \begin{pfcases}
 \case[\( x = y \)]\label{case:first} The first case
-
-Second paragraph
-\case[\( x = z \land z > q \land z < r \land x + z = r \)] Second case
-
-...
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} Second case
 \end{pfcases}
 \end{proof}
 
-Now to ref case \ref{case:first}.
+We can now reference the case number \ref{case:second}.
+
+To skip numbering and instead reference with the argument to \verb=\case= use pfcases*
+\begin{pfcases*}
+\case[\( x = y \)]\label{case*:first} The first case
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} Second case
+\end{pfcases*}
+\end{proof}
+
+Now to ref case \ref{case*:second}.
 \end{verbatim}
 
 Use the enviornment pfcases* instead of pfcases to enable case numbering.
@@ -513,7 +566,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
-	\item[2.3] 12/31/2017 - Added proof cases helper.
+	\item[2.3] 12/31/2017 - Added proof cases helper.  Also fixed the issue with \verb=\ncequiv= in \XeLaTeX
 	\item[2.2] 11/14/2017 - Fixed \verb=\Tdeg= so it works different on symbols and vars and added \verb=\Tdegof= and \verb=\Tvarof=.  Added \verb=\subfunneq= and \verb=\supfunneq=.
 	\item[2.1] 10/05/2017 - Fixed way packages are required so rec-thy can be loaded in a flexible order.  Also fixed one or two bugs.
 	\item[2.0] 09/26/2017 - Added support for introducing requirements, the subfunction relation and probably other undocumented features

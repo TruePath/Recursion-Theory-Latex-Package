@@ -142,17 +142,8 @@
 		  labelindent=0pt,
 		  labelwidth=0pt
 		}
-		% \newcommand{\case}[1][]{%
-		%   \if\relax\detokenize{#1}\relax
-		%     \def\thiscase{}%
-		%   \else
-		%     \def\thiscase{~#1}%
-		%   \fi
-		%   \item \protected@edef\@currentlabel{#1} \ltx@ifpackageloaded{cleverref}{\cref@constructprefix{pfcases}{\cref@result}%
-		% 																																						\protected@xdef\cref@currentlabel{[pfcases][][\cref@result]#1}%
-		% 																																					}{}%
-		% }
-		\newenvironment{pfcases}{
+
+		\newenvironment{pfcases*}{
 				\newcommand{\case}[1][]{%
 		  \if\relax\detokenize{##1}\relax
 		    \def\thiscase{}%
@@ -164,8 +155,10 @@
 																																							}{}%
 		}
 		\begin{pfcasesnonum}
-		}{\end{pfcasesnonum}}
-			\newenvironment{pfcases*}{
+		}
+		{\end{pfcasesnonum}}
+
+		\newenvironment{pfcases}{
 				\newcommand{\case}[1][]{%
 		  \if\relax\detokenize{##1}\relax
 		    \def\thiscase{}%
@@ -174,8 +167,7 @@
 		  \fi
 		  \item 
 		}
-		\begin{pfcasesnumbered}
-		}{\end{pfcasesnumbered}}
+		\begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
 	\fi
 }
 
@@ -1240,8 +1232,8 @@
 	}}
 
 
-	\newcommand*{\cequiv}{\mathrel{\backsimeq}}
-	\newcommand*{\ncequiv}{\mathrel{\not\cequiv}}
+	\newcommand*{\cequiv}{\mathrel{\simeq}}
+	\newcommand*{\ncequiv}{\mathrel{\not\simeq}}
 	\newcommand*{\conv}[1][]{\mathpunct{\downarrow}_{#1}}
 	\let\converge=\conv
 	%\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
