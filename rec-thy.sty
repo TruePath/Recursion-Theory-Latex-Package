@@ -110,6 +110,8 @@
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
 
+\let\pmg@casefont=\textsc
+\DeclareOptionX{pfcasefont}[textsc]{\edef\pmg@casefont{\expandafter\noexpand\csname #1 \endcsname}}
 
 \AtEndOfPackage{
 	\ifrecthy@nopfcases
@@ -117,13 +119,39 @@
 	\else
 		\@packinfo{Loading Proof Cases Helper.}
 		\RequirePackage{enumitem}
-		\ltx@ifpackageloaded{cleverref}{
+		\ltx@ifpackageloaded{cleveref}{
 		\crefname{pfcases}{case}{cases} 
 		\Crefname{pfcases}{Case}{Cases}
+		\crefformat{pfcases}{#2case~#1#3}
+		\Crefformat{pfcases}{#2Case~#1#3}
+		\crefname{pfcasesnonumi}{case}{cases} 
+		\Crefname{pfcasesnonumi}{Case}{Cases}
+		\crefformat{pfcasesnonumi}{#2case~#1#3}
+		\Crefformat{pfcasesnonumi}{#2Case~#1#3}
+		\crefname{pfcasesnonumii}{case}{cases} 
+		\Crefname{pfcasesnonumii}{Case}{Cases}
+		\crefformat{pfcasesnonumii}{#2case~#1#3}
+		\Crefformat{pfcasesnonumii}{#2Case~#1#3}
+		\crefname{pfcasesnonumiii}{case}{cases} 
+		\Crefname{pfcasesnonumiii}{Case}{Cases}
+		\crefformat{pfcasesnonumiii}{#2case~#1#3}
+		\Crefformat{pfcasesnonumiii}{#2Case~#1#3}
+		\crefname{pfcasesnumberedi}{case}{cases} 
+		\Crefname{pfcasesnumberedi}{Case}{Cases}
+		\crefformat{pfcasesnumberedi}{#2case~#1#3}
+		\Crefformat{pfcasesnumberedi}{#2Case~#1#3}
+		\crefname{pfcasesnumberedii}{case}{cases} 
+		\Crefname{pfcasesnumberedii}{Case}{Cases}
+		\crefformat{pfcasesnumberedii}{#2case~#1#3}
+		\Crefformat{pfcasesnumberedii}{#2Case~#1#3}
+		\crefname{pfcasesnumberediii}{case}{cases} 
+		\Crefname{pfcasesnumberediii}{Case}{Cases}
+		\crefformat{pfcasesnumberediii}{#2case~#1#3}
+		\Crefformat{pfcasesnumberediii}{#2Case~#1#3}
 		}{}
-		\newlist{pfcasesnonum}{enumerate}{1}
+		\newlist{pfcasesnonum}{enumerate}{3}
 		\setlist[pfcasesnonum]{
-		  label=\scshape{Case}\protect\thiscase:~,
+		  label={\pmg@casefont{Case}}\protect\thiscase:~,
 		  align=left,
 		  labelsep=!,
 		  itemindent=-1em,
@@ -131,10 +159,17 @@
 		  labelindent=0pt,
 		  labelwidth=0pt
 		}
-		\newlist{pfcasesnumbered}{enumerate}{1}
+		\setlist[pfcasesnonum,1]{
+			before=\def\pfcasecounter@pmg{pfcasesnonumi},
+		}
+		\setlist[pfcasesnonum,2]{
+			before=\def\pfcasecounter@pmg{pfcasesnonumii},
+		}
+		\setlist[pfcasesnonum,3]{
+			before=\def\pfcasecounter@pmg{pfcasesnonumiii},
+		}
+		\newlist{pfcasesnumbered}{enumerate}{3}
 		\setlist[pfcasesnumbered]{
-		  label=\scshape{Case}\arabic*:\protect\thiscase.~,
-		  ref=\arabic*,
 		  align=left,
 		  labelsep=!,
 		  itemindent=-1em,
@@ -142,30 +177,46 @@
 		  labelindent=0pt,
 		  labelwidth=0pt
 		}
-
+		\setlist[pfcasesnumbered,1]{
+			before=\def\pfcasecounter@pmg{pfcasesnumberedi},
+		  label={{\pmg@casefont{Case}}~\arabic*:\protect\thiscase.~},
+		  ref={\arabic*},
+		}
+		\setlist[pfcasesnumbered,2]{
+			before=\def\pfcasecounter@pmg{pfcasesnumberedii},
+		  label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
+		  ref={\arabic{pfcasesnumberedi}\alph*},
+		}
+		\setlist[pfcasesnumbered,3]{
+			before=\def\pfcasecounter@pmg{pfcasesnumberediii},
+		  label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
+		  ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+		}
 		\newenvironment{pfcases*}{
-				\newcommand{\case}[1][]{%
+				\providecommand{\case}[1][]{%
 		  \if\relax\detokenize{##1}\relax
 		    \def\thiscase{}%
 		  \else
 		    \def\thiscase{~##1}%
 		  \fi
-		  \item \protected@edef\@currentlabel{##1} \ltx@ifpackageloaded{cleverref}{\cref@constructprefix{pfcases}{\cref@result}%
-																																								\protected@xdef\cref@currentlabel{[pfcases][][\cref@result]##1}%
-																																							}{}%
+		  \item  \ltx@ifpackageloaded{cleveref}{%
+		  \cref@constructprefix{pfcases}{\cref@result}%
+		  \protected@xdef\cref@currentlabel{[pfcases][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
 		}
 		\begin{pfcasesnonum}
 		}
 		{\end{pfcasesnonum}}
 
 		\newenvironment{pfcases}{
-				\newcommand{\case}[1][]{%
+				\providecommand{\case}[1][]{%
 		  \if\relax\detokenize{##1}\relax
 		    \def\thiscase{}%
 		  \else
 		    \def\thiscase{~##1}%
 		  \fi
-		  \item 
+		  \item \ltx@ifpackageloaded{cleveref}{%
+		   \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
+		   \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
 		}
 		\begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
 	\fi
