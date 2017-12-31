@@ -120,32 +120,28 @@
 		\@packinfo{Loading Proof Cases Helper.}
 		\RequirePackage{enumitem}
 		\ltx@ifpackageloaded{cleveref}{
-		\crefname{pfcases}{case}{cases} 
-		\Crefname{pfcases}{Case}{Cases}
-		\crefformat{pfcases}{#2case~#1#3}
-		\Crefformat{pfcases}{#2Case~#1#3}
-		\crefname{pfcasesnonumi}{case}{cases} 
-		\Crefname{pfcasesnonumi}{Case}{Cases}
+		% \crefname{pfcasesnonumi}{case}{cases} 
+		% \Crefname{pfcasesnonumi}{Case}{Cases}
 		\crefformat{pfcasesnonumi}{#2case~#1#3}
 		\Crefformat{pfcasesnonumi}{#2Case~#1#3}
-		\crefname{pfcasesnonumii}{case}{cases} 
-		\Crefname{pfcasesnonumii}{Case}{Cases}
-		\crefformat{pfcasesnonumii}{#2case~#1#3}
-		\Crefformat{pfcasesnonumii}{#2Case~#1#3}
-		\crefname{pfcasesnonumiii}{case}{cases} 
-		\Crefname{pfcasesnonumiii}{Case}{Cases}
-		\crefformat{pfcasesnonumiii}{#2case~#1#3}
-		\Crefformat{pfcasesnonumiii}{#2Case~#1#3}
-		\crefname{pfcasesnumberedi}{case}{cases} 
-		\Crefname{pfcasesnumberedi}{Case}{Cases}
+		% \crefname{pfcasesnonumii}{case}{cases} 
+		% \Crefname{pfcasesnonumii}{Case}{Cases}
+		\crefformat{pfcasesnonumii}{#2subcase~#1#3}
+		\Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
+		% \crefname{pfcasesnonumiii}{case}{cases} 
+		% \Crefname{pfcasesnonumiii}{Case}{Cases}
+		\crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
+		\Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
+		% \crefname{pfcasesnumberedi}{case}{cases} 
+		% \Crefname{pfcasesnumberedi}{Case}{Cases}
 		\crefformat{pfcasesnumberedi}{#2case~#1#3}
 		\Crefformat{pfcasesnumberedi}{#2Case~#1#3}
-		\crefname{pfcasesnumberedii}{case}{cases} 
-		\Crefname{pfcasesnumberedii}{Case}{Cases}
+		% \crefname{pfcasesnumberedii}{case}{cases} 
+		% \Crefname{pfcasesnumberedii}{Case}{Cases}
 		\crefformat{pfcasesnumberedii}{#2case~#1#3}
 		\Crefformat{pfcasesnumberedii}{#2Case~#1#3}
-		\crefname{pfcasesnumberediii}{case}{cases} 
-		\Crefname{pfcasesnumberediii}{Case}{Cases}
+		% \crefname{pfcasesnumberediii}{case}{cases} 
+		% \Crefname{pfcasesnumberediii}{Case}{Cases}
 		\crefformat{pfcasesnumberediii}{#2case~#1#3}
 		\Crefformat{pfcasesnumberediii}{#2Case~#1#3}
 		}{}
@@ -179,7 +175,7 @@
 		}
 		\setlist[pfcasesnumbered,1]{
 			before=\def\pfcasecounter@pmg{pfcasesnumberedi},
-		  label={{\pmg@casefont{Case}}~\arabic*:\protect\thiscase.~},
+		  label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
 		  ref={\arabic*},
 		}
 		\setlist[pfcasesnumbered,2]{
@@ -201,7 +197,7 @@
 		  \fi
 		  \item  \ltx@ifpackageloaded{cleveref}{%
 		  \cref@constructprefix{pfcases}{\cref@result}%
-		  \protected@xdef\cref@currentlabel{[pfcases][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
+		  \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
 		}
 		\begin{pfcasesnonum}
 		}

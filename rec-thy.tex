@@ -47,6 +47,7 @@
         	pdfcopyright={Copyright (C) \today, Peter M. Gerdes},
         	baseurl={http://invariant.org}
 }
+\usepackage{cleveref}
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{booktabs}
@@ -509,15 +510,24 @@ To change the syntax for the computable infinitary formulas you can pass the opt
 The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.
 
 \begin{pfcases}
-\newpage
-\case[\( x = y \)]\label{case:first}  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+\case[\( x = y \)]\label{case:first} %  
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
 
-Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
+	Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
 
-\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} %
+	Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
+
+\begin{pfcases}
+\case[\( x=2 \)] \label{case:second:sub1} % 
+	ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+\case[\( x = 3 \)] \label{case:second:sub2} % 
+	consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend 
 \end{pfcases}
 
-We can now reference the case number \ref{case:second}.
+\end{pfcases}
+
+We can now reference the case number \ref{case:second} and cleveref \cref{case:second} as well as case \ref{case:second:sub1} and cleveref \cref{case:second:sub2}.
 
 
 To skip numbering and instead reference with the argument to \verb=\case= use pfcases*
@@ -527,36 +537,43 @@ To skip numbering and instead reference with the argument to \verb=\case= use pf
 Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
 
 \case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
+\begin{pfcases*}
+\case[\( x=2 \)] \label{case*:second:sub1} Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+\case[\( x = 3 \)] \label{case*:second:sub2}  consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend 
+\end{pfcases*}
 \end{pfcases*}
 \end{proof}
 
-Now to ref case \ref{case*:second}.
+Again we can ref case \ref{case*:second} and cleverref that \cref{case*:second}.  Also case \ref{case*:second:sub1} and cleveref \cref{case*:second:sub2}.
+
+If the choice of cleveref labels aren't to your taste please let me know and I will consider changing them.  Also, note that by passing the options \verb!pfcasefont=textit! one can change the font used to typeset Case to italics (or whatever other font command you choose).
 
 \vspace{.5cm}
 
 The above is accomplished with the following code.
 \begin{verbatim}
 \begin{proof}
-This is an example of the pfcases enviornment
 \begin{pfcases}
-\case[\( x = y \)]\label{case:first} The first case
-\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} Second case
+	\case[\( x = y \)]\label{case:first} ...
+	\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} ..
+		\begin{pfcases}
+			\case[\( x=2 \)] \label{case:second:sub1} ..
+			\case[\( x = 3 \)] \label{case:second:sub2}..
+		\end{pfcases}
 \end{pfcases}
-\end{proof}
-
-We can now reference the case number \ref{case:second}.
-
-To skip numbering and instead reference with the argument to \verb=\case= use pfcases*
+.. \ref{case:second}.. \cref{case:second} ..  \ref{case:second:sub1} .. \cref{case:second:sub2}
 \begin{pfcases*}
-\case[\( x = y \)]\label{case*:first} The first case
-\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} Second case
-\end{pfcases*}
+	\case[\( x = y \)]\label{case*:first} ..
+	\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} ..
+		\begin{pfcases*}
+			\case[\( x=2 \)] \label{case*:second:sub1} ..
+			\case[\( x = 3 \)] \label{case*:second:sub2}
+		\end{pfcases*}
+.. \ref{case*:second} .. \cref{case*:second} .. \ref{case*:second:sub1} .. \cref{case*:second:sub2}.
 \end{proof}
-
-Now to ref case \ref{case*:second}.
 \end{verbatim}
 
-Use the enviornment pfcases* instead of pfcases to enable case numbering.
+
 
 \subsection{MRref}
 
