@@ -468,6 +468,43 @@ To change the syntax for the computable infinitary formulas you can pass the opt
 		\bottomrule
 \end{xtabular}
 
+\subsection{Proof Cases}
+
+\begin{proof}
+This is an example of the pfcases enviornment
+\begin{pfcases}
+\case[\( x = y \)]\label{case:first} The first case
+
+Second paragraph
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] Second case
+
+Some random text to give a sense of how it looks parameter is added in enumitem for the blank space from the margin of the enclosing list/text to the left edge of the label box. This means there is a redundancy because one of the parameters depends on the others, i.e., it has to be computed from the other values, as described below. There is a new counter length labelindent which defaults to 0 pt. The five parameteres are related in the following way:
+\end{pfcases}
+\end{proof}
+
+Now to ref case \ref{case:first}.
+
+\vspace{.5cm}
+
+The above is accomplished with the following code.
+\begin{verbatim}
+\begin{proof}
+This is an example of the pfcases enviornment
+\begin{pfcases}
+\case[\( x = y \)]\label{case:first} The first case
+
+Second paragraph
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] Second case
+
+...
+\end{pfcases}
+\end{proof}
+
+Now to ref case \ref{case:first}.
+\end{verbatim}
+
+Use the enviornment pfcases* instead of pfcases to enable case numbering.
+
 \subsection{MRref}
 
 Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article.  Unless you have a good reason (like journal formatting guidelines) there is no reason not to always pass this option.  Note this option requires the hyperref package.
@@ -476,6 +513,8 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.3] 12/31/2017 - Added proof cases helper.
+	\item[2.2] 11/14/2017 - Fixed \verb=\Tdeg= so it works different on symbols and vars and added \verb=\Tdegof= and \verb=\Tvarof=.  Added \verb=\subfunneq= and \verb=\supfunneq=.
 	\item[2.1] 10/05/2017 - Fixed way packages are required so rec-thy can be loaded in a flexible order.  Also fixed one or two bugs.
 	\item[2.0] 09/26/2017 - Added support for introducing requirements, the subfunction relation and probably other undocumented features
 	\item[1.3] 06/20/2012 - Added abbreviations for computable infinitary formulas and made a few minor fixes.

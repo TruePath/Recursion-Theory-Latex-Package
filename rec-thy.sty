@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{rec-thy}[2017/09/26 v2.1  Provides commands for writing up recursion theory papers]
+\ProvidesPackage{rec-thy}[2017/12/31 v2.3  Provides commands for writing up recursion theory papers]
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
@@ -81,6 +81,7 @@
 \newif\ifrecthy@nostructresets \recthy@nostructresetsfalse
 \newif\ifrecthy@noreqhelper \recthy@noreqhelperfalse
 \newif\ifrecthy@nosubfun \recthy@nosubfunfalse
+\newif\ifrecthy@nopfcases \recthy@nopfcasesfalse
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
 
 \DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
@@ -104,15 +105,85 @@
 \DeclareOptionX{nostructresets}{\recthy@nostructresetstrue}
 \DeclareOptionX{noreqhelper}{\recthy@noreqhelpertrue}
 \DeclareOptionX{nosubfun}{\recthy@nosubfuntrue}
+\DeclareOptionX{nopfcases}{\recthy@nopfcasestrue}
 \DeclareOptionX{nohyperreqs}{\recthy@hyperreqsfalse}
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
+
+
+\AtEndOfPackage{
+	\ifrecthy@nopfcases
+		\@packinfo{Not loading Proof Cases Helper}
+	\else
+		\@packinfo{Loading Proof Cases Helper.}
+		\RequirePackage{enumitem}
+		\ltx@ifpackageloaded{cleverref}{
+		\crefname{pfcases}{case}{cases} 
+		\Crefname{pfcases}{Case}{Cases}
+		}{}
+		\newlist{pfcasesnonum}{enumerate}{1}
+		\setlist[pfcasesnonum]{
+		  label=\scshape{Case}\protect\thiscase:~,
+		  align=left,
+		  labelsep=!,
+		  itemindent=-1em,
+		  leftmargin=2em,
+		  labelindent=0pt,
+		  labelwidth=0pt
+		}
+		\newlist{pfcasesnumbered}{enumerate}{1}
+		\setlist[pfcasesnumbered]{
+		  label=\scshape{Case}\arabic*:\protect\thiscase.~,
+		  ref=\arabic*,
+		  align=left,
+		  labelsep=!,
+		  itemindent=-1em,
+		  leftmargin=2em,
+		  labelindent=0pt,
+		  labelwidth=0pt
+		}
+		% \newcommand{\case}[1][]{%
+		%   \if\relax\detokenize{#1}\relax
+		%     \def\thiscase{}%
+		%   \else
+		%     \def\thiscase{~#1}%
+		%   \fi
+		%   \item \protected@edef\@currentlabel{#1} \ltx@ifpackageloaded{cleverref}{\cref@constructprefix{pfcases}{\cref@result}%
+		% 																																						\protected@xdef\cref@currentlabel{[pfcases][][\cref@result]#1}%
+		% 																																					}{}%
+		% }
+		\newenvironment{pfcases}{
+				\newcommand{\case}[1][]{%
+		  \if\relax\detokenize{##1}\relax
+		    \def\thiscase{}%
+		  \else
+		    \def\thiscase{~##1}%
+		  \fi
+		  \item \protected@edef\@currentlabel{##1} \ltx@ifpackageloaded{cleverref}{\cref@constructprefix{pfcases}{\cref@result}%
+																																								\protected@xdef\cref@currentlabel{[pfcases][][\cref@result]##1}%
+																																							}{}%
+		}
+		\begin{pfcasesnonum}
+		}{\end{pfcasesnonum}}
+			\newenvironment{pfcases*}{
+				\newcommand{\case}[1][]{%
+		  \if\relax\detokenize{##1}\relax
+		    \def\thiscase{}%
+		  \else
+		    \def\thiscase{~##1}%
+		  \fi
+		  \item 
+		}
+		\begin{pfcasesnumbered}
+		}{\end{pfcasesnumbered}}
+	\fi
+}
 
 \AtEndOfPackage{
 \ifrecthy@nosubfun
 	\@packinfo{Not loading subfun defs.}
 \else
-	\@packinfo{Loading subfun defs DOCUMENT ME.}
+	\@packinfo{Loading subfun defs.}
 	%DOCUMENT ME
 	\newcommand*{\subfun}[1][]{\prec\ifthenelse{\isempty{#1}}{_{#1}}{}}
 	\newcommand*{\supfun}[1][]{\succ\ifthenelse{\isempty{#1}}{_{#1}}{}}
@@ -122,6 +193,8 @@
 	\newcommand*{\supfuneq}[1][]{\succeq\ifthenelse{\isempty{#1}}{_{#1}}{}}
 	\newcommand*{\nsubfuneq}[1][]{\npreceq\ifthenelse{\isempty{#1}}{_{#1}}{}}
 	\newcommand*{\nsupfuneq}[1][]{\nsucceq\ifthenelse{\isempty{#1}}{_{#1}}{}}
+	\newcommand*{\subfunneq}[1][]{\precneq\ifthenelse{\isempty{#1}}{_{#1}}{}}
+	\newcommand*{\supfunneq}[1][]{\succneq\ifthenelse{\isempty{#1}}{_{#1}}{}}
 \fi
 }
 
@@ -1207,7 +1280,20 @@
 
 
 	%%%%%%Turing Degrees
-	\newcommand*{\Tdeg}[1]{\utilde{\mathbf{#1}}}
+	\def\firsttokof@pmg#1{\first@pmg@rdmxs(#1)}
+	\def\first@pmg@rdmxs(#1#2){#1}
+
+	\newcommand*{\Tdegvar}[1]{\mathbf{#1}}
+	\newcommand*{\Tdegof}[1]{\utilde{#1}}
+	\newcommand*{\Tdeg}[1]{\ifthenelse{
+	%\equal{\detokenize{\Tzero}}{\futurelet\next@pmg\discard#1\@nil\expandafter\detokenize{\next@pmg}}
+										\equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR  
+										\equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR 
+										\equal{\detokenize{\zeroj}}{\detokenize{#1}} \OR 
+										\equal{\detokenize{\zerojj}}{\detokenize{#1}} \OR 
+										\equal{\detokenize{\zerojjj}}{\detokenize{#1}} \OR 
+										\equal{\string \zeron }{\expandafter\string \first@pmg@rdmxs(#1)}  
+									   }{\Tdegof{#1}}{\Tdegvar{#1}}}
 
 	\newcommand*{\Tjump}[1]{#1'}
 	\let\jump=\Tjump
