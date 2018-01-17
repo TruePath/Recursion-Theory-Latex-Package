@@ -83,7 +83,7 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{\today: Version 2.3}
+\date{\today: Version 2.4}
 
 \begin{document}
 
@@ -114,8 +114,25 @@ A few general conventions are usually followed in the commands.  Whenever an ope
 
 Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
 
-Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above
-\( \mathfrak{u} \)
+Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above.
+
+
+\subsection{Priority Trees}
+
+Note the commands in this section double as suggestions for standardized notation.
+
+\begin{xtabular}{l |  l | l}\toprule
+	\verb=\PriorityTree=					& \( 	\PriorityTree                   \)	& Truepath. \\ \midrule
+	\verb=\tpath=					& \( 	\tpath                   \)	& Truepath. \\ \midrule
+	\verb=\tpath[s]=					& \( 	\tpath[s]                   \)	& Approximate Truepath. \\ \midrule
+	\verb=\xi \leftof \eta =					& \( 	\xi \leftof \eta                   \)	& The left of relation for priority tree arguments \\ \midrule
+	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
+	\verb=\Vstages{\xi}=					& \( 	\Vstages{\xi}                   \)	& Stages where \( \xi \subfun \tpath[s] \) even if links skip \( \xi \). \\ \midrule
+	\verb=\reqof{\xi}=					& \( 	\reqof{\xi}                   \)	& Requirement implemented by a node \( \xi \). \\ \midrule
+	\verb=\ball[X]{y}{s}=					& \( 	\ball[X]{y}{s}                  \)	& Location of ball \( y\) (headed to \( X \)) at \( s \)\\ \midrule
+	\verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
+	\end{xtabular}          \\
+
 \subsection{Computations}
 To disable these commands pass the option \verb=nocomputations=. \\
 
@@ -145,6 +162,7 @@ To disable these commands pass the option \verb=nocomputations=. \\
 	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\
 		\bottomrule
 	\end{xtabular}          \\
+
 
 \subsection{Degrees}
 To disable these commands pass the option \verb=nodegrees=. \\
@@ -583,6 +601,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.4] 1/17/2018 - Added priority tree helpers.  Should be more robust with respect to existing definitions of common commands.
 	\item[2.3] 12/31/2017 - Added proof cases helper.  Also fixed the issue with \verb=\ncequiv= in \XeLaTeX
 	\item[2.2] 11/14/2017 - Fixed \verb=\Tdeg= so it works different on symbols and vars and added \verb=\Tdegof= and \verb=\Tvarof=.  Added \verb=\subfunneq= and \verb=\supfunneq=.
 	\item[2.1] 10/05/2017 - Fixed way packages are required so rec-thy can be loaded in a flexible order.  Also fixed one or two bugs.

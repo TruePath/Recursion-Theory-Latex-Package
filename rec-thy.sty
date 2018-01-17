@@ -3,8 +3,13 @@
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
-\newcommand*{\recthy@strip}[1]{%\expandafter\newcommand{\csname #1\endcsname}{}% Makes sure arg isn't already a command
-\expandafter\edef\csname #1\endcsname{\expandafter\noexpand\csname @recthy@#1\endcsname}} %leaves us a command \arg defined to do \@recthy@arg
+\newcommand*{\recthy@strip}[1]{%
+\ifcsname #1\endcsname%
+\else%
+\expandafter\edef\csname #1\endcsname{\expandafter\noexpand\csname @recthy@#1\endcsname}
+\fi
+}
+%leaves us a command \arg defined to do \@recthy@arg
 % \ProvidesPackage{\@curpack}  %file name is package name
 
 % Release Notes
@@ -82,6 +87,7 @@
 \newif\ifrecthy@noreqhelper \recthy@noreqhelperfalse
 \newif\ifrecthy@nosubfun \recthy@nosubfunfalse
 \newif\ifrecthy@nopfcases \recthy@nopfcasesfalse
+\newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
 
 \DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
@@ -106,9 +112,30 @@
 \DeclareOptionX{noreqhelper}{\recthy@noreqhelpertrue}
 \DeclareOptionX{nosubfun}{\recthy@nosubfuntrue}
 \DeclareOptionX{nopfcases}{\recthy@nopfcasestrue}
+\DeclareOptionX{noprioritytrees}{\recthy@noprioritytreestrue}
 \DeclareOptionX{nohyperreqs}{\recthy@hyperreqsfalse}
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
+
+
+\AtEndOfPackage{
+	\ifrecthy@noprioritytrees
+		\@packinfo{Not loading Priority Tree Helper}
+	\else
+		\@packinfo{Loading Priority Tree Helper.}
+		\providecommand{\PriorityTree}{\mathbb{T}}
+		\providecommand{\tpath}[1][]{\mathbb{f}_{#1}}
+		\providecommand{\leftof}{\mathbin{<_L}}
+		\providecommand{\ball}[3][]{{\ifdefined\symbf
+										\symbf{\alpha}
+									  \else
+									  	\alpha
+									  \fi}^{#1}(#2, #3)}
+		\providecommand*{\Astages}[1]{\mathcal{S}_{\text{act}}^{#1}}
+		\providecommand*{\Vstages}[1]{\mathcal{S}^{#1}}
+		\providecommand{\reqof}[2][]{\mathbb{r}(#2)}
+	\fi
+}
 
 \let\pmg@casefont=\textsc
 \DeclareOptionX{pfcasefont}[textsc]{\edef\pmg@casefont{\expandafter\noexpand\csname #1 \endcsname}}
@@ -120,28 +147,16 @@
 		\@packinfo{Loading Proof Cases Helper.}
 		\RequirePackage{enumitem}
 		\ltx@ifpackageloaded{cleveref}{
-		% \crefname{pfcasesnonumi}{case}{cases} 
-		% \Crefname{pfcasesnonumi}{Case}{Cases}
 		\crefformat{pfcasesnonumi}{#2case~#1#3}
 		\Crefformat{pfcasesnonumi}{#2Case~#1#3}
-		% \crefname{pfcasesnonumii}{case}{cases} 
-		% \Crefname{pfcasesnonumii}{Case}{Cases}
 		\crefformat{pfcasesnonumii}{#2subcase~#1#3}
 		\Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
-		% \crefname{pfcasesnonumiii}{case}{cases} 
-		% \Crefname{pfcasesnonumiii}{Case}{Cases}
 		\crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
 		\Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
-		% \crefname{pfcasesnumberedi}{case}{cases} 
-		% \Crefname{pfcasesnumberedi}{Case}{Cases}
 		\crefformat{pfcasesnumberedi}{#2case~#1#3}
 		\Crefformat{pfcasesnumberedi}{#2Case~#1#3}
-		% \crefname{pfcasesnumberedii}{case}{cases} 
-		% \Crefname{pfcasesnumberedii}{Case}{Cases}
 		\crefformat{pfcasesnumberedii}{#2case~#1#3}
 		\Crefformat{pfcasesnumberedii}{#2Case~#1#3}
-		% \crefname{pfcasesnumberediii}{case}{cases} 
-		% \Crefname{pfcasesnumberediii}{Case}{Cases}
 		\crefformat{pfcasesnumberediii}{#2case~#1#3}
 		\Crefformat{pfcasesnumberediii}{#2Case~#1#3}
 		}{}
@@ -360,27 +375,45 @@
 	\@packinfo{No math loading.}
 \else
 	\@packinfo{math loading.}
-	\newcommand*{\eqdef}{\stackrel{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
-	\newcommand*{\iffdef}{\stackrel{\text{\tiny def}}{\iff}}
-	\DeclareMathOperator{\aut}{Aut}
-	\DeclareMathOperator{\Ord}{Ord}
+	\providecommand*{\eqdef}{\stackrel{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
+	\providecommand*{\iffdef}{\stackrel{\text{\tiny def}}{\iff}}
+	\ifdefined\aut
+	\else
+		\DeclareMathOperator{\aut}{Aut}
+	\fi
+	\ifdefined\Ord
+	\else
+		\DeclareMathOperator{\Ord}{Ord}
+	\fi
 
-	\newcommand*{\meet}{\mathbin{\wedge}}
-	\newcommand*{\join}{\mathbin{\vee}}
-	\newcommand*{\Meet}{\mathop{\bigwedge}}
+	\providecommand*{\meet}{\mathbin{\wedge}}
+	\providecommand*{\join}{\mathbin{\vee}}
+	\providecommand*{\Meet}{\mathop{\bigwedge}}
 	\let\MnJoin=\Join
 	\renewcommand*{\Join}{\mathop{\bigvee}}
 	\recthy@strip{abs}
-	\DeclareMathOperator{\dom}{dom}
-	\DeclareMathOperator{\rng}{rng}
-	\newcommand*{\restr}[1]{\mathpunct{\restriction_{#1}}}
-	\newcommand*{\ordpair}[2]{\left( #1, #2 \right) }
+	\ifdefined\dom
+	\else
+		\DeclareMathOperator{\dom}{dom}
+	\fi
+	\ifdefined\rng
+	\else
+		\DeclareMathOperator{\rng}{rng}
+	\fi
+	\providecommand*{\restr}[1]{\mathpunct{\restriction_{#1}}}
+	\providecommand*{\ordpair}[2]{\left( #1, #2 \right) }
 	%%%%%%%%Function commands
-	\newcommand*{\map}[2]{:#1\mapsto #2}
-	\newcommand*{\functo}[3]{#1\map{#2}{#3}}
-	\newcommand*{\compfunc}{\mathbin{\circ}}
-	\let\compose=\compfunc
-	\let\funcomp=\compfunc
+	\providecommand*{\map}[2]{:#1\mapsto #2}
+	\providecommand*{\functo}[3]{#1\map{#2}{#3}}
+	\providecommand*{\compfunc}{\mathbin{\circ}}
+	\ifdefined\compose
+	\else
+		\let\compose=\compfunc
+	\fi
+	\ifdefined\funcomp
+	\else
+		\let\funcomp=\compfunc
+	\fi
 	\recthy@strip{ensuretext}
 \fi
 }
@@ -529,13 +562,19 @@
 	\recthy@strip{setovercmp}
 	\recthy@strip{setminuscmp}
 	\recthy@strip{setminus}
-	\newcommand*{\cross}{\mathbin{\times}}
+	\providecommand*{\cross}{\mathbin{\times}}
 	\let\CrossOrig=\Cross
 	\def\Cross{}
 	\renewcommand*{\Cross}{\mathop{\Pi}}
-	\newcommand*{\symdiff}{\mathbin{\Delta}}
-	\DeclareMathOperator{\interior}{int}
-	\DeclareMathOperator{\closure}{cl}
+	\providecommand*{\symdiff}{\mathbin{\Delta}}
+	\ifdefined\interior
+	\else
+		\DeclareMathOperator{\interior}{int}
+	\fi
+	\ifdefined\closure
+	\else
+		\DeclareMathOperator{\closure}{cl}
+	\fi
 \fi
 }
 
@@ -555,11 +594,11 @@
 	\WithSuffix\def\forallae(#1){\left(\forallae\, #1\right)\!}
 	\WithSuffix\def\forallae[#1]{\left[\forallae\, #1\right]\!}
 
-	\newcommand*{\existsinf}{\exists^{\infty}}
+	\providecommand*{\existsinf}{\exists^{\infty}}
 	\WithSuffix\def\existsinf(#1){\left(\existsinf\, #1\right)\!}
 	\WithSuffix\def\existsinf[#1]{\left[\existsinf\, #1\right]\!}
 
-	\newcommand*{\nexistsinf}{\nexists^{\infty}}
+	\providecommand*{\nexistsinf}{\nexists^{\infty}}
 	\WithSuffix\def\nexistsinf(#1){\left(\nexistsinf\, #1\right)\!}
 	\WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf\, #1\right]\!}
 
@@ -577,16 +616,16 @@
 
 
 
-	\newcommand*{\True}{\top}
-	\newcommand*{\False}{\bot}
+	\providecommand*{\True}{\top}
+	\providecommand*{\False}{\bot}
 
-	\newcommand*{\Land}{\mathop{\bigwedge}}
-	\newcommand*{\Lor}{\mathop{\bigvee}}
-	\newcommand*{\LLand}{\mathop{\bigwedge\mkern-15mu\bigwedge}}
-	\newcommand*{\LLor}{\mathop{\bigvee\mkern-15mu\bigvee}}
+	\providecommand*{\Land}{\mathop{\bigwedge}}
+	\providecommand*{\Lor}{\mathop{\bigvee}}
+	\providecommand*{\LLand}{\mathop{\bigwedge\mkern-15mu\bigwedge}}
+	\providecommand*{\LLor}{\mathop{\bigvee\mkern-15mu\bigvee}}
 
-	\newcommand*{\liff}{\ensuremath{\leftrightarrow}}
-	\newcommand*{\limplies}{\ensuremath{\rightarrow}}
+	\providecommand*{\liff}{\ensuremath{\leftrightarrow}}
+	\providecommand*{\limplies}{\ensuremath{\rightarrow}}
 \fi
 }
 
@@ -596,14 +635,14 @@
 \else
 	\@packinfo{Spaces loading.}
 
-	\newcommand*{\bstrs}{2^{<\omega}}
-	\newcommand*{\wstrs}{\omega^{<\omega}}
+	\providecommand*{\bstrs}{2^{<\omega}}
+	\providecommand*{\wstrs}{\omega^{<\omega}}
 
-	\newcommand*{\cantor}{2^{\omega}}
+	\providecommand*{\cantor}{2^{\omega}}
 	% \WithSuffix\def\cantor*{\left(2\union \diverge \right)^{\omega}}
-	\newcommand*{\baire}{\omega^{\omega}}
+	\providecommand*{\baire}{\omega^{\omega}}
 	% \WithSuffix\def\baire*{\left(\omega \union \diverge \right)^{\omega}}
-	\newcommand*{\Baire}{\mathcal{N}}
+	\providecommand*{\Baire}{\mathcal{N}}
 \fi
 }
 
@@ -633,15 +672,15 @@
 	\newcommand*{\EmptyStr}{\@recthy@EmptyStr}
 	\newcommand*{\estr}{\EmptyStr}
 	\newcommand*{\decode}[2]{(#1)_{#2}}
-	\newcommand*{\godelpair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
+	\providecommand*{\godelpair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
 	\newcommand*{\gpair}{\godelpair}
 	\newcommand*{\concat}{\mathbin{\@recthy@concatSYM}}
 	\WithSuffix\def\concat[#1]{\concat\str{#1}}
 	\newcommand*{\strpred}[1]{{#1}^{-}}
-	\newcommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
-	\newcommand*{\incompat}{\mathrel{\mid}} %incompatible stringes FIX SPACING
-	\newcommand*{\incomp}{\incompat}
-	\newcommand*{\compat}{\mathrel{\nmid}}
+	\providecommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
+	\providecommand*{\incompat}{\mathrel{\mid}} %incompatible stringes FIX SPACING
+	\providecommand*{\incomp}{\incompat}
+	\providecommand*{\compat}{\mathrel{\nmid}}
 	\newcommand*{\setcol}[2]{{#1}^{[#2]}}
 	\ifrecthy@nopair
 		\@packinfo{No redefining pair.}
@@ -731,7 +770,7 @@
 \else
 	\@packinfo{ordinal notations loading.}
 
-\newcommand*{\wck}{\ensuremath{\omega^{ck}_1}}
+\providecommand*{\wck}{\ensuremath{\omega^{ck}_1}}
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
 	\newcommand*{\ordzero}{\ensuremath{0}}
   \def\kleeneOSYM{\mathcal{O}}
@@ -790,7 +829,7 @@
 	\@packinfo{No forcing loading.}
 \else
 	\@packinfo{forcing loading.}
-	\newcommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\def\@PMG@curfrcsym{\Vdash}\@forcesBody}
+	\providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\def\@PMG@curfrcsym{\Vdash}\@forcesBody}
 	\newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
 	\WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
 	\WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
@@ -799,7 +838,7 @@
 	% \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
 	% \newcommand{\forces}{\optparams{\forces@}{[][]}%
 	% }
-	\newcommand*{\frc}{\forces}
+	\providecommand*{\frc}{\forces}
 \fi
 }
 
@@ -1322,9 +1361,9 @@
 	\def\firsttokof@pmg#1{\first@pmg@rdmxs(#1)}
 	\def\first@pmg@rdmxs(#1#2){#1}
 
-	\newcommand*{\Tdegvar}[1]{\mathbf{#1}}
-	\newcommand*{\Tdegof}[1]{\utilde{#1}}
-	\newcommand*{\Tdeg}[1]{\ifthenelse{
+	\providecommand*{\Tdegvar}[1]{\mathbf{#1}}
+	\providecommand*{\Tdegof}[1]{\utilde{#1}}
+	\providecommand*{\Tdeg}[1]{\ifthenelse{
 	%\equal{\detokenize{\Tzero}}{\futurelet\next@pmg\discard#1\@nil\expandafter\detokenize{\next@pmg}}
 										\equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR  
 										\equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR 
@@ -1334,48 +1373,48 @@
 										\equal{\string \zeron }{\expandafter\string \first@pmg@rdmxs(#1)}  
 									   }{\Tdegof{#1}}{\Tdegvar{#1}}}
 
-	\newcommand*{\Tjump}[1]{#1'}
+	\providecommand*{\Tjump}[1]{#1'}
 	\let\jump=\Tjump
-	\newcommand*{\jumpn}[2]{#1^{(#2)}}
-	\newcommand*{\jjump}[1]{#1''}
+	\providecommand*{\jumpn}[2]{#1^{(#2)}}
+	\providecommand*{\jjump}[1]{#1''}
 	% \newcommand*{\Tzerosym}{\MVZero}
 	\newcommand*{\Tzerosym}{\mathbb{0}}
-	\newcommand*{\Tzero}{{\Tzerosym}}
-	\newcommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
-	\newcommand*{\zeroj}{\jump{{\Tzerosym}}}
+	\providecommand*{\Tzero}{{\Tzerosym}}
+	\providecommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
+	\providecommand*{\zeroj}{\jump{{\Tzerosym}}}
 	\let\Tzeroj=\zeroj
-	\newcommand*{\zerojj}{\jump{\jump{{\Tzerosym}}}}
-	\newcommand*{\zerojjj}{\jump{\jump{\jump{{\Tzerosym}}}}}
+	\providecommand*{\zerojj}{\jump{\jump{{\Tzerosym}}}}
+	\providecommand*{\zerojjj}{\jump{\jump{\jump{{\Tzerosym}}}}}
 	\let\Tzerojj=\zerojj
 	\let\Tzerojjj=\zerojjj
 
 	%%Misc Recursion theory stuff
 	%turing equivalent
 	\newcommand*{\@recthy@TSYM}{\mathbf{T}}
-	\newcommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}}
-	\newcommand*{\Teq}{\Tequiv}
-	\newcommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
-	\newcommand*{\nTeq}{\nTequiv}
+	\providecommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}}
+	\providecommand*{\Teq}{\Tequiv}
+	\providecommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
+	\providecommand*{\nTeq}{\nTequiv}
 	%turing below
 
-	\newcommand*{\Tlneq}{\lneq_{\@recthy@TSYM}}
-	\newcommand*{\Tleq}{\leq_{\@recthy@TSYM}}
-	\newcommand*{\Tgneq}{\gneq_{\@recthy@TSYM}}
-	\newcommand*{\Tgeq}{\geq_{\@recthy@TSYM}}
-	\newcommand*{\Tgtr}{>_{\@recthy@TSYM}}
-	\newcommand*{\Tless}{<_{\@recthy@TSYM}}
-	\newcommand*{\nTleq}{\nleq_{\@recthy@TSYM}}
-	\newcommand*{\nTgeq}{\ngeq_{\@recthy@TSYM}}
+	\providecommand*{\Tlneq}{\lneq_{\@recthy@TSYM}}
+	\providecommand*{\Tleq}{\leq_{\@recthy@TSYM}}
+	\providecommand*{\Tgneq}{\gneq_{\@recthy@TSYM}}
+	\providecommand*{\Tgeq}{\geq_{\@recthy@TSYM}}
+	\providecommand*{\Tgtr}{>_{\@recthy@TSYM}}
+	\providecommand*{\Tless}{<_{\@recthy@TSYM}}
+	\providecommand*{\nTleq}{\nleq_{\@recthy@TSYM}}
+	\providecommand*{\nTgeq}{\ngeq_{\@recthy@TSYM}}
 
-	\newcommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
-	\newcommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
-	\newcommand*{\Tmeet}{\Tdegmeet}
-	\newcommand*{\Tsetjoin}{\mathbin{\oplus}}
-	\newcommand*{\TsetJoin}{\mathop{\bigoplus}}
-	\newcommand*{\Tplus}{\Tsetjoin}
-	\newcommand*{\TPlus}{\TsetJoin}
-	\newcommand*{\Tjoin}{\Tsetjoin}
-	\newcommand*{\TJoin}{\TsetJoin}
+	\providecommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
+	\providecommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
+	\providecommand*{\Tmeet}{\Tdegmeet}
+	\providecommand*{\Tsetjoin}{\mathbin{\oplus}}
+	\providecommand*{\TsetJoin}{\mathop{\bigoplus}}
+	\providecommand*{\Tplus}{\Tsetjoin}
+	\providecommand*{\TPlus}{\TsetJoin}
+	\providecommand*{\Tjoin}{\Tsetjoin}
+	\providecommand*{\TJoin}{\TsetJoin}
 
 
 
