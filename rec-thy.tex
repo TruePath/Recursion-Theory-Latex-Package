@@ -15,11 +15,12 @@
 % \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 % \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
 \usepackage{mathspec}
-
+\usepackage{comment}
 \usepackage{unicode-math}
 \unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
 \setmathfont{xits-math.otf}
 \setmathfont{xits-math.otf}[range={cal,bfcal},StylisticSet=1]
+
 
 \usepackage{hyperxmp}
 \usepackage[unicode,psdextra,pdfusetitle]{hyperref}
@@ -97,6 +98,8 @@
 \noindent The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
 \end{abstract}
 
+
+
 \section{Introduction}
 This package aims to provide a useful set of \LaTeX { }macros covering basic computability theory notation.  Given the variation in usage in several areas this package had to pick particular notational conventions.  The package author would like to encourage uniformity in these conventions but has included a multitude of package options to allow individual authors to choose alternative conventions or exclude that part of the package.  Some effort has been made to align the semantic content of documents created with this package with the \LaTeX { }source.  The author hopes that eventually this package may be incorporated into some larger package for typesetting papers in mathematical logic.
 
@@ -114,7 +117,7 @@ A few general conventions are usually followed in the commands.  Whenever an ope
 
 Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
 
-Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above.
+Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above. 
 
 
 \subsection{Priority Trees}
@@ -123,7 +126,7 @@ Note the commands in this section double as suggestions for standardized notatio
 
 \begin{xtabular}{l |  l | l}\toprule
 	\verb=\PriorityTree=					& \( 	\PriorityTree                   \)	& Truepath. \\ \midrule
-	\verb=\tpath=					& \( 	\tpath                   \)	& Truepath. \\ \midrule
+	\verb=\tpath=					& \(  \tpath                   \)	& Truepath. \\ \midrule
 	\verb=\tpath[s]=					& \( 	\tpath[s]                   \)	& Approximate Truepath. \\ \midrule
 	\verb=\xi \leftof \eta =					& \( 	\xi \leftof \eta                   \)	& The left of relation for priority tree arguments \\ \midrule
 	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
@@ -133,12 +136,21 @@ Note the commands in this section double as suggestions for standardized notatio
 	\verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
 	\end{xtabular}          \\
 
+
 \subsection{Computations}
-To disable these commands pass the option \verb=nocomputations=. \\
+To disable these commands pass the option \verb=nocomputations=. \\  To specify an alternative symbol for either recursive functionals or recursive functions pass  \verb!recfnlsym=macroname! or \verb!recfsym=macroname!.  For instance, to use \( \psi \) for recursive functions and \( \Psi \) for recursive functionals pass the options \verb!recfsym=psi, recfnlsym=Psi!.  
 
 \begin{xtabular}{l |  l | l}\toprule
 	\verb=\murec{x}{f(x)>1}=					& \( 	\murec{x}{f(x)>1}                     \)	& Least \( x \) satisfying condition. \\ \midrule
-	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functions/functionals} \\[6pt]
+	\verb=\recf{e}=                                	& \( 	\recf{e}                      	   \)   &\multirow{4}{*}{Computable functions} \\[6pt]
+	\verb=\recf[s]{e}=                             & \( 	\recf[s]{e}                   	   \)   & \\[6pt]
+	\verb=\recf{e}(x)=                             & \( 	\recf{e}(x)                   	   \)   & \\[6pt]
+	\verb=\recf[s]{e}(x)=                             & \( 	\recf[s]{e}(x)                   	   \)   & \\[6pt]
+	\verb=\recf{e}[Y]=                             & \( 	\recf{e}[Y]                   	   \)   & \\[6pt]
+	\verb=\recf[s]{e}[Y]=                             & \( 	\recf[s]{e}[Y]                   	   \)   & \\[6pt]
+	\verb=\recf{e}[Y](x)=                             & \( 	\recf[s]{e}[Y](x)                   	   \)   & \\[6pt]
+	\verb=\recf[s]{e}[Y](x)=                             & \( 	\recf[s]{e}[Y](x)                   	   \)   & \\[6pt]
+	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functionals} \\[6pt]
 	\verb=\recfnl[s]{e}{Y}{x}=                             & \( 	\recfnl[s]{e}{Y}{x}                   	   \)   & \\[6pt]
 	\verb=\recfnl{e}{Y}{}=                                 & \( 	\recfnl{e}{Y}{}                       	   \)   & \\[6pt]
 	\verb=\recfnl{e}{}{x}=                                 & \( 	\recfnl{e}{}{x}                       	   \)   & \\[6pt]
@@ -284,6 +296,8 @@ To disable these commands pass the option \verb=nomath=. \\
 \subsection{Set Notation}
 To disable these commands pass the option \verb=nosets=.\\
 
+Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving them as \verb=\CrossOrig= and \verb=\crossOrig= respectively as these commands have varying meanings between different font packages.  However, the other commands avoid overwriting existing commands with that name 
+
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt]
 	\verb=\set{(x,y)}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
@@ -298,9 +312,8 @@ To disable these commands pass the option \verb=nosets=.\\
 	\verb=\powset{\omega}=                   &    \(   \powset{\omega}            \)    &  Powerset \\ \midrule
 	\verb=\eset=                             &    \(   \eset                      \)    &  Emptyset abbreviation\\ \midrule
 	\verb=x \nin A=                          &    \(   x \nin A                   \)    &  not an element\\ \midrule
-	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\[6pt]
-						 &	\( \setminuscmp{X} \)		    & With option \verb=minussetcmp= \\ \midrule
-	\verb=X \setminus Y=                     &    \(   X \setminus Y              \)    & Set difference \\ \midrule
+	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\\midrule
+	\verb=X \setdiff Y=                     &    \(   X \setdiff Y              \)    & Set difference \\ \midrule
 	\verb=X \symdiff Y=                      &    \(   X \symdiff Y               \)    & Symmetric difference \\ \midrule
 	\verb=\interior X=                       &    \(   \interior X                \)    & Interior \\ \midrule
 	\verb=\closure X=                        &    \(   \closure X                 \)    & Closure \\ \midrule
@@ -368,7 +381,7 @@ To disable these commands pass the option \verb=noquants=. The commands \verb=\e
 	\bottomrule
 \end{tabular}
 \subsection{Spaces}
-To disable these commands pass the option \verb=nospaces=.\\
+To disable these commands pass the option \verb=nospaces=.\\  
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\bstrs=		       & \( \bstrs  \) & Finite binary strings        \\	\midrule
@@ -381,6 +394,8 @@ To disable these commands pass the option \verb=nospaces=.\\
 
 \subsection{Strings}
 To disable these commands pass the option \verb=nostrings=.\\
+
+To specify an alternative symbol for the empty string pass \verb!emptystr=macroname!.  For instance, to use \( \lambda \) as the empty string pass \verb!emptystr=lambda!.  Similarly, to specify an alternate value for the conatination symbol pass \verb!concatsym=macroname!, e.g., if you specify \verb!\def\plus{+}! and then pass \verb!concatsym=plus! the concatenation symbol would be changed to \( + \).
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\str{1,0,1}=		     & \(   \str{1,0,1}           \) & \multirow{2}{*}{Strings/Codes for strings}  \\
@@ -491,7 +506,7 @@ To disable these commands pass the option \verb=noforcing=.\\
 \subsection{Syntax}
 To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas as this doesn't make sense).  Not all formulas/abbreviations are demonstrated below given the huge number but the enough are included to make it clear what command is required to generate the desired formula class, e.g., substituting pi for delta does what you think it does.
 
-To change the syntax for the computable infinitary formulas you can pass the options \verb=cdeltasym=, \verb=csigmasym= and \verb=cpisym= set equal to the command to produce your desired symbol.  This is UNTESTED and quite likely doesn't work yet.  If you desire this feature and it doesn't work send me a bug report.
+To change the syntax for the computable infinitary formulas you can pass the options \verb!cdeltasym=macroname!, \verb!csigmasym=macroname! and \verb!cpisym=macroname! where macroname is the name (without the leading \\) of the macro giving the desired symbol to use for the relevant class. 
 
 \begin{xtabular}{l |  l | l}\toprule
 	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
@@ -601,6 +616,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}
 	\item[2.4] 1/17/2018 - Added priority tree helpers.  Should be more robust with respect to existing definitions of common commands.
 	\item[2.3] 12/31/2017 - Added proof cases helper.  Also fixed the issue with \verb=\ncequiv= in \XeLaTeX
 	\item[2.2] 11/14/2017 - Fixed \verb=\Tdeg= so it works different on symbols and vars and added \verb=\Tdegof= and \verb=\Tvarof=.  Added \verb=\subfunneq= and \verb=\supfunneq=.
