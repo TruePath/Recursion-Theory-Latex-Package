@@ -14,7 +14,7 @@
 % \usepackage{amsfonts}
 % \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 % \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
-\usepackage{mathspec}
+% \usepackage{mathspec}
 \usepackage{comment}
 \usepackage{unicode-math}
 \unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
@@ -248,7 +248,7 @@ Giving output
 		\recfnl{r}{B}{} = \REset{j} \implies   \exists[k] \left( \Upsilon^{j}_k(C \Tplus \REset{j}) = B) \lor \REset{j} \Tleq \Tzero \right) 
 	\end{requirement}
 
-The require enfiornment merges the \verb=\req[\nu]{R}{e\}= command directly into the enviornment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third are just indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require enviornment.
+The require environment merges the \verb=\req[\nu]{R}{e\}= command directly into the environment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third argument contains only indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require enviornment.
 
 \begin{lstlisting}[breaklines]
 \begin{require}{R}{i}
@@ -616,6 +616,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
 	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}
 	\item[2.4] 1/17/2018 - Added priority tree helpers.  Should be more robust with respect to existing definitions of common commands.
 	\item[2.3] 12/31/2017 - Added proof cases helper.  Also fixed the issue with \verb=\ncequiv= in \XeLaTeX

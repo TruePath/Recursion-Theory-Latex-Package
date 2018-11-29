@@ -28,3 +28,4 @@ Github URL: https://github.com/TruePath/Recursion-Theory-Latex-Package
 12/31/2017 - v2.3 - Added proof cases helper. Also fixed the issue with \ncequiv in XeLaTeX
 1/17/2018 - v2.4 - Added priority tree helpers.  Should be more robust with respect to existing definitions of common commands
 2/14/2018 - v2.4.1 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing. Also worked around the mathtools/unicode-math font bug described here: https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177
+11/29/2018 - v2.4.2 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also things are compiling again.

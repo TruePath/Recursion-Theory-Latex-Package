@@ -32,7 +32,7 @@
 \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
 \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
 \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
-\ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}}
+\ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
 \ltx@ifpackageloaded{undertilde}{}{\RequirePackage{undertilde}}
 }
 
@@ -321,6 +321,11 @@
     }{
         \end{requirement}
     }
+    \newenvironment{require*}[3][]{
+        \begin{requirement}{\req*[#1]{#2}{#3}} \label{\detokenize{req:#2@#1}}
+    }{
+        \end{requirement}
+    }
     \newcommand*{\refreq}[2][]{\ref{\detokenize{req:#2@#1}}}
 
 \fi
@@ -531,7 +536,7 @@
 
 
 
-\NewDocumentCommand{\@recthy@set}{oG{}}{\left \{ #1 \ifthenelse{\isempty{#2}}{}{\middle | #2} \right \}}
+\NewDocumentCommand{\@recthy@set}{mg}{\left \{ #1 \IfNoValueTF{#2}{}{\middle | #2} \right \}}
 
 % \def\@recthy@set#1{\def\@set@argi@pmg{#1}\@ifnextchar\bgroup\@setst@pmg\@setplain@pmg}
 % \newcommand*{\@setst@pmg}[1]{\ifthenelse{\isempty{#1}}{\@setplain@pmg}{\left \{ \@set@argi@pmg \middle | #1\right \}}}
@@ -1345,11 +1350,11 @@
 
     \newcommand*{\cequiv}{\mathrel{\simeq}}
     \newcommand*{\ncequiv}{\mathrel{\not\simeq}}
-    \NewDocumentCommand{\conv}{o}{\mathpunct{\downarrow}_{#1}}
+    \NewDocumentCommand{\conv}{O{}}{\mathpunct{\downarrow}_{#1}}
     \let\converge=\conv
     %\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
 %   \NewDocumentCommand{\nconv}{o}{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
-    \NewDocumentCommand{\nconv}{o}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
+    \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
     \newcommand*{\diverge}{\mathpunct{\uparrow}}
     % \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
     \newcommand*{\use}[1]{\mathop{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}\!\left[{#1}\right]}
@@ -1393,7 +1398,7 @@
     \providecommand*{\Tdegvar}[1]{\symbf{#1}}
     \providecommand*{\Tdegof}[1]{\utilde{#1}}
     \providecommand*{\Tdeg}[1]{\ifthenelse{
-    %\equal{\detokenize{\Tzero}}{\futurelet\next@pmg\discard#1\@nil\expandafter\detokenize{\next@pmg}}
+    % \equal{\detokenize{\Tzero}}{\futurelet\next@pmg\discard#1\@nil\expandafter\detokenize{\next@pmg}}
                                         \equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR  
                                         \equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR 
                                         \equal{\detokenize{\zeroj}}{\detokenize{#1}} \OR 
