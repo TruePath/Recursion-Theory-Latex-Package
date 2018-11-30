@@ -540,7 +540,7 @@ To change the syntax for the computable infinitary formulas you can pass the opt
 \subsection{Proof Cases}
 
 \begin{proof}
-The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.
+The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.  Note these features are not available if you are using the package in a beamer document (not likely to be an issue).
 
 \begin{pfcases}
 \case[\( x = y \)]\label{case:first} %  
@@ -616,6 +616,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
 	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
 	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}
 	\item[2.4] 1/17/2018 - Added priority tree helpers.  Should be more robust with respect to existing definitions of common commands.

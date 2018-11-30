@@ -98,7 +98,7 @@
 \newif\ifrecthy@nostructresets \recthy@nostructresetsfalse
 \newif\ifrecthy@noreqhelper \recthy@noreqhelperfalse
 \newif\ifrecthy@nosubfun \recthy@nosubfunfalse
-\newif\ifrecthy@nopfcases \recthy@nopfcasesfalse
+\newif\ifrecthy@nopfcases \@ifclassloaded{beamer}{\recthy@nopfcasestrue}{\recthy@nopfcasesfalse}
 \newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
 
