@@ -228,13 +228,13 @@ Math mode is not required for \verb=\req{R}{e\}=
 
 \begin{tabular}{l |  l | l}\toprule
 \verb=\req{R}{e}=			 &  \( \req{R}{e} \) & \multirow{3}{*}{Requirement } \\ \midrule
-\verb=\req[\nu]{R}{e\}=	&  \req[\nu]{R}{e} & \\ \midrule
+\verb=\req{R}[\nu]{e\}=	&  \req{R}[\nu]{e} & \\ \midrule
 \verb=\req*{R}{e\}=			 &  \req{R}{e} & \multirow{3}{*}{Requirement without hyperlinks} \\ \midrule
-\verb=\req*[\nu]{R}{e\}=	&  \req[\nu]{R}{e} & \\ \midrule
+\verb=\req*{R}[\nu]{e\}=	&  \req{R}[\nu]{e} & \\ \midrule
 	\bottomrule
 \end{tabular}          \\
 
-We also introduce the following two enviornments for introducing requirements.  The requirement enviornment is used as follows
+We also introduce the following environments for introducing requirements.  The requirement environment is used as follows
 
 \begin{lstlisting}[breaklines]
 	\begin{requirement}{\req{R^{*}}{r,j}}
@@ -248,7 +248,7 @@ Giving output
 		\recfnl{r}{B}{} = \REset{j} \implies   \exists[k] \left( \Upsilon^{j}_k(C \Tplus \REset{j}) = B) \lor \REset{j} \Tleq \Tzero \right) 
 	\end{requirement}
 
-The require environment merges the \verb=\req[\nu]{R}{e\}= command directly into the environment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third argument contains only indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require enviornment.
+The require environment merges the \verb=\req[\nu]{R}{e\}= command directly into the environment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third argument contains only indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require environment.
 
 \begin{lstlisting}[breaklines]
 \begin{require}{R}{i}
@@ -261,6 +261,22 @@ The require environment merges the \verb=\req[\nu]{R}{e\}= command directly into
 \begin{require}{R}{i}
 	\recfnl{i}{B}{} = \REset{i} \implies   \exists[k] \left( \Upsilon^{i}_k(C \Tplus \REset{i}) = B) \lor \REset{j} \Tleq \Tzero \right)
 \end{require}
+
+To list multiple requirements at once without introducing unnecessary spaces we also introduce the requirements environment which can be used as follows.  Note that one may \textit{not} end the final line with a linebreak or an undesired tag will appear.
+
+\begin{lstlisting}[breaklines]
+\begin{requirements}
+\require{P}[A]{e} A \neq \recfnl{i}{}{} \\
+\require{P}[B]{e} B \neq \recfnl{i}{}{} \\
+\require{R}{i,\hat{i},j,\hat{j}} \recfnl{i}{A}{} = \hat{A} \land \recfnl{\hat{i}}{\hat{A}}{} = A \land  \recfnl{j}{B}{} = \hat{B} \land \recfnl{\hat{j}}{\hat{B}}{} = B \implies \Gamma(\hat{A} \symdiff \hat{B}) = A \Tplus B 
+\end{requirements}
+\end{lstlisting}
+
+\begin{requirements}
+\require{P}[A]{e} A \neq \recfnl{i}{}{} \\
+\require{P}[B]{e} B \neq \recfnl{i}{}{} \\
+\require{R}{i,\hat{i},j,\hat{j}} \recfnl{i}{A}{} = \hat{A} \land \recfnl{\hat{i}}{\hat{A}}{} = A \land  \recfnl{j}{B}{} = \hat{B} \land \recfnl{\hat{j}}{\hat{B}}{} = B \implies \Gamma(\hat{A} \symdiff \hat{B}) = A \Tplus B 
+\end{requirements}
 
 
 
@@ -616,6 +632,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
+	\item[2.5] 12/09/2018 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.
 	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
 	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
 	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}

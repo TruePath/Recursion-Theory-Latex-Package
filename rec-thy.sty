@@ -277,17 +277,21 @@
 \else
     \@packinfo{Loading requirement assist.}
     \newcommand*{\req@orig}[3][]{\ensuremath{\ifthenelse{\isempty{#1}}{\@recthy@reqscr{#2}_{#3}}{\@recthy@reqscr{#2}^{#1}_{#3}}}}
-    \ifrecthy@hyperreqs
-        \newcommand*{\req}[3][]{
+    \NewDocumentCommand{\req@href}{O{}mO{}m}{
         \@ifundefined{hyperref}{
-            \req@orig[#1]{#2}{#3}
+            \req@orig[#1#3]{#2}{#4}
         }{
-            \hyperref[\detokenize{req:#2@#1}]{\req@orig[#1]{#2}{#3}}
-        }}
+            \hyperref[\detokenize{req:#2@#1#3}]{\req@orig[#1#3]{#2}{#3}}
+        }
+    }
+    \NewDocumentCommand{\req@nohref}{O{}mO{}m}{\req@orig[#1#3]{#2}{#4}}
+    \ifrecthy@hyperreqs
+        \let\req=\req@href
+        % \newcommand*{\req}[3][]{
     \else
-        \let\req=\req@orig
+        \let\req=\req@nohref
     \fi
-    \WithSuffix\def\req*{\req@orig}
+    \WithSuffix\def\req*{\req@nohref}
     % \newsavebox{\@recthy@reqbox}
     % \def\defreq#1#2\par{
     %   \begin{equation}\let\veqno\@@leqno%
@@ -316,17 +320,44 @@
         % \let\maketag@@@=\maketag@@@orig@pmg  
     }
 
-    \newenvironment{require}[3][]{
-        \begin{requirement}{\req*[#1]{#2}{#3}} \label{\detokenize{req:#2@#1}}
+    \NewDocumentEnvironment{require}{O{}mO{}m}{
+        \begin{requirement}{\req@nohref[#1#3]{#2}{#4}} \label{\detokenize{req:#2@#1#3}}%
     }{
-        \end{requirement}
+        \end{requirement}%
     }
-    \newenvironment{require*}[3][]{
-        \begin{requirement}{\req*[#1]{#2}{#3}} \label{\detokenize{req:#2@#1}}
+    % \NewDocumentEnvironment{require*}{O{}mO{}m}{
+    %     \begin{requirement}{\req@nohref[#1#3]{#2}{#4}}%
+    % }{
+    %     \end{requirement}%
+    % }
+    \NewDocumentCommand{\refreq}{O{}mO{}}{\ref{\detokenize{req:#2@#1#3}}}
+
+    \NewDocumentCommand{\require@nested}{O{}mO{}m}{
+        \tag{\req@nohref[#1#3]{#2}{#4}}\label{\detokenize{req:#2@#1#3}}
+    }
+        % \NewDocumentEnvironment{require*}{O{}mO{}m}{
+        %     \tag{\req@nohref[#1#3]{#2}{#4}}%
+        % }{}
+
+
+    \NewDocumentEnvironment{requirements}{}{
+        \let\@origif@fleqn@pmg=\if@fleqn
+        \let\@origiftagsleft@pmg=\iftagsleft@
+        \@fleqntrue
+        \setlength\@mathmargin{1.5cm}
+        \tagsleft@true
+        \usetagform{colon}
+        \let\require=\require@nested
+        % \let\maketag@@@orig@pmg=\maketag@@@
+        % \def\maketag@@@#1{\hbox{\m@th\normalfont#1:}}
+        \gather
     }{
-        \end{requirement}
+        \endgather
+        \let\if@fleqn=\@origif@fleqn@pmg
+        \let\iftagsleft@=\@origiftagsleft@pmg
+        \usetagform{default}
+        % \let\maketag@@@=\maketag@@@orig@pmg  
     }
-    \newcommand*{\refreq}[2][]{\ref{\detokenize{req:#2@#1}}}
 
 \fi
 }
