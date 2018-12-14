@@ -101,6 +101,7 @@
 \newif\ifrecthy@nopfcases \@ifclassloaded{beamer}{\recthy@nopfcasestrue}{\recthy@nopfcasesfalse}
 \newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
+%\newif\ifrecthy@nomodule \recthy@nomodulefalse
 
 \DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
 \DeclareOptionX{mrref}{\recthy@mrreftrue}
@@ -126,10 +127,16 @@
 \DeclareOptionX{nopfcases}{\recthy@nopfcasestrue}
 \DeclareOptionX{noprioritytrees}{\recthy@noprioritytreestrue}
 \DeclareOptionX{nohyperreqs}{\recthy@hyperreqsfalse}
+%\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
 
 
+\let\@recthy@modulescr=\mathcal
+\DeclareOptionX{modulescr}{\edef\@recthy@nodescr{\expandafter\noexpand\csname #1 \endcsname}}
+
+
+\DeclareOptionX{ModuleCommand}[module]{\expandafter\def\csname #1 \endcsname\PriorityTreeModule}
 \AtEndOfPackage{
     \ifrecthy@noprioritytrees
         \@packinfo{Not loading Priority Tree Helper}
@@ -138,6 +145,14 @@
         \providecommand{\PriorityTree}{\mathbb{T}}
         \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
         \providecommand{\leftof}{\mathbin{<_L}}
+        \providecommand{\ancestor}{\succ}
+        \providecommand{\descendant}{\prec}
+        \providecommand{\ancestoreq}{\succeq}
+        \providecommand{\descendanteq}{\preceq}
+        \let\ances=\ancestor
+        \let\anceseq=\ancestoreq
+        \let\desc=\descendant
+        \let\desceq=\descendanteq
         \providecommand{\ball}[3][]{{\ifdefined\symbf
                                         \symbf{\alpha}
                                       \else
@@ -146,7 +161,11 @@
         \providecommand*{\Astages}[1]{\mathcal{S}_{\text{act}}^{#1}}
         \providecommand*{\Vstages}[1]{\mathcal{S}^{#1}}
         \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
+        \let\modof=\reqof
+        \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
+        \let\module=\PriorityTreeModule
     \fi
+
 }
 
 \let\pmg@casefont=\textsc
@@ -277,17 +296,11 @@
 \else
     \@packinfo{Loading requirement assist.}
     \newcommand*{\req@orig}[3][]{\ensuremath{\ifthenelse{\isempty{#1}}{\@recthy@reqscr{#2}_{#3}}{\@recthy@reqscr{#2}^{#1}_{#3}}}}
-    \NewDocumentCommand{\req@href}{O{}mO{}m}{
-        \@ifundefined{hyperref}{
-            \req@orig[#1#3]{#2}{#4}
-        }{
-            \hyperref[\detokenize{req:#2@#1#3}]{\req@orig[#1#3]{#2}{#3}}
-        }
-    }
+
+    \NewDocumentCommand{\req@href}{O{}mO{}m}{\@ifundefined{hyperref}{\req@orig[#1#3]{#2}{#4}}{\hyperref[\detokenize{req:#2@#1#3}]{\req@orig[#1#3]{#2}{#4}}}}
     \NewDocumentCommand{\req@nohref}{O{}mO{}m}{\req@orig[#1#3]{#2}{#4}}
     \ifrecthy@hyperreqs
         \let\req=\req@href
-        % \newcommand*{\req}[3][]{
     \else
         \let\req=\req@nohref
     \fi
@@ -450,6 +463,10 @@
     \else
         \DeclareMathOperator{\rng}{rng}
     \fi
+    \ifdefined\xor
+    \else
+        \DeclareMathOperator{\xor}{xor}
+    \fi
     \providecommand*{\restr}[1]{\mathpunct{\restriction_{#1}}}
     \providecommand*{\ordpair}[2]{\left( #1, #2 \right) }
     %%%%%%%%Function commands
@@ -469,27 +486,6 @@
 }
 
 
-
-% corner quotes From Sam Buss http://www.phil.cam.ac.uk/teaching_staff/Smith/LaTeX/resources/godelquotes.txt
-\newbox\@recthy@gnBoxA
-\newdimen\@recthy@gnCornerHgt
-\setbox\@recthy@gnBoxA=\hbox{$\ulcorner$}
-\global\@recthy@gnCornerHgt=\ht\@recthy@gnBoxA
-\newdimen\@recthy@gnArgHgt
-
-\newcommand{\@recthy@godelnum}[1]{%
-    \setbox\@recthy@gnBoxA=\hbox{$#1$}%
-    \@recthy@gnArgHgt=\ht\@recthy@gnBoxA%
-    \ifnum \@recthy@gnArgHgt<\@recthy@gnCornerHgt
-        \@recthy@gnArgHgt=0pt%
-    \else
-        \advance \@recthy@gnArgHgt by -\@recthy@gnCornerHgt%
-    \fi
-    \raise\@recthy@gnArgHgt\hbox{$\ulcorner$} \box\@recthy@gnBoxA %
-        \raise\@recthy@gnArgHgt\hbox{$\urcorner$}}
-
-
-
 \newcommand*{\@recthy@llangle}{\mathopen{\langle\!\langle}}
 \newcommand*{\@recthy@rrangle}{\mathclose{\rangle\!\rangle}}
 
@@ -499,7 +495,34 @@
 \ifrecthy@nodelim
     \@packinfo{No delimiters loading.}
 \else
-    \newcommand*{\godelnum}[1]{\@recthy@godelnum{#1}}
+    \ltx@ifpackageloaded{MnSymbol}{}{ 
+    \DeclareFontFamily{OMX}{MnSymbolE}{}
+    \DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+    \SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+    \DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+        <-6>  MnSymbolE5
+       <6-7>  MnSymbolE6
+       <7-8>  MnSymbolE7
+       <8-9>  MnSymbolE8
+       <9-10> MnSymbolE9
+      <10-12> MnSymbolE10
+      <12->   MnSymbolE12
+    }{}
+    \DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+        <-6>  MnSymbolE-Bold5
+       <6-7>  MnSymbolE-Bold6
+       <7-8>  MnSymbolE-Bold7
+       <8-9>  MnSymbolE-Bold8
+       <9-10> MnSymbolE-Bold9
+      <10-12> MnSymbolE-Bold10
+      <12->   MnSymbolE-Bold12
+    }{}
+    \DeclareMathDelimiter{\ulcorner}
+        {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
+    \DeclareMathDelimiter{\urcorner}
+        {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
+}
+    \newcommand*{\godelnum}[1]{\left\ulcorner #1 \right\urcorner}
     \let\cornerquote=\godelnum
     \let\gcode=\godelnum
     \recthy@strip{llangle}
