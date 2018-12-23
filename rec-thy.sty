@@ -669,36 +669,54 @@
     \@packinfo{No quants loading.}
 \else
     \@packinfo{Quants loading.}
-    \newcommand*{\existsuniq}{\exists !}
-    \newcommand*{\nexistsuniq}{\nexists !}
-    \WithSuffix\def\existsuniq(#1){\left(\existsuniq\, #1 \right)\!}
-    \WithSuffix\def\nexistsuniq(#1){\left(\nexistsuniq\, #1 \right)\!}
-    \WithSuffix\def\existsuniq[#1]{\left[\existsuniq\, #1 \right]\!}
-    \WithSuffix\def\nexistsuniq[#1]{\left[\nexistsuniq\, #1 \right]\!}
+    \AtBeginDocument{
+        \let\exists@orig@recthy=\exists
+        \let\forall@orig@recthy=\forall
+        \newcommand*{\exists@recthy}{\exists@orig@recthy}
+        \newcommand*{\forall@recthy}{\forall@orig@recthy}
+        \let\nexists@orig@recthy=\nexists
+        \newcommand*{\nexists@recthy}{\nexists@orig@recthy}
+        \let\nforall@orig@recthy=\nforall
+        \newcommand*{\nforall@recthy}{\nforall@orig@recthy}
+        \newcommand*{\existsuniq}{\exists@orig@recthy !}
+        \newcommand*{\nexistsuniq}{\nexists@orig@recthy !}
+        \WithSuffix\def\existsuniq(#1){\left(\existsuniq #1 \right)\!}
+        \WithSuffix\def\nexistsuniq(#1){\left(\nexistsuniq #1 \right)\!}
+        \WithSuffix\def\existsuniq[#1]{\left[\existsuniq #1 \right]\!}
+        \WithSuffix\def\nexistsuniq[#1]{\left[\nexistsuniq #1 \right]\!}
 
-    \newcommand*{\forallae}{\forall^{*}}
-    \WithSuffix\def\forallae(#1){\left(\forallae\, #1\right)\!}
-    \WithSuffix\def\forallae[#1]{\left[\forallae\, #1\right]\!}
+        \newcommand*{\forallae}{\forall@orig@recthy^{*}}
+        \WithSuffix\def\forallae(#1){\left(\forallae #1\right)\!}
+        \WithSuffix\def\forallae[#1]{\left[\forallae #1\right]\!}
 
-    \providecommand*{\existsinf}{\exists^{\infty}}
-    \WithSuffix\def\existsinf(#1){\left(\existsinf\, #1\right)\!}
-    \WithSuffix\def\existsinf[#1]{\left[\existsinf\, #1\right]\!}
+        \newcommand*{\nforallae}{\nforall@orig@recthy^{*}}
+        \WithSuffix\def\nforallae(#1){\left(\nforallae #1\right)\!}
+        \WithSuffix\def\nforallae[#1]{\left[\nforallae #1\right]\!}
 
-    \providecommand*{\nexistsinf}{\nexists^{\infty}}
-    \WithSuffix\def\nexistsinf(#1){\left(\nexistsinf\, #1\right)\!}
-    \WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf\, #1\right]\!}
+        \providecommand*{\existsinf}{\exists@orig@recthy^{\infty}}
+        \WithSuffix\def\existsinf(#1){\left(\existsinf #1\right)\!}
+        \WithSuffix\def\existsinf[#1]{\left[\existsinf #1\right]\!}
 
-    \WithSuffix\def\exists(#1){\left(\exists\, #1 \right)\!}
-    \WithSuffix\def\forall(#1){\left(\forall\, #1 \right)\!}
-    \WithSuffix\def\nexists(#1){\left(\nexists\, #1 \right)\!}
-    \WithSuffix\def\exists[#1]{\left[\exists\, #1 \right]\!}
-    \WithSuffix\def\forall[#1]{\left[\forall\, #1 \right]\!}
-    \WithSuffix\def\nexists[#1]{\left[\nexists\, #1 \right]\!}
-    \WithSuffix\def\forall*{\forallae}
-    \WithSuffix\def\exists*{\existsinf}
-    \WithSuffix\def\nexists*{\nexistsinf}
-    \WithSuffix\def\exists!{\existsuniq}
+        \providecommand*{\nexistsinf}{\nexists^{\infty}}
+        \WithSuffix\def\nexistsinf(#1){\left(\nexistsinf #1\right)\!}
+        \WithSuffix\def\nexistsinf[#1]{\left[\nexistsinf #1\right]\!}
 
+        \WithSuffix\def\exists@recthy(#1){\left(\exists #1 \right)\!}
+        \WithSuffix\def\forall@recthy(#1){\left(\forall #1 \right)\!}
+        \WithSuffix\def\nexists@recthy(#1){\left(\nexists #1 \right)\!}
+        \WithSuffix\def\exists@recthy[#1]{\left[\exists #1 \right]\!}
+        \WithSuffix\def\forall@recthy[#1]{\left[\forall #1 \right]\!}
+        \WithSuffix\def\nexists@recthy[#1]{\left[\nexists #1 \right]\!}
+        \WithSuffix\def\forall@recthy*{\forallae}
+        \WithSuffix\def\nforall@recthy*{\nforallae}
+        \WithSuffix\def\exists@recthy*{\existsinf}
+        \WithSuffix\def\nexists@recthy*{\nexistsinf}
+        \WithSuffix\def\exists@recthy!{\existsuniq}
+        \let\exists=\exists@recthy
+        \let\forall=\forall@recthy
+        \let\nexists=\nexists@recthy
+        \let\nforall=\nforall@recthy
+    }
 
 
 
@@ -801,34 +819,62 @@
     \@packinfo{No setrels loading.}
 \else
     \@packinfo{setrels loading.}
+    \AtBeginDocument{
+        \providecommand*{\nsupset}{\not\supset@recthy@orig}
+        \providecommand*{\nsubset}{\not\subset@recthy@orig}
+        \let\nsubset@recthy@orig=\nsubset
+        \let\nsupset@recthy@orig=\nsupset
+        \let\subset@recthy@orig=\subset
+        \let\supset@recthy@orig=\supset
+        \let\subseteq@recthy@orig=\subseteq
+        \let\supseteq@recthy@orig=\supseteq
+        \let\subsetneq@recthy@orig=\subsetneq
+        \let\supsetneq@recthy@orig=\supsetneq
+        \newcommand*{\subset@recthy}{\subset@recthy@orig}
+        \newcommand*{\supset@recthy}{\supset@recthy@orig}
+        \newcommand*{\subseteq@recthy}{\subseteq@recthy@orig}
+        \newcommand*{\supseteq@recthy}{\supseteq@recthy@orig}
+        \newcommand*{\nsubset@recthy}{\nsubset@recthy@orig}
+        \newcommand*{\nsupset@recthy}{\nsupset@recthy@orig}
+        \newcommand*{\nsubseteq@recthy}{\nsubseteq@recthy@orig}
+        \newcommand*{\nsupseteq@recthy}{\nsupseteq@recthy@orig}
+        \WithSuffix\def\subset@recthy*{\subset@recthy@orig^{*}}
+        \WithSuffix\def\supset@recthy*{\supset@recthy@orig^{*}}
+        \WithSuffix\def\subseteq@recthy*{\subseteq@recthy@orig^{*}}
+        \WithSuffix\def\supseteq@recthy*{\supseteq@recthy@orig^{*}}
+        \WithSuffix\def\subsetneq@recthy*{\subsetneq@recthy@orig^{*}}
+        \WithSuffix\def\supsetneq@recthy*{\supsetneq@recthy@orig^{*}}
+        \WithSuffix\def\nsubset@recthy*{\nsubset^{*}}
+        \WithSuffix\def\nsupset@recthy*{\nsupset^{*}}
+        \WithSuffix\def\nsubseteq@recthy*{\nsubseteq^{*}}
+        \WithSuffix\def\nsupseteq@recthy*{\nsupseteq^{*}}
+        \let\subset=\subset@recthy
+        \let\supset=\supset@recthy
+        \let\subseteq=\subseteq@recthy
+        \let\supseteq=\supseteq@recthy
+        \let\subsetneq=\subsetneq@recthy
+        \let\supsetneq=\supsetneq@recthy
+        \let\nsubset=\nsubset@recthy
+        \let\nsupset=\nsupset@recthy
+        \let\nsubseteq=\nsubseteq@recthy
+        \let\nsupseteq=\nsupseteq@recthy
 
-    \WithSuffix\def\subset*{\subset^{*}}
-    \WithSuffix\def\supset*{\supset^{*}}
-    \WithSuffix\def\subseteq*{\subseteq^{*}}
-    \WithSuffix\def\supseteq*{\supseteq^{*}}
-    \providecommand*{\nsupset}{\not\supset}
-    \providecommand*{\nsubset}{\not\subset}
-    \WithSuffix\def\nsubset*{\nsubset^{*}}
-    \WithSuffix\def\nsupset*{\nsupset^{*}}
-    \WithSuffix\def\nsubseteq*{\nsubseteq^{*}}
-    \WithSuffix\def\nsupseteq*{\nsupseteq^{*}}
-    % \WithSuffix\def\subsetneq*{\subsetneq^{*}}
-    % \WithSuffix\def\supsetneq*{\supsetneq^{*}}
 
-    \newcommand*{\eq}{=}
-    \WithSuffix\def\eq*{=^{*}}
-    \newcommand*{\eqae}{=^{*}}
-        \newcommand*{\neqae}{\neq^{*}}
-    \WithSuffix\def\neq*{\neq^{*}}
+        \newcommand*{\eq}{=}
+        \WithSuffix\def\eq*{=^{*}}
+        \newcommand*{\eqae}{=^{*}}
+            \newcommand*{\neqae}{\neq^{*}}
+        \WithSuffix\def\neq*{\neq^{*}}
 
-    \newcommand*{\infsubset}{\subset_{\infty}}
-    \WithSuffix\def\infsubset*{\infsubset^{*}}
-    \let\subsetnaeq=\infsubset
-    \newcommand*{\infsupset}{\supset_{\infty}}
-    \WithSuffix\def\infsupset*{\infsupset^{*}}
-    \let\supsetnaeq=\infsupset
-    \newcommand*{\majsubset}{\subset_{m}}
-    \newcommand*{\majsupset}{\supset_{m}}
+        \newcommand*{\infsubset}{\subset_{\infty}}
+        \WithSuffix\def\infsubset*{\infsubset^{*}}
+        \let\subsetnaeq=\infsubset
+        \newcommand*{\infsupset}{\supset_{\infty}}
+        \WithSuffix\def\infsupset*{\infsupset^{*}}
+        \let\supsetnaeq=\infsupset
+        \newcommand*{\majsubset}{\subset_{m}}
+        \newcommand*{\majsupset}{\supset_{m}}
+    }
 \fi
 }
 
