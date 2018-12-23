@@ -348,9 +348,11 @@
     % }
     \NewDocumentCommand{\refreq}{O{}mO{}}{\ref{\detokenize{req:#2@#1#3}}}
 
-    \NewDocumentCommand{\require@nested}{O{}mO{}m}{
-        \tag{\req@nohref[#1#3]{#2}{#4}}\label{\detokenize{req:#2@#1#3}}
+    \NewDocumentCommand{\require@nested}{sO{}mO{}m}{
+        \IfBooleanTF{#1}{\tag{\req@nohref[#2#4]{#3}{#5}}}{\tag{\req@nohref[#2#4]{#3}{#5}}\label{\detokenize{req:#3@#2#4}}}
     }
+    % \newcommand*{\require@nested}{\require@nested@href}
+    % \WithSuffix\def\require@nested*{\require@nested@nohref}
         % \NewDocumentEnvironment{require*}{O{}mO{}m}{
         %     \tag{\req@nohref[#1#3]{#2}{#4}}%
         % }{}
@@ -758,7 +760,7 @@
 
 \DeclareOptionX{emptystr}{\edef\@recthy@EmptyStr{\expandafter\noexpand\csname #1 \endcsname}}
 \DeclareOptionX{concatsym}{\edef\@recthy@concatSYM{\expandafter\noexpand\csname #1 \endcsname}}
-\providecommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
+\newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
 
 \AtEndOfPackage{
 \ifrecthy@nostrings
