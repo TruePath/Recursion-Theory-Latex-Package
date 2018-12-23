@@ -54,6 +54,7 @@
 \usepackage{booktabs}
 \usepackage{xtab}
 \usepackage{rec-thy}
+\usepackage{suffix}
 \usepackage{metalogo}
 
 
@@ -316,7 +317,6 @@ Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\set{(x,y)}{x > y}=	  &    \(   \set{(x,y)}{x > y} \)    & \multirow{2}{*}{Set notation}  \\[6pt]
-	\verb=\set{(x,y)}{}=		  &    \(   \set{(x,y)}{}      \)    &  \\ \midrule
 	\verb=\set{(x,y)}=			  & 	\(   \set{(x,y)}      \)    &  \\ \midrule
 	\verb=\card{X}=                          &    \(   \card{X}                   \)    & Cardinality \\ \midrule
 	\verb=X \union Y=                        &    \(   X \union Y                 \)    & \multirow{2}{*}{Union}  \\[6pt]
@@ -436,7 +436,7 @@ To specify an alternative symbol for the empty string pass \verb!emptystr=macron
 To disable these commands pass the option \verb=nosubfuns=.\\
 
 \begin{tabular}{l |  l | l}\toprule
-	\verb=f \subfun g=		       & \( f \subfun g \) & \multirow{8}{*}{Varities of the function extension relation}        \\	\midrule
+	\verb=f \subfun g=		       & \( f \subfun g \) & Varieties of the function extension relation      \\	\midrule
 	\verb=f \supfun g=		       & \( f \supfun g \) &  \\ 	\midrule
 	\verb=f \nsubfun g=		       & \( f \nsubfun g \) & \\	\midrule
 \verb=f \nsupfun g=		       & \( f \nsupfun g \) & \\	\midrule
@@ -632,7 +632,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
-	\item[2.5] 12/09/2018 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes.
+	\item[3.0] 12/23/2018 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes. Added \verb=\leftofeq=, \verb=\rightof=, \verb=\rightofeq=.  Added \verb=\RE=, \verb=\CE=, \verb=\Ce=, \verb=\Re=.  Changed the way strings are symbolized and coded.  Fixed suffix commands to work with unicode-math.
 	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
 	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
 	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}
