@@ -145,6 +145,9 @@
         \providecommand{\PriorityTree}{\mathbb{T}}
         \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
         \providecommand{\leftof}{\mathbin{<_L}}
+        \providecommand{\leftofeq}{\mathbin{\leq_L}}
+        \providecommand{\rightof}{\mathbin{>_L}}
+        \providecommand{\rightofeq}{\mathbin{\geq_L}}
         \providecommand{\ancestor}{\succ}
         \providecommand{\descendant}{\prec}
         \providecommand{\ancestoreq}{\succeq}
@@ -532,6 +535,10 @@
 
 \newcommand*{\@recthy@re}{\@recthy@ensuretext{r.e.\ }}
 \newcommand*{\@recthy@ce}{\@recthy@ensuretext{c.e.\ }}
+\newcommand*{\@recthy@RE}{\@recthy@ensuretext{R.E.\ }}
+\newcommand*{\@recthy@CE}{\@recthy@ensuretext{C.E.\ }}
+\newcommand*{\@recthy@Re}{\@recthy@ensuretext{R.e.\ }}
+\newcommand*{\@recthy@Ce}{\@recthy@ensuretext{C.e.\ }}
 \newcommand*{\@recthy@recursive}{\@recthy@ensuretext{recursive}}
 \newcommand*{\@recthy@computable}{\@recthy@ensuretext{computable}}
 \newcommand*{\@recthy@recursivelyEnumerable}{\@recthy@ensuretext{recursively enumerable}}
@@ -727,13 +734,13 @@
 
 
 %Strings
-\def\@recthy@concatSYM{\widehat{\;}}
-\def\@recthy@EmptyStr{\mathopen{\@recthy@llangle}\mathclose{\@recthy@rrangle}}
+\def\@recthy@concatSYM{\widehat{\phantom{X}}}
+\def\@recthy@EmptyStr{\mathopen{\langle}\mathclose{\rangle}}
 
 
 \DeclareOptionX{emptystr}{\edef\@recthy@EmptyStr{\expandafter\noexpand\csname #1 \endcsname}}
 \DeclareOptionX{concatsym}{\edef\@recthy@concatSYM{\expandafter\noexpand\csname #1 \endcsname}}
-
+\providecommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
 
 \AtEndOfPackage{
 \ifrecthy@nostrings
@@ -741,14 +748,14 @@
 \else
     \@packinfo{Strings loading.}
         \newcommand*{\closedn}[1]{{#1}^\blacktriangledown}
-    \newcommand*{\str}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
-    \newcommand*{\code}{\str}
+    \newcommand*{\str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+    \newcommand*{\code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
     \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
     \newcommand*{\estr}{\EmptyStr}
     \newcommand*{\decode}[2]{(#1)_{#2}}
-    \providecommand*{\godelpair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
-    \newcommand*{\gpair}{\godelpair}
-    \newcommand*{\concat}{\mathbin{\@recthy@concatSYM}}
+    \let\godelpair=\@recthy@pair
+    \let\gpair=\@recthy@pair
+    \newcommand*{\concat}{\@recthy@concatSYM}
     \WithSuffix\def\concat[#1]{\concat\str{#1}}
     \newcommand*{\strpred}[1]{{#1}^{-}}
     \providecommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
@@ -760,7 +767,7 @@
         \@packinfo{No redefining pair.}
     \else
         \@packinfo{pair=godelpair.}
-        \newcommand*{\pair}{\godelpair}
+        \let\pair=\@recthy@pair
     \fi
 \fi
 }
@@ -1411,8 +1418,8 @@
     \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
     \newcommand*{\diverge}{\mathpunct{\uparrow}}
     % \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
-    \newcommand*{\use}[1]{\mathop{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}\!\left[{#1}\right]}
-
+    \newcommand*{\use}[1]{\mathop{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}[#1]}
+% \newcommand*{\use}[1]{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}\left(#1\right)}
     % \NewDocumentCommand{\REset}{omd()}{
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}
     % }
