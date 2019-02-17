@@ -610,6 +610,10 @@
     \@packinfo{Names loading.}
     \recthy@strip{re}
     \recthy@strip{ce}
+    \recthy@strip{RE}
+    \recthy@strip{CE}
+    \recthy@strip{Re}
+    \recthy@strip{Ce}
     \recthy@strip{REA}
     \recthy@strip{CEA}
     \recthy@strip{recursive}
@@ -684,14 +688,14 @@
     \def\Cross{}
     \renewcommand*{\Cross}{\mathop{\Pi}}
     \providecommand*{\symdiff}{\mathbin{\Delta}}
-    \ifdefined\interior
-    \else
-        \DeclareMathOperator{\interior}{int}
-    \fi
-    \ifdefined\closure
-    \else
-        \DeclareMathOperator{\closure}{cl}
-    \fi
+    % \ifdefined\interior
+    % \else
+    %     \DeclareMathOperator{\interior}{int}
+    % \fi
+    % \ifdefined\closure
+    % \else
+        % \DeclareMathOperator{\clos}{cl}
+    % \fi
 \fi
 }
 
@@ -1419,13 +1423,15 @@
 }
 
 
-\let\@recthy@recfSYM\phi
-\let\@recthy@recfnlSYM\Phi
+\def\@recthy@recfSYM@default{\phi}
+\let\@recthy@recfSYM=\@recthy@recfSYM@default
+\def\@recthy@recfnlSYM@default{\Phi}
+\let\@recthy@recfnlSYM=\@recthy@recfnlSYM@default
 \def\@recthy@useSYM@default{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}
 \let\@recthy@useSYM=\@recthy@useSYM@default
 %%%ABREVIATIONS
-\DeclareOptionX{recfnlsym}[Phi]{\letcs{\@recthy@recfnlSYM}{#1}}
-\DeclareOptionX{recfsym}[phi]{\letcs{\@recthy@recfSYM}{#1}}
+\DeclareOptionX{recfnlsym}[@recthy@recfnlSYM@default]{\letcs{\@recthy@recfnlSYM}{#1}}
+\DeclareOptionX{recfsym}[@recthy@recfSYM@default]{\letcs{\@recthy@recfSYM}{#1}}
 \DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
 
 
