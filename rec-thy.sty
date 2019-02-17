@@ -100,6 +100,7 @@
 \newif\ifrecthy@nosubfun \recthy@nosubfunfalse
 \newif\ifrecthy@nopfcases \@ifclassloaded{beamer}{\recthy@nopfcasestrue}{\recthy@nopfcasesfalse}
 \newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
+\newif\ifrecthy@nosuppprioritytrees \recthy@nosuppprioritytreestrue
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
 %\newif\ifrecthy@nomodule \recthy@nomodulefalse
 
@@ -126,6 +127,7 @@
 \DeclareOptionX{nosubfun}{\recthy@nosubfuntrue}
 \DeclareOptionX{nopfcases}{\recthy@nopfcasestrue}
 \DeclareOptionX{noprioritytrees}{\recthy@noprioritytreestrue}
+\DeclareOptionX{suppPriorityTrees}{\recthy@nosuppprioritytreesfalse}
 \DeclareOptionX{nohyperreqs}{\recthy@hyperreqsfalse}
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
@@ -135,8 +137,9 @@
 \let\@recthy@modulescr=\mathcal
 \DeclareOptionX{modulescr}{\edef\@recthy@nodescr{\expandafter\noexpand\csname #1 \endcsname}}
 
+\def\@recthy@ballsymb{\mathscr{B}}
+\DeclareOptionX{ballsymb}{\edef\@recthy@ballsymb{\expandafter\noexpand\csname #1 \endcsname}}
 
-\DeclareOptionX{ModuleCommand}[module]{\expandafter\def\csname #1 \endcsname\PriorityTreeModule}
 \AtEndOfPackage{
     \ifrecthy@noprioritytrees
         \@packinfo{Not loading Priority Tree Helper}
@@ -148,6 +151,26 @@
         \providecommand{\leftofeq}{\mathbin{\leq_L}}
         \providecommand{\rightof}{\mathbin{>_L}}
         \providecommand{\rightofeq}{\mathbin{\geq_L}}
+        \providecommand{\nleftof}{\mathbin{\nless_L}}
+        \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
+        \providecommand{\nrightof}{\mathbin{\ngtr_L}}
+        \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
+        \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
+        \let\module=\PriorityTreeModule
+        \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
+    \fi
+
+}
+
+
+\AtEndOfPackage{
+    \ifrecthy@nosuppprioritytrees
+        \@packinfo{Not loading Priority Tree Supplemental Helper}
+    \else
+        \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
+        \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
+        \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
+        \let\modof=\reqof
         \providecommand{\ancestor}{\succ}
         \providecommand{\descendant}{\prec}
         \providecommand{\ancestoreq}{\succeq}
@@ -156,17 +179,6 @@
         \let\anceseq=\ancestoreq
         \let\desc=\descendant
         \let\desceq=\descendanteq
-        \providecommand{\ball}[3][]{{\ifdefined\symbf
-                                        \symbf{\alpha}
-                                      \else
-                                        \alpha
-                                      \fi}^{#1}(#2, #3)}
-        \providecommand*{\Astages}[1]{\mathcal{S}_{\text{act}}^{#1}}
-        \providecommand*{\Vstages}[1]{\mathcal{S}^{#1}}
-        \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
-        \let\modof=\reqof
-        \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
-        \let\module=\PriorityTreeModule
     \fi
 
 }
@@ -762,6 +774,9 @@
 \DeclareOptionX{concatsym}{\edef\@recthy@concatSYM{\expandafter\noexpand\csname #1 \endcsname}}
 \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
 
+\NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
+\NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
+
 \AtEndOfPackage{
 \ifrecthy@nostrings
     \@packinfo{No strings loading.}
@@ -779,9 +794,12 @@
     \WithSuffix\def\concat[#1]{\concat\str{#1}}
     \newcommand*{\strpred}[1]{{#1}^{-}}
     \providecommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
-    \providecommand*{\incompat}{\mathrel{\mid}} %incompatible stringes FIX SPACING
-    \providecommand*{\incomp}{\incompat}
-    \providecommand*{\compat}{\mathrel{\nmid}}
+
+    \providecommand*{\incompat}{\incompat@recthy} %incompatible stringes FIX SPACING
+    \providecommand*{\incomp}{\incompat@recthy}
+    \providecommand*{\compat}{\compat@recthy}
+    \providecommand*{\nincompat}{\compat@recthy}
+    \providecommand*{\nincomp}{\compat@recthy}
     \newcommand*{\setcol}[2]{{#1}^{[#2]}}
     \ifrecthy@nopair
         \@packinfo{No redefining pair.}
@@ -1558,13 +1576,15 @@
     \providecommand*{\TPlus}{\TsetJoin}
     \providecommand*{\Tjoin}{\Tsetjoin}
     \providecommand*{\TJoin}{\TsetJoin}
+    \providecommand*{\Tincompat}{\incompat@recthy[\@recthy@TSYM]}
+    \providecommand*{\Tincomp}{\Tincompat}
+    \providecommand*{\Tcompat}{\compat@recthy[\@recthy@TSYM]}
+    \providecommand*{\nTincompat}{\Tcompat}
+    \providecommand*{\nTincomp}{\Tcompat}
 
 
 
-
-
-
-    \newcommand*{\@recthy@ttSYM}{\ensuremath{\text{\tiny tt}}}
+    \newcommand*{\@recthy@ttSYM}{\ensuremath{\tiny \mathtt{tt}}}
     \newcommand*{\ttSYM}{\@recthy@ttSYM}
     \newcommand*{\ttlneq}{\lneq_{\@recthy@ttSYM}}
     \newcommand*{\ttleq}{\leq_{\@recthy@ttSYM}}
