@@ -102,6 +102,7 @@
 \newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
 \newif\ifrecthy@nosuppprioritytrees \recthy@nosuppprioritytreestrue
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
+\newif\ifrecthy@nooperators \recthy@nooperatorsfalse
 %\newif\ifrecthy@nomodule \recthy@nomodulefalse
 
 \DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
@@ -129,16 +130,17 @@
 \DeclareOptionX{noprioritytrees}{\recthy@noprioritytreestrue}
 \DeclareOptionX{suppPriorityTrees}{\recthy@nosuppprioritytreesfalse}
 \DeclareOptionX{nohyperreqs}{\recthy@hyperreqsfalse}
+\DeclareOptionX{nooperators}{\recthy@nooperatorstrue}
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
 
+\let\@recthy@modulescr\mathcal
+\DeclareOptionX{modulescr}[mathcal]{\letcs{\@recthy@modulescr}{#1}}
 
-\let\@recthy@modulescr=\mathcal
-\DeclareOptionX{modulescr}{\edef\@recthy@nodescr{\expandafter\noexpand\csname #1 \endcsname}}
-
-\def\@recthy@ballsymb{\mathscr{B}}
-\DeclareOptionX{ballsymb}{\edef\@recthy@ballsymb{\expandafter\noexpand\csname #1 \endcsname}}
+\def\@recthy@ballsymb@default{\mathscr{B}}
+\let\@recthy@ballsymb\@recthy@ballsymb@default
+\DeclareOptionX{ballsymb}[@recthy@ballsymb@default]{\letcs{\@recthy@ballsymb}{#1}}
 
 \AtEndOfPackage{
     \ifrecthy@noprioritytrees
@@ -183,8 +185,8 @@
 
 }
 
-\let\pmg@casefont=\textsc
-\DeclareOptionX{pfcasefont}{\edef\pmg@casefont{\expandafter\noexpand\csname #1 \endcsname}}
+\let\pmg@casefont\textsc
+\DeclareOptionX{pfcasefont}[textsc]{\letcs{\pmg@casefont}{#1}}
 
 \AtEndOfPackage{
     \ifrecthy@nopfcases
@@ -300,9 +302,8 @@
 
 
 
-% \newcommand*{\@recthy@reqscr}[1]{\mathscr{#1}}
-\let\@recthy@reqscr=\mathscr
-\DeclareOptionX{reqscr}{\edef\@recthy@reqscr{\expandafter\noexpand\csname #1 \endcsname}}
+\let\@recthy@reqscr\mathscr
+\DeclareOptionX{reqscr}[mathscr]{\letcs{\@recthy@reqscr}{#1}}
 
 
 \AtEndOfPackage{
@@ -466,11 +467,7 @@
         \DeclareMathOperator{\Ord}{Ord}
     \fi
 
-    \providecommand*{\meet}{\mathbin{\wedge}}
-    \providecommand*{\join}{\mathbin{\vee}}
-    \providecommand*{\Meet}{\mathop{\bigwedge}}
-    \let\MnJoin=\Join
-    \renewcommand*{\Join}{\mathop{\bigvee}}
+
     \recthy@strip{abs}
     \ifdefined\dom
     \else
@@ -479,10 +476,6 @@
     \ifdefined\rng
     \else
         \DeclareMathOperator{\rng}{rng}
-    \fi
-    \ifdefined\xor
-    \else
-        \DeclareMathOperator{\xor}{xor}
     \fi
     \providecommand*{\restr}[1]{\mathpunct{\restriction_{#1}}}
     \providecommand*{\ordpair}[2]{\left( #1, #2 \right) }
@@ -502,6 +495,23 @@
 \fi
 }
 
+
+\AtEndOfPackage{
+\ifrecthy@nooperators
+    \@packinfo{No operators loading.}
+\else
+    \@packinfo{Operators loading.}
+        \providecommand*{\meet}{\mathbin{\wedge}}
+    \providecommand*{\join}{\mathbin{\vee}}
+    \providecommand*{\Meet}{\mathop{\bigwedge}}
+    \let\MnJoin=\Join
+    \renewcommand*{\Join}{\mathop{\bigvee}}
+    \ifdefined\xor
+    \else
+        \DeclareMathOperator{\xor}{xor}
+    \fi
+\fi
+}
 
 \newcommand*{\@recthy@llangle}{\mathopen{\langle\!\langle}}
 \newcommand*{\@recthy@rrangle}{\mathclose{\rangle\!\rangle}}
@@ -562,29 +572,9 @@
 \newcommand*{\@recthy@RecursivelyEnumerable}{\@recthy@ensuretext{Recursively enumerable}}
 \newcommand*{\@recthy@ComputablyEnumerable}{\@recthy@ensuretext{Computably enumerable}}
 \newcommand*{\@recthy@REA}{\ensuremath{\text{REA}}}
-\WithSuffix\def\@recthy@REA[#1]{#1-\REA\relax}
+\WithSuffix\def\@recthy@REA[#1]{#1-\@recthy@REA\relax}
 \newcommand*{\@recthy@CEA}{\ensuremath{\text{CEA}}}
-\WithSuffix\def\@recthy@CEA[#1]{#1-\CEA\relax}
-
-\AtEndOfPackage{
-\ifrecthy@nonames
-    \@packinfo{No names loading.}
-\else
-    \@packinfo{Names loading.}
-    \recthy@strip{re}
-    \recthy@strip{ce}
-    \recthy@strip{REA}
-    \recthy@strip{CEA}
-    \recthy@strip{recursive}
-    \recthy@strip{computable}
-    \recthy@strip{recursivelyEnumerable}
-    \recthy@strip{computablyEnumerable}
-    \recthy@strip{Recursive}
-    \recthy@strip{Computable}
-    \recthy@strip{RecursivelyEnumerable}
-    \recthy@strip{ComputablyEnumerable}
-\fi
-}
+\WithSuffix\def\@recthy@CEA[#1]{#1-\@recthy@CEA\relax}
 
 \DeclareOptionX{reterms}{%
     \let\@recthy@ce=\@recthy@re
@@ -607,6 +597,33 @@
 \DeclareOptionX{ceaterms}{%
             \let\@recthy@REA=\@recthy@CEA
             }
+\DeclareOptionX{reaterms}{%
+            \let\@recthy@CEA=\@recthy@REA
+            }
+
+
+
+\AtEndOfPackage{
+\ifrecthy@nonames
+    \@packinfo{No names loading.}
+\else
+    \@packinfo{Names loading.}
+    \recthy@strip{re}
+    \recthy@strip{ce}
+    \recthy@strip{REA}
+    \recthy@strip{CEA}
+    \recthy@strip{recursive}
+    \recthy@strip{computable}
+    \recthy@strip{recursivelyEnumerable}
+    \recthy@strip{computablyEnumerable}
+    \recthy@strip{Recursive}
+    \recthy@strip{Computable}
+    \recthy@strip{RecursivelyEnumerable}
+    \recthy@strip{ComputablyEnumerable}
+\fi
+}
+
+
 % Set stuff
 
 
@@ -744,8 +761,12 @@
 
     \providecommand*{\liff}{\ensuremath{\leftrightarrow}}
     \providecommand*{\limplies}{\ensuremath{\rightarrow}}
+
 \fi
 }
+
+
+
 
 \AtEndOfPackage{
 \ifrecthy@nospaces
@@ -766,12 +787,13 @@
 
 
 %Strings
-\def\@recthy@concatSYM{\widehat{\phantom{X}}}
-\def\@recthy@EmptyStr{\mathopen{\langle}\mathclose{\rangle}}
+\def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
+\def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+\let\@recthy@concatSYM\@recthy@concatSYM@Default
+\let\@recthy@EmptyStr\@recthy@EmptyStr@Default
 
-
-\DeclareOptionX{emptystr}{\edef\@recthy@EmptyStr{\expandafter\noexpand\csname #1 \endcsname}}
-\DeclareOptionX{concatsym}{\edef\@recthy@concatSYM{\expandafter\noexpand\csname #1 \endcsname}}
+\DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
+\DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
 \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
 
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
@@ -992,13 +1014,16 @@
 
 %%%%%%%%% Formula Classes
 
-\newcommand*{\@recthy@CDelta}{\prescript{\mathcal{C}}{}{\Delta}}
-\newcommand*{\@recthy@CSigma}{\prescript{\mathcal{C}}{}{\Sigma}}
-\newcommand*{\@recthy@CPi}{\prescript{\mathcal{C}}{}{\Pi}}
+\newcommand*{\@recthy@CDelta@default}{\prescript{\mathcal{C}}{}{\Delta}}
+\newcommand*{\@recthy@CSigma@default}{\prescript{\mathcal{C}}{}{\Sigma}}
+\newcommand*{\@recthy@CPi@default}{\prescript{\mathcal{C}}{}{\Pi}}
+\let\@recthy@CDelta=\@recthy@CDelta@default
+\let\@recthy@CSigma=\@recthy@CSigma@default
+\let\@recthy@CPi=\@recthy@CPi@default
 
-\DeclareOptionX{cdeltasym}{\edef\@recthy@CDelta{\expandafter\noexpand\csname #1 \endcsname}}
-\DeclareOptionX{csigmasym}{\edef\@recthy@CSigma{\expandafter\noexpand\csname #1 \endcsname}}
-\DeclareOptionX{cpisym}{\edef\@recthy@CPi{\expandafter\noexpand\csname #1 \endcsname}}
+\DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
+\DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
+\DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
 
 % \DeclareOptionX<\@recthy@family>{cdeltasym}[]{\def\@recthy@CDelta{#1}}
 % \DeclareOptionX<\@recthy@family>{csigmasym}[]{\def\@recthy@CSigma{#1}}
@@ -1394,10 +1419,14 @@
 }
 
 
-
+\let\@recthy@recfSYM\phi
+\let\@recthy@recfnlSYM\Phi
+\def\@recthy@useSYM@default{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}
+\let\@recthy@useSYM=\@recthy@useSYM@default
 %%%ABREVIATIONS
-\DeclareOptionX{recfnlsym}[Phi]{\edef\recfnlSYM{\expandafter\noexpand\csname #1 \endcsname}}
-\DeclareOptionX{recfsym}[phi]{\edef\recfSYM{\expandafter\noexpand\csname #1 \endcsname}}
+\DeclareOptionX{recfnlsym}[Phi]{\letcs{\@recthy@recfnlSYM}{#1}}
+\DeclareOptionX{recfsym}[phi]{\letcs{\@recthy@recfSYM}{#1}}
+\DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
 
 
 %Degree Classes
@@ -1420,12 +1449,11 @@
     \newcommand*{\murec}[2]{\ensuremath{\mu#1\left( #2 \right) }}
 
     %\newcommand*{\brecfSYM}{\phi}
-    \providecommand*{\recfSYM}{\phi}
-    \providecommand*{\recfnlSYM}{\Phi}
-    % \newcommand*{\recf}[3][]{\recfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}} %If give an empty arg just print function no parens
+
+    % \newcommand*{\recf}[3][]{\@recthy@recfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}} %If give an empty arg just print function no parens
     %\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
     %\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
-    \newcommand*{\recfnl}[4][]{\recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,{#1}} }%
+    \newcommand*{\recfnl}[4][]{\@recthy@recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,{#1}} }%
         \ifthenelse{\isempty{#4}}%
         {\ifthenelse{\isempty{#3}}%
             {}% No args then print no parents
@@ -1433,46 +1461,46 @@
         }%If no oracle we just refer to the functional without any arguments
         {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
     }}
-    \NewDocumentCommand{\recf}{omod()}{
-        \recfSYM_{#2\IfNoValueTF{#1}{}{, {#1}}}\IfNoValueTF{#3}{}{^{#3}}\IfNoValueTF{#4}{}{(#4)}
+    \NewDocumentCommand{\recf}{od()md()}{
+        \@recthy@recfSYM_{#3\IfNoValueTF{#1}{}{\ifthenelse{\isempty{#3}}{}{, }{#1}}}\IfNoValueTF{#2}{}{^{#2}}\IfNoValueTF{#4}{}{(#4)}
     }
 
 
-    \newcommand*{\thetafnl}[4][]{\Theta_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
-        \ifthenelse{\isempty{#4}}%
-        {\ifthenelse{\isempty{#3}}%
-            {}% No args then print no parents
-            {(#3)}
-        }%If no oracle we just refer to the functional without any arguments
-        {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-    }}
+    % \newcommand*{\thetafnl}[4][]{\Theta_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+    %     \ifthenelse{\isempty{#4}}%
+    %     {\ifthenelse{\isempty{#3}}%
+    %         {}% No args then print no parents
+    %         {(#3)}
+    %     }%If no oracle we just refer to the functional without any arguments
+    %     {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+    % }}
 
-    \newcommand*{\psifnl}[4][]{\Psi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
-        \ifthenelse{\isempty{#4}}%
-        {\ifthenelse{\isempty{#3}}%
-            {}% No args then print no parents
-            {(#3)}
-        }%If no oracle we just refer to the functional without any arguments
-        {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-    }}
+    % \newcommand*{\psifnl}[4][]{\Psi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+    %     \ifthenelse{\isempty{#4}}%
+    %     {\ifthenelse{\isempty{#3}}%
+    %         {}% No args then print no parents
+    %         {(#3)}
+    %     }%If no oracle we just refer to the functional without any arguments
+    %     {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+    % }}
 
-    \newcommand*{\phifnl}[4][]{\Phi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
-        \ifthenelse{\isempty{#4}}%
-        {\ifthenelse{\isempty{#3}}%
-            {}% No args then print no parents
-            {(#3)}
-        }%If no oracle we just refer to the functional without any arguments
-        {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-    }}
+    % \newcommand*{\phifnl}[4][]{\Phi_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+    %     \ifthenelse{\isempty{#4}}%
+    %     {\ifthenelse{\isempty{#3}}%
+    %         {}% No args then print no parents
+    %         {(#3)}
+    %     }%If no oracle we just refer to the functional without any arguments
+    %     {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+    % }}
 
-    \newcommand*{\upsilonfnl}[4][]{\Upsilon_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
-        \ifthenelse{\isempty{#4}}%
-        {\ifthenelse{\isempty{#3}}%
-            {}% No args then print no parents
-            {(#3)}
-        }%If no oracle we just refer to the functional without any arguments
-        {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-    }}
+    % \newcommand*{\upsilonfnl}[4][]{\Upsilon_{#2\ifthenelse{\isempty{#1}}{}{,#1} }%
+    %     \ifthenelse{\isempty{#4}}%
+    %     {\ifthenelse{\isempty{#3}}%
+    %         {}% No args then print no parents
+    %         {(#3)}
+    %     }%If no oracle we just refer to the functional without any arguments
+    %     {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
+    % }}
 
 
     \newcommand*{\cequiv}{\mathrel{\simeq}}
@@ -1484,7 +1512,7 @@
     \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
     \newcommand*{\diverge}{\mathpunct{\uparrow}}
     % \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
-    \newcommand*{\use}[1]{\mathop{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}[#1]}
+    \newcommand*{\use}[1]{\mathop{\@recthy@useSYM}[#1]}
 % \newcommand*{\use}[1]{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}\left(#1\right)}
     % \NewDocumentCommand{\REset}{omd()}{
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}

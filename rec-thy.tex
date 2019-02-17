@@ -53,7 +53,8 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
-\usepackage{rec-thy}
+
+\usepackage[suppPriorityTrees]{rec-thy}
 \usepackage{suffix}
 \usepackage{metalogo}
 
@@ -113,6 +114,33 @@ Include the package in your document by placing \verb=\usepackage{rec-thy}= into
 
 Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.
 
+\section{Alternate Symbols}
+While the symbols used by default in the package are suggested for adoption to achieve greater consistency users may wish to specify their own symbols and options have been provided to enable this.  The following parameters may be specified.
+
+\begin{itemize}
+	\item[modulescr] Sets the script used to typeset the \verb=\module= command.  Default is mathcal.
+	\item[reqscr] Sets the script used to typeset requirements.  Default is mathscr.
+	\item[pfcasefont] Sets the script used to typeset Case in the cases helper.
+	\item[emptystr] Sets the empty string symbol
+	\item[concatsym] Sets the concat symbol.
+	\item[cdeltasym] Sets the symbol used to denote computably \( \Delta \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Delta} \).
+	\item[cpisym] Same for \( \Pi \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Pi} \).
+	\item[csigmasym] Same for \( \Sigma \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Sigma} \).
+	\item[recfnlsym] Sets the symbol used for recursive functionals.  Default is \( \Phi \).
+	\item[recfsym]  Sets the symbol used for recursive functions.  Default is \( \phi \).
+	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \symbffrak{u} \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
+	\item[ballsymb] Sets the symbol used for the ball command.  Default is \( \mathscr{B} \).
+\end{itemize}
+
+As an example of how to use these commands consider the following code changing the ball symbol to \( \mathbf{B} \).
+
+\begin{verbatim}
+\def\myballsymb{\mathbf{B}}
+
+\usepackage[suppPriorityTrees, ballsymb=myballsymb]{rec-thy}
+\end{verbatim}
+
+
 \section{Commands}
 A few general conventions are usually followed in the commands.  Whenever an operator can be used as a binary operator (as in \( X \union Y \)) and as an operation on some collection \( \Union_{i \in \omega} X_i \) the binary operator will begin with a lowercase letter \verb=\union= and the operation on the collection will begin with a capital letter \verb=\Union=.  If the first letter is already capitalized then the second letter is used instead.
 
@@ -123,19 +151,26 @@ Unless indicated otherwise all macros are to be used inside math mode.  Indented
 
 \subsection{Priority Trees}
 
-Note the commands in this section double as suggestions for standardized notation.
+Note the commands in this section double as suggestions for standardized notation.  
 
 \begin{xtabular}{l |  l | l}\toprule
-	\verb=\PriorityTree=					& \( 	\PriorityTree                   \)	& Truepath. \\ \midrule
+	\verb=\PriorityTree=					& \( 	\PriorityTree                   \)	& Priority Tree \\ \midrule
 	\verb=\tpath=					& \(  \tpath                   \)	& Truepath. \\ \midrule
 	\verb=\tpath[s]=					& \( 	\tpath[s]                   \)	& Approximate Truepath. \\ \midrule
 	\verb=\xi \leftof \eta =					& \( 	\xi \leftof \eta                   \)	& The left of relation for priority tree arguments \\ \midrule
-	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
-	\verb=\Vstages{\xi}=					& \( 	\Vstages{\xi}                   \)	& Stages where \( \xi \subfun \tpath[s] \) even if links skip \( \xi \). \\ \midrule
-	\verb=\reqof{\xi}=					& \( 	\reqof{\xi}                   \)	& Requirement implemented by a node \( \xi \). \\ \midrule
+	\verb=\module{R}[X]{i,j}=					&  \module{R}{i,j}  & Module in tree construction (superscript optional arg) \\ \midrule
 	\verb=\ball[X]{y}{s}=					& \( 	\ball[X]{y}{s}                  \)	& Location of ball \( y\) (headed to \( X \)) at \( s \)\\ \midrule
 	\verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
 	\end{xtabular}          \\
+
+
+There are a few additional commands relating to priority trees which are less frequently used and require passing the option \verb=suppPriorityTrees= to the package to use.  These commands exist in a kind of limbo and will probably be removed in some future edition of the package absent popular demand and feedback for better notation.
+
+\begin{xtabular}{l |  l | l}\toprule
+	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
+	\verb=\Vstages{\xi}=					& \( 	\Vstages{\xi}                   \)	& Stages where \( \xi \subfun \tpath[s] \) even if links skip \( \xi \). \\ \midrule
+	\verb=\reqof{\xi}=					& \( 	\reqof{\xi}                   \)	& Requirement implemented by a node \( \xi \). \\  \bottomrule
+\end{xtabular}
 
 
 \subsection{Computations}
@@ -147,10 +182,10 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	\verb=\recf[s]{e}=                             & \( 	\recf[s]{e}                   	   \)   & \\[6pt]
 	\verb=\recf{e}(x)=                             & \( 	\recf{e}(x)                   	   \)   & \\[6pt]
 	\verb=\recf[s]{e}(x)=                             & \( 	\recf[s]{e}(x)                   	   \)   & \\[6pt]
-	\verb=\recf{e}[Y]=                             & \( 	\recf{e}[Y]                   	   \)   & \\[6pt]
-	\verb=\recf[s]{e}[Y]=                             & \( 	\recf[s]{e}[Y]                   	   \)   & \\[6pt]
-	\verb=\recf{e}[Y](x)=                             & \( 	\recf[s]{e}[Y](x)                   	   \)   & \\[6pt]
-	\verb=\recf[s]{e}[Y](x)=                             & \( 	\recf[s]{e}[Y](x)                   	   \)   & \\[6pt]
+	\verb=\recf(Y){e}=                             & \( 	\recf(Y){e}                  	   \)   & \\[6pt]
+	\verb=\recf[s](Y){e}=                             & \( 	\recf[s](Y){e}                   	   \)   & \\[6pt]
+	\verb=\recf(Y){e}(x)=                             & \( 	\recf(Y){e}(x)                   	   \)   & \\[6pt]
+	\verb=\recf[s](Y){e}(x)=                             & \( 	\recf[s](Y){e}(x)                   	   \)   & \\[6pt]
 	\verb=\recfnl{e}{Y}{x}=                                	& \( 	\recfnl{e}{Y}{x}                      	   \)   &\multirow{4}{*}{Computable functionals} \\[6pt]
 	\verb=\recfnl[s]{e}{Y}{x}=                             & \( 	\recfnl[s]{e}{Y}{x}                   	   \)   & \\[6pt]
 	\verb=\recfnl{e}{Y}{}=                                 & \( 	\recfnl{e}{Y}{}                       	   \)   & \\[6pt]
@@ -196,14 +231,19 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\tab \verb=X \Teq Y=                                        &   & \\ \midrule
 	\verb=X \nTequiv Y=                                    & \multirow{2}{*}{\( 	X \nTequiv Y                          	   \)}   & \multirow{2}{*}{Turing inequivalence} \\
 	\tab \verb=X \nTeq Y=                                       &    & \\ \midrule
-        \verb=X \Tlneq Y=                                      & \(  X \Tlneq Y                              	   \)   & \\ \midrule
-        \verb=X \Tleq  Y=                                      & \(  X \Tleq  Y                              	   \)   & \\ \midrule
-        \verb=X \Tgneq Y=                                      & \(  X \Tgneq Y                              	   \)   & \\ \midrule
-        \verb=X \Tgeq  Y=                                      & \(  X \Tgeq  Y                              	   \)   & \\ \midrule
-        \verb=X \Tgtr  Y=                                      & \(  X \Tgtr  Y                              	   \)   & \\ \midrule
-        \verb=X \Tless Y=                                      & \(  X \Tless Y                              	   \)   & \\ \midrule
-        \verb=X \nTleq Y=                                      & \(  X \nTleq Y                              	   \)   & \\ \midrule
-        \verb=X \nTgeq Y=                                      & \(  X \nTgeq Y                              	   \)   & \\ \midrule
+        \verb=X \Tlneq Y=                               	& \(  X \Tlneq Y   \)   & \\ \midrule
+        \verb=X \Tleq  Y=                               	& \(  X \Tleq  Y   \)   & \\ \midrule
+        \verb=X \Tgneq Y=                               	& \(  X \Tgneq Y   \)   & \\ \midrule
+        \verb=X \Tgeq  Y=                               	& \(  X \Tgeq  Y   \)   & \\ \midrule
+        \verb=X \Tgtr  Y=                               	& \(  X \Tgtr  Y   \)   & \\ \midrule
+        \verb=X \Tless Y=                               	& \(  X \Tless Y   \)   & \\ \midrule
+        \verb=X \nTleq Y=                               	& \(  X \nTleq Y   \)   & \\ \midrule
+        \verb=X \nTgeq Y=                               	& \(  X \nTgeq Y   \)   & \\ \midrule
+        \verb=X \Tincompat Y=                                      & \multirow{2}{*}{\(  X \Tincompat Y   \)}   & Turing incompatibility \\ 
+        \tab \verb=X \Tincomp Y= 							& & \\ \midrule 
+        \verb=X \Tcompat Y=                               	& & \multirow{3}{*}{\(  X \Tcompat Y   \)}    \\
+        \tab \verb=X \nTincomp Y= & & \\
+        \tab \verb=X \nTincompat Y= & & \\  \midrule
 	\verb=\Tdeg{d} \Tdegjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \Tdegjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
 	\verb=\Tdeg{d} \Tdegmeet \Tdeg{d'}=                    & \multirow{2}{*}{\( 	\Tdeg{d} \Tdegmeet \Tdeg{d'}          	   \)}   & \multirow{2}{*}{Meet of degrees (when defined)} \\
 	\tab \verb=\Tdeg{d} \Tmeet \Tdeg{d'}=                       &    & \\ \midrule
@@ -290,10 +330,6 @@ To disable these commands pass the option \verb=nomath=. \\
 	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\	\midrule
 	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\ \midrule
 	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\\midrule
-	\verb=x \meet y= 				& \( x \meet y \) & \multirow{2}{*}{Meet operation} \\[6pt]
-	\verb=\Meet_{i\in \omega} x_i=		& \( \Meet_{i\in \omega} x_i \) & \\ \midrule
-	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt]
-	\verb=\Join_{i\in \omega} x_i=		& \( \Join_{i\in \omega} x_i \) & \\ \midrule
 	\verb=\abs{x}= 					& \( \abs{x} \) & Absolute value\\ \midrule
 	\verb=\dom= 					& \( \dom \) & Domain \\ \midrule
 	\verb=\rng= 					& \( \rng \) & Range\\ \midrule
@@ -306,10 +342,21 @@ To disable these commands pass the option \verb=nomath=. \\
 	\tab \verb=f \compose g=	            		& &\\ \midrule
 	\verb=\( \ensuretext{blah} \)=	           	& \multirow{2}{*}{\( \ensuretext{blah} \)}& \multirow{2}{*}{Types argument in text mode} \\
 	\tab \verb=\ensuretext{blah}=			& & \\
-
 	\bottomrule
 \end{tabular}          \\
 \newpage
+
+\subsection{Operators}
+Misc operators used in logic and computability.  To disable these commands pass the option \verb=nooperators=.\\
+
+\begin{tabular}{l |  l | l}\toprule
+\verb=x \meet y= 				& \( x \meet y \) & \multirow{2}{*}{Meet operation} \\[6pt]
+	\verb=\Meet_{i\in \omega} x_i=		& \( \Meet_{i\in \omega} x_i \) & \\ \midrule
+	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt]
+	\verb=\Join_{i\in \omega} x_i=		& \( \Join_{i\in \omega} x_i \) & \\ \midrule
+	\verb=x \xor y=						& \( x \xor y \)  & \\ \bottomrule
+\end{tabular}          \\	
+
 \subsection{Set Notation}
 To disable these commands pass the option \verb=nosets=.\\
 
@@ -632,7 +679,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 \section{Release Notes}
 
 \begin{itemize}
-	\item[3.0] 12/23/2018 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes. Added \verb=\leftofeq=, \verb=\rightof=, \verb=\rightofeq=.  Added \verb=\RE=, \verb=\CE=, \verb=\Ce=, \verb=\Re=.  Changed the way strings are symbolized and coded.  Fixed suffix commands to work with unicode-math.  Also added \verb=\require*= inside \verb=\requirements=. 
+	\item[3.0] 02/16/2019 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes. Added \verb=\leftofeq=, \verb=\rightof=, \verb=\rightofeq=.  Added \verb=\RE=, \verb=\CE=, \verb=\Ce=, \verb=\Re= and  \verb=\Tincompat=, \verb=\Tincomp=, \verb=\Tcompat=.  Changed the way strings are symbolized and coded.  Fixed suffix commands to work with unicode-math.  Also added \verb=\require*= inside \verb=\requirements=. Added \verb=\nleftofeq=, \verb=\nrightof=, \verb=\nrightofeq=, \verb=\nleftof=.  The commands \verb=\ancestor=, \verb=\descendant= etc... \verb=\reqof=, \verb=\Astages= and \verb=\Vstages=now require the option suppPriorityTrees be passed to the class to use and should be viewed as depreciated.  Fixed the options system so different symbols can be correctly passed to the class.    Changed the way \verb=\recf= works to comply with the usual syntax.
 	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
 	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
 	\item[2.4.1] 2/14/2018 - Moved to using xparse to define the case macros and several other macros to allow nested brackets for optional arguments.  Added the recf command and cleaned up some option processing.  Also worked around the mathtools/unicode-math font bug described \href{https://tex.stackexchange.com/questions/335164/incompatibility-with-mathtools-and-unicode-math-in-xelatex/335177}{here}
