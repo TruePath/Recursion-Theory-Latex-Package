@@ -18,8 +18,10 @@
 \usepackage{comment}
 \usepackage{unicode-math}
 \unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
-\setmathfont{xits-math.otf}
-\setmathfont{xits-math.otf}[range={cal,bfcal},StylisticSet=1]
+    \setmainfont{XITS}
+    \setmathfont{XITS Math}
+    \setmathfont{XITS Math}[range={\mathscr,\mathbfscr}]
+    \setmathfont{XITS Math}[range={\mathcal,\mathbfcal},StylisticSet=1]
 
 
 \usepackage{hyperxmp}
@@ -204,9 +206,9 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	 \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}                       	   \)   & \\ \midrule
 	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
 	\tab \verb=\reaop*{e}(\eset)=                               &    & \\ \midrule
-	\verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
+	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
 	\tab \verb=\reaop{\alpha}(\eset)=                           &    & \\[6pt]
-	\verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
+	% \verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
 	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\
 		\bottomrule
 	\end{xtabular}          \\
@@ -252,7 +254,7 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\
 	\tab \verb=\TJoin_{i \in \omega} X_i=                       &    & \\ \midrule
 	% \verb=\ttSYM=                                          & \( 	\ttSYM                                	   \)   & \\ \midrule
-	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reducibilities\\ \midrule
+	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reproducibilities\\ \midrule
 	\verb=X \ttleq  Y=                                     & \( 	X \ttleq  Y                           	   \)   & \\ \midrule
 	\verb=X \ttgneq Y=                                     & \( 	X \ttgneq Y                           	   \)   & \\ \midrule
 	\verb=X \ttgeq  Y=                                     & \( 	X \ttgeq  Y                           	   \)   & \\ \midrule
@@ -335,11 +337,17 @@ To disable these commands pass the option \verb=nomath=. \\
 	\verb=\rng= 					& \( \rng \) & Range\\ \midrule
 	\verb=f\restr{X}= 				& \( f\restr{X} \) & Restriction\\ \midrule
 	\verb=\ordpair{x}{y}= 				& \( \ordpair{x}{y} \)& Ordered Pair\\ \midrule
-	\verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) & \multirow{2}{*}{Function specification} \\
-	\verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) &\\ \midrule
-	\verb=f \compfunc g=		       		& \multirow{3}{*}{\( f \compose g \)} & \multirow{3}{*}{Function composition}\\
-	\tab \verb=f \funcomp g=	            		& &\\
+	% \verb=f\map{X}{Y}= 				& \( f\map{X}{Y} \) & \multirow{2}{*}{Function specification} \\
+	% \verb=\functo{f}{X}{Y}= 			& \( \functo{f}{X}{Y} \) &\\ \midrule
+	\verb=f \compfunc g=		       		& \multirow{2}{*}{\( f \compose g \)} & \multirow{3}{*}{Function composition}\\
+	% \tab \verb=f \funcomp g=	            		& &\\
 	\tab \verb=f \compose g=	            		& &\\ \midrule
+	\verb=f: X \pmapsto Y= 					& \( f: X \pmapsto Y \) & partial function from \( X \) to \( Y \). \\ \midrule
+	\verb=f: Y \pmapsfrom X= 					& \( f: Y \pmapsfrom X \) & partial function from \( X \) to \( Y \). \\ \midrule
+	\verb=f: X \fpmapsto Y= 					& \( f: X \fpmapsto Y \) & finite partial function from \( X \) to \( Y \). \\ \midrule
+	\verb=f: Y \fpmapsfrom X= 					& \( f: Y \fpmapsfrom X \) & finite partial function from \( X \) to \( Y \). \\ \midrule
+	\verb=\ParFuncs{X}{Y}=						& \( \ParFuncs{X}{Y} \) & set of partial functions from \( X \) to \( Y \). \\ \midrule
+	\verb=\FinParFuncs{X}{Y}=						& \( \FinParFuncs{X}{Y} \) & set of finite partial functions from \( X \) to \( Y \). \\ \midrule
 	\verb=\( \ensuretext{blah} \)=	           	& \multirow{2}{*}{\( \ensuretext{blah} \)}& \multirow{2}{*}{Types argument in text mode} \\
 	\tab \verb=\ensuretext{blah}=			& & \\
 	\bottomrule
@@ -488,7 +496,9 @@ To disable these commands pass the option \verb=nosubfuns=.\\
 	\verb=f \nsubfun g=		       & \( f \nsubfun g \) & \\	\midrule
 \verb=f \nsupfun g=		       & \( f \nsupfun g \) & \\	\midrule
 	\verb=f \subfuneq g=		       & \( f \subfuneq g \) & \\	\midrule
+		\verb=f \subfunneq g=		       & \( f \subfunneq g \) & \\	\midrule
 	\verb=f \supfuneq g=		       & \( f \supfuneq g \) &  \\ 	\midrule
+		\verb=f \supfunneq g=		       & \( f \supfunneq g \) &  \\ 	\midrule
 	\verb=f \nsubfuneq g=		       & \( f \nsubfuneq g \) & \\	\midrule
 \verb=f \nsupfuneq g=		       & \( f \nsupfuneq g \) & \\	\midrule
 		\bottomrule
@@ -549,8 +559,8 @@ To disable these commands pass the option \verb=noordinalnotations=.\\
 	\verb=\alpha \kleeneMul  \beta=        & \( 	\alpha \kleeneMul  \beta   \)                          & Effective multiplication of notations \\  \midrule
 	\verb=\kleenelim{\lambda}{n}=          & \( 	\kleenelim{\lambda}{n}     \)                          & The \( n \)-th element in effective limit defining notation \( \lambda \)\\  \midrule
         \verb=\kleenepred{\alpha}=             & \(  \kleenepred{\alpha}          \)                          & Predecessor of \( \alpha \) if defined \\ \midrule
-	\verb=\kleenehgt{R}=                   & \multirow{2}{*}{\( 	\kleenehgt{R}              \)}        & Heigh of computable relation \( R \) \\
-\tab	\verb=\hgtO{R}=                        & & \\
+	\verb=\kleenehgt{R}=                   & \( 	\kleenehgt{R}              \)        & Height of computable relation \( R \) \\
+% \tab	\verb=\hgtO{R}=                        & & \\
 		\bottomrule
 	\end{tabular}
 
@@ -678,7 +688,12 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 \section{Release Notes}
 
+
+% TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.3]  - Fixed/added tweak to overline so it looks correct.  Also added real symbols so that \verb=\subfunneq= and \verb=\supfunneq= can be defined appropriately.  Added \verb=\floor= and \verb=\ceil=.  Note these aren't yet shown off in package doc.  Fixed incorrect use of tiny in math mode.
+	\item[3.2]	- Removed \verb=\reaop=, \verb=\alphaREAop=, \verb=\aREAop= in favor of using the single form \verb=\REAop=.  Removed \verb=\functo=, \verb=\map= and \verb=funcomp=, \verb=\hgtO= as useless synonyms and removed \verb=\KleeneOBelow= and \verb=KleeneOLess= as beyond what the package should define. Added package option compat31 to ensure package compatibility with version 3.1.  An optional parentheses delimited argument specifying the base has been added to  \verb=\REAop=.  Both \verb=\REAop= and the pair \verb=\REA=/\verb=\CEA= have been updated to ignore order of optional arguments.  The square brackets used to delimit the argument to the use command are now auto-sized.  Added \verb=\pmapsto=, \verb=\pmapsfrom=, \verb=\kleeneZero=, \verb=\kleeneNum=, \verb=\entersat=.  Also Misc typesetting fixes.  
+	\item[3.1]  02/26/2019 - Fixed \verb=\wck= to be \( \wck \), i.e., have capitalized roman CK.
 	\item[3.01] 02/17/2019 - Fixed \verb=\RE= \verb=\CE= \verb=\Re= and \verb=\Ce= for the various capitalized versions.  Fixed weird bug with \verb=\recfnl= no longer working based on let.  Removed \verb=\interior= and \\verb=\closure= as not really appropriate commands for the package and having bugs.  Also fixed package to have correct version.
 	\item[3.0] 02/16/2019 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes. Added \verb=\leftofeq=, \verb=\rightof=, \verb=\rightofeq=.  Added \verb=\RE=, \verb=\CE=, \verb=\Ce=, \verb=\Re= and  \verb=\Tincompat=, \verb=\Tincomp=, \verb=\Tcompat=.  Changed the way strings are symbolized and coded.  Fixed suffix commands to work with unicode-math.  Also added \verb=\require*= inside \verb=\requirements=. Added \verb=\nleftofeq=, \verb=\nrightof=, \verb=\nrightofeq=, \verb=\nleftof=.  The commands \verb=\ancestor=, \verb=\descendant= etc... \verb=\reqof=, \verb=\Astages= and \verb=\Vstages=now require the option suppPriorityTrees be passed to the class to use and should be viewed as depreciated.  Fixed the options system so different symbols can be correctly passed to the class.    Changed the way \verb=\recf= works to comply with the usual syntax.
 	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
