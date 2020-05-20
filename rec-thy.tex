@@ -1,10 +1,3 @@
-%
-%  untitled
-%
-%  Created by Peter M. Gerdes on 2010-10-14.
-%  Copyright (c) 2010 . All rights reserved.
-%
-
 \documentclass[leqno,11pt]{amsart}
 \usepackage{amsmath}
 % \RequirePackage{amsmath}
@@ -88,7 +81,7 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{\today: Version 2.4}
+\date{05/20/2020: Version \recthyVersion}
 
 \begin{document}
 
@@ -205,9 +198,9 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	 \verb=\REset(X){e}=                                    & \( 	\REset(X){e}                          	   \)   & \\[6pt]
 	 \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}                       	   \)   & \\ \midrule
 	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
-	\tab \verb=\reaop*{e}(\eset)=                               &    & \\ \midrule
+	\tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
 	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
-	\tab \verb=\reaop{\alpha}(\eset)=                           &    & \\[6pt]
+	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\[6pt]
 	% \verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
 	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\
 		\bottomrule

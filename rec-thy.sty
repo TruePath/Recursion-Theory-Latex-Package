@@ -1,5 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{rec-thy}[2019/02/17 v3.01  Provides commands for writing up recursion theory papers]
+% Release Notes see README
+\def\recthyVersion{3.3}
+\ProvidesPackage{rec-thy}[v3.3 Provides commands for writing up recursion theory papers]
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
@@ -12,10 +14,7 @@
 %leaves us a command \arg defined to do \@recthy@arg
 % \ProvidesPackage{\@curpack}  %file name is package name
 
-% Release Notes
-% Version 3.3
-% Added mrref option
-% Fixed horrific option processing bug
+
 \RequirePackage{ltxcmds}
 \RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
