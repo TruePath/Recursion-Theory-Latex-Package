@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 % Release Notes see README
-\def\recthyVersion{3.3}
-\ProvidesPackage{rec-thy}[v3.3 Provides commands for writing up recursion theory papers]
+\def\recthyVersion{3.3.1}
+\ProvidesPackage{rec-thy}[v3.3.1 Provides commands for writing up recursion theory papers]
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
@@ -26,7 +26,6 @@
 \robustify\(
 \robustify\)
 \RequirePackage{xparse}
-\RequirePackage{ifxetex}
 \AtBeginDocument{
 \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
 \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
@@ -656,8 +655,8 @@
     %%%%%%%%Function commands
     \let\recthy@rollback@threeTwo@threeOne@REA@mathsave=\recthy@rollback@threeTwo@threeOne@REA
     \renewcommand*{\recthy@rollback@threeTwo@threeOne@REA}{
-        \providecommand*{\map}[2]{:#1\mapsto #2}
-        \providecommand*{\functo}[3]{#1\map{#2}{#3}}
+        \providecommand*{\map}[2]{:##1\mapsto ##2}
+        \providecommand*{\functo}[3]{##1\map{##2}{##3}}
         \ifdefined\funcomp
         \else
             \let\funcomp=\compfunc

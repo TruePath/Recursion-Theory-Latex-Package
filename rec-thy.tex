@@ -81,7 +81,7 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{05/20/2020: Version \recthyVersion}
+\date{06/01/2020: Version \recthyVersion}
 
 \begin{document}
 
@@ -668,7 +668,8 @@ The above is accomplished with the following code.
 			\case[\( x=2 \)] \label{case*:second:sub1} ..
 			\case[\( x = 3 \)] \label{case*:second:sub2}
 		\end{pfcases*}
-.. \ref{case*:second} .. \cref{case*:second} .. \ref{case*:second:sub1} .. \cref{case*:second:sub2}.
+.. \ref{case*:second} .. \cref{case*:second} .. \ref{case*:second:sub1} .. 
+\cref{case*:second:sub2}.
 \end{proof}
 \end{verbatim}
 
@@ -684,6 +685,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.3.1] Fixed typo causing error under pdflatex.
 	\item[3.3]  - Fixed/added tweak to overline so it looks correct.  Also added real symbols so that \verb=\subfunneq= and \verb=\supfunneq= can be defined appropriately.  Added \verb=\floor= and \verb=\ceil=.  Note these aren't yet shown off in package doc.  Fixed incorrect use of tiny in math mode.
 	\item[3.2]	- Removed \verb=\reaop=, \verb=\alphaREAop=, \verb=\aREAop= in favor of using the single form \verb=\REAop=.  Removed \verb=\functo=, \verb=\map= and \verb=funcomp=, \verb=\hgtO= as useless synonyms and removed \verb=\KleeneOBelow= and \verb=KleeneOLess= as beyond what the package should define. Added package option compat31 to ensure package compatibility with version 3.1.  An optional parentheses delimited argument specifying the base has been added to  \verb=\REAop=.  Both \verb=\REAop= and the pair \verb=\REA=/\verb=\CEA= have been updated to ignore order of optional arguments.  The square brackets used to delimit the argument to the use command are now auto-sized.  Added \verb=\pmapsto=, \verb=\pmapsfrom=, \verb=\kleeneZero=, \verb=\kleeneNum=, \verb=\entersat=.  Also Misc typesetting fixes.  
 	\item[3.1]  02/26/2019 - Fixed \verb=\wck= to be \( \wck \), i.e., have capitalized roman CK.
