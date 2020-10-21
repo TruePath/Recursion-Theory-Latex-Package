@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 % Release Notes see README
-\def\recthyVersion{3.3.1}
-\ProvidesPackage{rec-thy}[v3.3.1 Provides commands for writing up recursion theory papers]
+\def\recthyVersion{3.5}
+\ProvidesPackage{rec-thy}[2020/06/04 v\recthyVersion Provides commands for writing up recursion theory papers]
 \makeatletter
 % \newcommand*{\@curpack}{\@currname} %rec-thy.sty
 \newcommand*{\@packinfo}[1]{\PackageInfo{rec-thy}{#1}}
@@ -32,13 +32,20 @@
 \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
 \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
 \ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
-\ltx@ifpackageloaded{undertilde}{}{\RequirePackage{undertilde}}
+% Undertilde doesn't exist in texlive so we remove the dependency and define it again.
+\ltx@ifpackageloaded{undertilde}{}{
+    \newlength\knuthian@fdfive
+    \def\mathpal@save#1{\let\was@math@style=#1\relax}
+    \def\utilde#1{\mathpalette\mathpal@save
+                  {\setbox124=\hbox{$\was@math@style#1$}%
+    \setbox125=\hbox{$\fam=3\global\knuthian@fdfive=\fontdimen5\font$}
+    \setbox125=\hbox{$\widetilde{\vrule height 0pt depth 0pt width \wd124}$}%
+                   \baselineskip=1pt\relax
+                   \vtop{\copy124\copy125\vskip -\knuthian@fdfive}}}
+    }
 }
 
 % \ifxetex  %workaround for bug...hopefully can dispense on later
-% \gdef\symbf#1{\symbf{#1}}
-% \fi
-% \global\let\symbf=\symbf
 \ifxetex
 \else
     \def\symbf#1{\mathbf{#1}}
@@ -381,16 +388,6 @@
   \end{picture}%
 }
 
-%     \newcommand{\not@pnrelbar}{%
-%   \linethickness{\dimen2}%
-%   \sbox\z@{$\m@th\nprec$}%
-%   \dimen@=1.1\ht\z@
-%   \begin{picture}(\dimen@,.4ex)
-%   \roundcap
-%   \put(0,.2ex){\line(1,0){\dimen@}}
-%   \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-%   \end{picture}%
-% }
 
     \newcommand{\@snrelbar}{%
   \linethickness{\dimen2}%
@@ -403,16 +400,6 @@
   \end{picture}%
 }
 
-%     \newcommand{\not@snrelbar}{%
-%   \linethickness{\dimen2}%
-%   \sbox\z@{$\m@th\nsucc$}%
-%   \dimen@=1.1\ht\z@
-%   \begin{picture}(\dimen@,.4ex)
-%   \roundcap
-%   \put(0,.2ex){\line(1,0){\dimen@}}
-%   \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-%   \end{picture}%
-% }
 
 \newcommand{\@precneq}{\mathrel{\vcenter{\hbox{\text{\prec@neq}}}}}
 \newcommand{\prec@neq}{%
@@ -425,16 +412,6 @@
   }%
 }
 
-% \newcommand{\@nprecneq}{\mathrel{\vcenter{\hbox{\text{\nprec@neq}}}}}
-% \newcommand{\nprec@neq}{%
-%   \dimen2=\f@size\dimexpr.04pt\relax
-%   \oalign{%
-%     \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
-%     $\m@th\nprec$\cr
-%     \noalign{\kern-.5\dimen2}
-%     \hidewidth\not@pnrelbar\hidewidth\cr
-%   }%
-% }
 
 \newcommand{\@succneq}{\mathrel{\vcenter{\hbox{\text{\succ@neq}}}}}
 \newcommand{\succ@neq}{%
@@ -447,16 +424,6 @@
   }%
 }
 
-% \newcommand{\@nsuccneq}{\mathrel{\vcenter{\hbox{\text{\nsucc@neq}}}}}
-% \newcommand{\nsucc@neq}{%
-%   \dimen2=\f@size\dimexpr.04pt\relax
-%   \oalign{%
-%     \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
-%     $\m@th\nprec$\cr
-%     \noalign{\kern-.5\dimen2}
-%     \hidewidth\not@snrelbar\hidewidth\cr
-%   }%
-% }
 
     \NewDocumentCommand{\subfun}{o}{\prec\IfNoValueTF{#1}{}{_{#1}}}
     \NewDocumentCommand{\supfun}{o}{\succ\IfNoValueTF{#1}{}{_{#1}}}
@@ -477,6 +444,10 @@
 \DeclareOptionX{reqscr}[mathscr]{\letcs{\@recthy@reqscr}{#1}}
 
 
+\newcommand*{\@pmg@saveeqstate}{\let\@origif@fleqn@pmg=\if@fleqn \let\@origiftagsleft@pmg=\iftagsleft@}
+\newcommand*{\@pmg@restoreeqstate}{ \let\if@fleqn=\@origif@fleqn@pmg\let\iftagsleft@=\@origiftagsleft@pmg}
+
+
 \AtEndOfPackage{
 \ifrecthy@noreqhelper
     \@packinfo{Not loading requirement assist.}
@@ -492,30 +463,17 @@
         \let\req=\req@nohref
     \fi
     \WithSuffix\def\req*{\req@nohref}
-    % \newsavebox{\@recthy@reqbox}
-    % \def\defreq#1#2\par{
-    %   \begin{equation}\let\veqno\@@leqno%
-    %       \tag*{#1}%
-    %       \begin{lrbox}{\@recthy@reqbox}%
- %   \begin{minipage}{\textwidth}#2\end{minipage}%
- %   \end{lrbox}%
- %   \makebox[0pt]{\usebox{\@recthy@reqbox}}%
-    %   \end{equation}}
     \newtagform{colon}{}{:}
     \newenvironment{requirement}[1]{
-        \let\@origif@fleqn@pmg=\if@fleqn
-        \let\@origiftagsleft@pmg=\iftagsleft@
+        \@pmg@saveeqstate
         \@fleqntrue
         \setlength\@mathmargin{1.5cm}
         \tagsleft@true
         \usetagform{colon}
-        % \let\maketag@@@orig@pmg=\maketag@@@
-        % \def\maketag@@@#1{\hbox{\m@th\normalfont#1:}}
         \begin{equation}\tag{#1}
     }{
         \end{equation}
-        \let\if@fleqn=\@origif@fleqn@pmg
-        \let\iftagsleft@=\@origiftagsleft@pmg
+        \@pmg@restoreeqstate
         \usetagform{default}
         % \let\maketag@@@=\maketag@@@orig@pmg  
     }
@@ -525,26 +483,14 @@
     }{
         \end{requirement}%
     }
-    % \NewDocumentEnvironment{require*}{O{}mO{}m}{
-    %     \begin{requirement}{\req@nohref[#1#3]{#2}{#4}}%
-    % }{
-    %     \end{requirement}%
-    % }
     \NewDocumentCommand{\refreq}{O{}mO{}}{\ref{\detokenize{req:#2@#1#3}}}
 
     \NewDocumentCommand{\require@nested}{sO{}mO{}m}{
         \IfBooleanTF{#1}{\tag{\req@nohref[#2#4]{#3}{#5}}}{\tag{\req@nohref[#2#4]{#3}{#5}}\label{\detokenize{req:#3@#2#4}}}
     }
-    % \newcommand*{\require@nested}{\require@nested@href}
-    % \WithSuffix\def\require@nested*{\require@nested@nohref}
-        % \NewDocumentEnvironment{require*}{O{}mO{}m}{
-        %     \tag{\req@nohref[#1#3]{#2}{#4}}%
-        % }{}
-
 
     \NewDocumentEnvironment{requirements}{}{
-        \let\@origif@fleqn@pmg=\if@fleqn
-        \let\@origiftagsleft@pmg=\iftagsleft@
+        \@pmg@saveeqstate
         \@fleqntrue
         \setlength\@mathmargin{1.5cm}
         \tagsleft@true
@@ -555,8 +501,7 @@
         \gather
     }{
         \endgather
-        \let\if@fleqn=\@origif@fleqn@pmg
-        \let\iftagsleft@=\@origiftagsleft@pmg
+        \@pmg@restoreeqstate
         \usetagform{default}
         % \let\maketag@@@=\maketag@@@orig@pmg  
     }
@@ -709,8 +654,8 @@
 \fi
 }
 
-\newcommand*{\@recthy@llangle}{\mathopen{\langle\!\langle}}
-\newcommand*{\@recthy@rrangle}{\mathclose{\rangle\!\rangle}}
+\newcommand*{\@recthy@llangle}{\langle\!\langle}
+\newcommand*{\@recthy@rrangle}{\rangle\!\rangle}
 
 
 
@@ -847,8 +792,6 @@
 \newcommand*{\@recthy@nin}{\notin}
 \newcommand*{\@recthy@powset}[1]{\mathcal{P}\left(#1\right)}
 \newcommand*{\@recthy@eset}{\emptyset}
-% \newcommand*{\@recthy@setcmpminusSYM}{\backsim}
-% \newcommand*{\@recthy@setminuscmp}[1]{\mathop{\@recthy@setcmpminusSYM} #1}
 \newcommand*{\@recthy@setovercmp}[1]{\overline{#1}}
 \newcommand*{\@recthy@setsimcmp}[1]{\backsim #1}
 \let\@recthy@setcmp=\@recthy@setovercmp
@@ -915,7 +858,6 @@
         \newcommand*{\existsuniq}{\exists@orig@recthy !}
         \newcommand*{\nexistsuniq}{\nexists@orig@recthy !}
 
-        \NewDocumentCommand{\axset}{D<>{}d()O{}d()}
         \WithSuffix\def\existsuniq(#1){\left(\existsuniq #1 \right)\!}
         \WithSuffix\def\nexistsuniq(#1){\left(\nexistsuniq #1 \right)\!}
         \WithSuffix\def\existsuniq[#1]{\left[\existsuniq #1 \right]\!}
@@ -1736,10 +1678,9 @@
 %   \NewDocumentCommand{\nconv}{o}{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
     \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
     \newcommand*{\diverge}{\mathpunct{\uparrow}}
-    % \newcommand*{\use}[2]{\mathscr{u}(#1\ifthenelse{\isempty{#2}}{}{,#2})}
     \newcommand*{\use}[1]{\mathop{\@recthy@useSYM}\left[#1\right]}
 % \newcommand*{\use}[1]{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}\left(#1\right)}
-    % \NewDocumentCommand{\REset}{omd()}{
+    % \NewDocumentCommand{\REset}{D(){}omd()}{
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}
     % }
 
@@ -1754,6 +1695,7 @@
     \fi}
     \WithSuffix\def\@REsetbody(#1){\def\@PMG@parenarg{#1}\@REsetbody}
     \WithSuffix\def\@REsetbody[#1]{\def\@PMG@braketarg{#1}\@REsetbody}
+    \NewDocumentCommand{\Hop}{oD(){}mD(){}}{\mathcal{H}_{#3\IfValueTF{#1}{, #1}{}}\left(\ifthenelse{\isempty{#2#4}}{\eset}{#2#4} \right)}
     \NewDocumentCommand{\REAop}{st+d()od()mm}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}#7}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
     \NewDocumentCommand{\oneREAop}{st+d()od()m}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
     \let\iREAop=\oneREAop
@@ -1853,7 +1795,7 @@
 
 
 
-    \newcommand*{\@recthy@ttSYM}{\ensuremath{\tiny \mathtt{tt}}}
+    \newcommand*{\@recthy@ttSYM}{\ensuremath{\mathtt{tt}}}
     \newcommand*{\ttSYM}{\@recthy@ttSYM}
     \newcommand*{\ttlneq}{\lneq_{\@recthy@ttSYM}}
     \newcommand*{\ttleq}{\leq_{\@recthy@ttSYM}}
