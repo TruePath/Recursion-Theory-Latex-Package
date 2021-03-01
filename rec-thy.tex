@@ -1,4 +1,5 @@
 \documentclass[leqno,11pt]{amsart}
+\usepackage{zwgetfdate}
 \usepackage{amsmath}
 % \RequirePackage{amsmath}
 \usepackage[disallowspaces,fixamsmath]{mathtools}
@@ -48,7 +49,6 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
-
 \usepackage[suppPriorityTrees]{rec-thy}
 \usepackage{suffix}
 \usepackage{metalogo}
@@ -81,19 +81,19 @@
 
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
-\date{06/01/2020: Version \recthyVersion}
+\date{\DateOfPackage{rec-thy}: Version \recthyVersion}
 
 \begin{document}
-
-
-
-
-\maketitle
 
 
 \begin{abstract}
 \noindent The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
 \end{abstract}
+
+
+
+\maketitle
+
 
 
 
@@ -193,10 +193,14 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	\verb=\recfnl{e}{}{x}\nconv=                           & \( 	\recfnl{e}{}{x}\nconv                 	   \)   &\multirow{2}{*}{Divergence} \\[6pt]
 	\tab \verb=\recfnl{e}{}{x}\nconv[s]=                        & \( 	\recfnl{e}{}{x}\nconv[s]              	   \)   & \\ \midrule
 	\verb=\use{\recfnl{e}{Y}{x}}=                          & \( 	\use{\recfnl{e}{Y}{x}}                	   \)   & Use of a computation. \\ \midrule
-	\verb=\REset{e}=                                       & \( 	\REset{e}                             	   \)   & \multirow{4}{*}{c.e. sets} \\[6pt]
-	 \verb=\REset[s]{e}=                                    & \( 	\REset[s]{e}                          	   \)   & \\[6pt]
-	 \verb=\REset(X){e}=                                    & \( 	\REset(X){e}                          	   \)   & \\[6pt]
-	 \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}                       	   \)   & \\ \midrule
+	\verb=\REset{e}=                                       & \( 	\REset{e} \)   & \multirow{4}{*}{c.e. sets} \\[6pt]
+	 \verb=\REset[s]{e}=                                    & \( 	\REset[s]{e}  \)   & \\[6pt]
+	 \verb=\REset(X){e}=                                    & \( 	\REset(X){e}   \)   & \\[6pt]
+	 \verb=\REset[s](X){e}=                                 & \( 	\REset[s](X){e}  \)   & \\ \midrule
+	\verb=\Hop{e}(X)=                                       & \( 	\Hop{e}(X)  \)   & \multirow{4}{*}{Hop sets} \\[6pt]
+		\verb=\Hop[s](X){e}=                                 & \( 	\Hop[s](X){e} \)   & \\[6pt]
+		\verb=\Hop[s]{e}=                                 & \( 	\Hop[s]{e} \)   & \\[6pt]
+		\verb=\Hop{e}=                                 & \( 	\Hop{e}  \)   & \\ \midrule
 	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
 	\tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
 	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
@@ -260,7 +264,7 @@ To disable these commands pass the option \verb=nodegrees=. \\
 \makeatletter
 \subsection{Requirement Assistance}
 To disable these commands pass the option \verb=noreqhelper=. To disable the hyperlinked requirements pass \verb=nohyperreqs=\\
-Math mode is not required for \verb=\req{R}{e\}=
+Math mode is not required for \verb=\req{R}{e}=
 
 \begin{tabular}{l |  l | l}\toprule
 \verb=\req{R}{e}=			 &  \( \req{R}{e} \) & \multirow{3}{*}{Requirement } \\ \midrule
@@ -685,6 +689,9 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.6] Fixed \verb=\REA[n]= so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \verb=\req*= error.  Improved syntax for \verb=\recfnl= so it can accept a parenthesis delimited argument as the oracle.  Improved \setcol to allow it to be used in a nested fashion without typesetting bugs.  
+	\item[3.5] Added \verb=\Hop= and misc code cleanup.
+	\item[3.4] Eliminated dependence on undertilde which is missing from texlive
 	\item[3.3.1] Fixed typo causing error under pdflatex.
 	\item[3.3]  - Fixed/added tweak to overline so it looks correct.  Also added real symbols so that \verb=\subfunneq= and \verb=\supfunneq= can be defined appropriately.  Added \verb=\floor= and \verb=\ceil=.  Note these aren't yet shown off in package doc.  Fixed incorrect use of tiny in math mode.
 	\item[3.2]	- Removed \verb=\reaop=, \verb=\alphaREAop=, \verb=\aREAop= in favor of using the single form \verb=\REAop=.  Removed \verb=\functo=, \verb=\map= and \verb=funcomp=, \verb=\hgtO= as useless synonyms and removed \verb=\KleeneOBelow= and \verb=KleeneOLess= as beyond what the package should define. Added package option compat31 to ensure package compatibility with version 3.1.  An optional parentheses delimited argument specifying the base has been added to  \verb=\REAop=.  Both \verb=\REAop= and the pair \verb=\REA=/\verb=\CEA= have been updated to ignore order of optional arguments.  The square brackets used to delimit the argument to the use command are now auto-sized.  Added \verb=\pmapsto=, \verb=\pmapsfrom=, \verb=\kleeneZero=, \verb=\kleeneNum=, \verb=\entersat=.  Also Misc typesetting fixes.  
