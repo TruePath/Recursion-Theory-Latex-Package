@@ -159,10 +159,12 @@
 \DeclareOptionX{compat35}{\recthy@compat@threeFive}
 \DeclareOptionX{nofixtype}{\ifrecthy@fix@typesetfalse}
 
+
+\newcommand*{\recthy@rollback@threeTwo}{}%filled in below
+\newcommand*{\recthy@rollback@threeSix}{}
 \newcommand*{\recthy@compat@threeFive}{\recthy@rollback@threeSix}
 \newcommand*{\recthy@compat@threeOne}{\recthy@compat@threeFive\recthy@rollback@threeTwo}
-\newcommand*{\recthy@rollback@threeTwo}{}
-\newcommand*{\recthy@rollback@threeSix}{}
+
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
 \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
@@ -252,7 +254,7 @@
 }
 
 
-\AtEndOfPackage{
+
     \ifrecthy@noprioritytrees
         \@packinfo{Not loading Priority Tree Helper}
     \else
@@ -272,10 +274,8 @@
         \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
     \fi
 
-}
 
 
-\AtEndOfPackage{
     \ifrecthy@nosuppprioritytrees
         \@packinfo{Not loading Priority Tree Supplemental Helper}
     \else
@@ -293,7 +293,6 @@
         \let\desceq=\descendanteq
     \fi
 
-}
 
 \let\pmg@casefont\textsc
 \DeclareOptionX{pfcasefont}[textsc]{\letcs{\pmg@casefont}{#1}}
@@ -391,34 +390,34 @@
     \fi
 }
 
-\AtEndOfPackage{
+
 \ifrecthy@nosubfun
     \@packinfo{Not loading subfun defs.}
 \else
     \@packinfo{Loading subfun defs.}
     %DOCUMENT ME
-    \newcommand{\@pnrelbar}{%
-  \linethickness{\dimen2}%
-  \sbox\z@{$\m@th\prec$}%
-  \dimen@=1.1\ht\z@
-  \begin{picture}(\dimen@,.4ex)
-  \roundcap
-  \put(0,.2ex){\line(1,0){\dimen@}}
-  \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-  \end{picture}%
-}
+  \newcommand{\@pnrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\prec$}%
+    \dimen@=1.1\ht\z@
+    \begin{picture}(\dimen@,.4ex)
+    \roundcap
+    \put(0,.2ex){\line(1,0){\dimen@}}
+    \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
+    \end{picture}%
+  }
 
 
-    \newcommand{\@snrelbar}{%
-  \linethickness{\dimen2}%
-  \sbox\z@{$\m@th\succ$}%
-  \dimen@=1.1\ht\z@
-  \begin{picture}(\dimen@,.4ex)
-  \roundcap
-  \put(0,.2ex){\line(1,0){\dimen@}}
-  \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-  \end{picture}%
-}
+  \newcommand{\@snrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\succ$}%
+    \dimen@=1.1\ht\z@
+    \begin{picture}(\dimen@,.4ex)
+    \roundcap
+    \put(0,.2ex){\line(1,0){\dimen@}}
+    \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
+    \end{picture}%
+  }
 
 
 \newcommand{\@precneq}{\mathrel{\vcenter{\hbox{\text{\prec@neq}}}}}
@@ -456,7 +455,7 @@
     \NewDocumentCommand{\nsubfuneq}{o}{\npreceq\IfNoValueTF{#1}{}{_{#1}}}
     \NewDocumentCommand{\nsupfuneq}{o}{\nsucceq\IfNoValueTF{#1}{}{_{#1}}}
 \fi
-}
+
 
 
 
