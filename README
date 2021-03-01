@@ -38,4 +38,4 @@ Github URL: https://github.com/TruePath/Recursion-Theory-Latex-Package
 06/01/2020 - v3.3.1 Fixed typo causing error under pdflatex.
 06/04/2020 - v3.4 Eliminated dependence on undertilde which is missing from texlive
 v3.5 - Added \Hop command and misc code cleanup.  
-v3.6 - Fixed \REA[n] so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \req* command.  Improved syntax for \recfnl so it can accept a () delimited argument via the same standard as \REset and \recf.  Improved \setcol to allow it to be used repeatedly without typesetting bugs.  
+v3.6 - Fixed \REA[n] so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \req* command.  Improved syntax for \recfnl so it can accept a () delimited argument via the same standard as \REset and \recf.  Improved \setcol to allow it to be used repeatedly without typesetting bugs.  Changed the code and pair commands to use only a single angle bracket.

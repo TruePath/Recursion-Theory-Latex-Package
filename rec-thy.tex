@@ -49,7 +49,6 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{xtab}
-\usepackage[suppPriorityTrees]{rec-thy}
 \usepackage{suffix}
 \usepackage{metalogo}
 
@@ -78,7 +77,7 @@
 
 %\usepackage[pdftex]{graphicx}
 %\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
-
+\usepackage[suppPriorityTrees]{rec-thy}
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
 \date{\DateOfPackage{rec-thy}: Version \recthyVersion}
@@ -125,6 +124,7 @@ While the symbols used by default in the package are suggested for adoption to a
 	\item[recfsym]  Sets the symbol used for recursive functions.  Default is \( \phi \).
 	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \symbffrak{u} \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
 	\item[ballsymb] Sets the symbol used for the ball command.  Default is \( \mathscr{B} \).
+	\item[nodoubleangles] Prevents redefinition of \verb=\rrangle= and \verb=\llangle= with versions that use the repeated angle brackets e.g., lets you use the weird XITS versions.
 \end{itemize}
 
 As an example of how to use these commands consider the following code changing the ball symbol to \( \mathbf{B} \).
@@ -576,7 +576,7 @@ To disable these commands pass the option \verb=noforcing=.\\
 \subsection{Syntax}
 To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas as this doesn't make sense).  Not all formulas/abbreviations are demonstrated below given the huge number but the enough are included to make it clear what command is required to generate the desired formula class, e.g., substituting pi for delta does what you think it does.
 
-To change the syntax for the computable infinitary formulas you can pass the options \verb!cdeltasym=macroname!, \verb!csigmasym=macroname! and \verb!cpisym=macroname! where macroname is the name (without the leading \\) of the macro giving the desired symbol to use for the relevant class. 
+To change the syntax for the computable infinitary formulas you can pass the options \verb!cdeltasym=macroname!, \verb!csigmasym=macroname! and \verb!cpisym=macroname! where macroname is the name (without the leading \verb=\=) of the macro giving the desired symbol to use for the relevant class. 
 
 \begin{xtabular}{l |  l | l}\toprule
 	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
@@ -689,7 +689,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[3.6] Fixed \verb=\REA[n]= so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \verb=\req*= error.  Improved syntax for \verb=\recfnl= so it can accept a parenthesis delimited argument as the oracle.  Improved \setcol to allow it to be used in a nested fashion without typesetting bugs.  
+	\item[3.6] Fixed \verb=\REA[n]= so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \verb=\req*= error.  Improved syntax for \verb=\recfnl= so it can accept a parenthesis delimited argument as the oracle.  Improved \verb=\setcol= to allow it to be used in a nested fashion without typesetting bugs.  Changed the \verb=\code= and \verb=\pair= commands to use only a single angle bracket.
 	\item[3.5] Added \verb=\Hop= and misc code cleanup.
 	\item[3.4] Eliminated dependence on undertilde which is missing from texlive
 	\item[3.3.1] Fixed typo causing error under pdflatex.
