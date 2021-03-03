@@ -163,7 +163,9 @@
 
 \newcommand*{\recthy@rollback@threeTwo}{}
 \newcommand*{\recthy@rollback@threeSix}{}
-\newcommand*{\recthy@compat@threeFive}{\AtEndOfPackage{\recthy@rollback@threeSix}}
+\newcommand*{\recthy@rollback@threeSeven}{}
+\newcommand*{\recthy@compat@threeSix}{\AtEndOfPackage{\recthy@rollback@threeSeven}}
+\newcommand*{\recthy@compat@threeFive}{\recthy@compat@threeSix\AtEndOfPackage{\recthy@rollback@threeSix}}
 \newcommand*{\recthy@compat@threeOne}{\recthy@compat@threeFive\AtEndOfPackage{\recthy@rollback@threeTwo}}
 
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
@@ -181,145 +183,14 @@
 
 
 
-\AtEndOfPackage{
-    \ifrecthy@noprioritytrees
-        \@packinfo{Not loading Priority Tree Helper}
-    \else
-        \@packinfo{Loading Priority Tree Helper.}
-        \providecommand{\PriorityTree}{\mathbb{T}}
-        \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
-        \providecommand{\leftof}{\mathbin{<_L}}
-        \providecommand{\leftofeq}{\mathbin{\leq_L}}
-        \providecommand{\rightof}{\mathbin{>_L}}
-        \providecommand{\rightofeq}{\mathbin{\geq_L}}
-        \providecommand{\nleftof}{\mathbin{\nless_L}}
-        \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
-        \providecommand{\nrightof}{\mathbin{\ngtr_L}}
-        \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
-        \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
-        \let\module=\PriorityTreeModule
-        \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
-    \fi
-
-}
 
 
-\AtEndOfPackage{
-    \ifrecthy@nosuppprioritytrees
-        \@packinfo{Not loading Priority Tree Supplemental Helper}
-    \else
-        \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
-        \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
-        \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
-        \let\modof=\reqof
-        \providecommand{\ancestor}{\succ}
-        \providecommand{\descendant}{\prec}
-        \providecommand{\ancestoreq}{\succeq}
-        \providecommand{\descendanteq}{\preceq}
-        \let\ances=\ancestor
-        \let\anceseq=\ancestoreq
-        \let\desc=\descendant
-        \let\desceq=\descendanteq
-    \fi
 
-}
+
 
 \let\pmg@casefont\textsc
 \DeclareOptionX{pfcasefont}[textsc]{\letcs{\pmg@casefont}{#1}}
 
-\AtEndOfPackage{
-    \ifrecthy@nopfcases
-        \@packinfo{Not loading Proof Cases Helper}
-    \else
-        \@packinfo{Loading Proof Cases Helper.}
-        \RequirePackage{enumitem}
-      \ltx@ifpackageloaded{cleveref}{
-        \crefformat{pfcasesnonumi}{#2case~#1#3}
-        \Crefformat{pfcasesnonumi}{#2Case~#1#3}
-        \crefformat{pfcasesnonumii}{#2subcase~#1#3}
-        \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
-        \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
-        \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
-        \crefformat{pfcasesnumberedi}{#2case~#1#3}
-        \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
-        \crefformat{pfcasesnumberedii}{#2case~#1#3}
-        \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
-        \crefformat{pfcasesnumberediii}{#2case~#1#3}
-        \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
-        }{}
-        \newlist{pfcasesnonum}{enumerate}{3}
-        \setlist[pfcasesnonum]{
-          label={\pmg@casefont{Case}},
-          align=left,
-          labelsep=0pt,
-          itemindent=!,
-          leftmargin=2em,
-          labelindent=0pt,
-          labelwidth=0pt
-        }
-        \setlist[pfcasesnonum,1]{
-            before=\def\pfcasecounter@pmg{pfcasesnonumi},
-        }
-        \setlist[pfcasesnonum,2]{
-            before=\def\pfcasecounter@pmg{pfcasesnonumii},
-            labelindent=-1em,
-        }
-        \setlist[pfcasesnonum,3]{
-            before=\def\pfcasecounter@pmg{pfcasesnonumiii},
-            labelindent=-1em,
-        }
-        \newlist{pfcasesnumbered}{enumerate}{3}
-        \setlist[pfcasesnumbered]{
-          align=left,
-          labelsep=0pt,
-          itemindent=!,
-          leftmargin=2em,
-          labelindent=0pt,
-          labelwidth=0pt
-        }
-        \setlist[pfcasesnumbered,1]{
-            before=\def\pfcasecounter@pmg{pfcasesnumberedi},
-          label={{\pmg@casefont{Case}}~\arabic*},
-          ref={\arabic*},
-        }
-        \setlist[pfcasesnumbered,2]{
-            before=\def\pfcasecounter@pmg{pfcasesnumberedii},
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*},
-          ref={\arabic{pfcasesnumberedi}\alph*},
-          labelindent=-1em,
-        }
-        \setlist[pfcasesnumbered,3]{
-            before=\def\pfcasecounter@pmg{pfcasesnumberediii},
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
-          ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
-          labelindent=-1em,
-        }
-        \def\@recthy@cases@labelindent{0pt}
-        \newenvironment{pfcases*}{
-            \def\@recthy@cases@labelindent{-1em}
-            \ProvideDocumentCommand{\case}{r[]}{
-                    \def\thiscase{~##1}%
-                \item~##1: %
-                \ltx@ifpackageloaded{cleveref}{%
-                \cref@constructprefix{pfcases}{\cref@result}%
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
-        \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
-
-        \newenvironment{pfcases}{
-            \ProvideDocumentCommand{\case}{o}{
-                \IfNoValueTF{##1}{
-                    \def\thiscase{}%
-                }{
-                    \def\thiscase{~##1}%
-                }
-                \item~##1: \linebreak[1]%
-                \ltx@ifpackageloaded{cleveref}{%
-                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
-        
-        \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
-    \fi
-}
 
 \AtEndOfPackage{
 \ifrecthy@nosubfun
@@ -1784,31 +1655,13 @@
 }
 
 
-%Strings
-  \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
-  \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-  \let\@recthy@concatSYM\@recthy@concatSYM@Default
-  \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
 
-  \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
-  \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
-  \newcommand*{\@recthy@pair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
-  \newcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-  \newcommand*{\@recthy@code}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-
-  \appto{\recthy@rollback@threeSix}{
-    \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
-    \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-    % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-    \renewcommand*{\@recthy@code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
-    \newcommand*{\closedn}[1]{{#1}^\blacktriangledown}
-    }
 
 % \ProcessOptions*
 % \ProcessOptionsX<\@recthy@family>
-\ProcessOptionsX
+\ProcessOptionsX\relax
 
-    \ifrecthy@fix@typeset
+\ifrecthy@fix@typeset
       %Defining \overbar
       \let\save@mathaccent\mathaccent
   \newcommand*\if@single[3]{%
@@ -1878,11 +1731,29 @@
     \fi
     \endgroup
   }
-  \else
-      \@packinfo{Not loading Fix Typesetting}
-  \fi
+\else
+  \@packinfo{Not loading Fix Typesetting}
+\fi
 
 
+%Strings
+  \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
+  \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+  \let\@recthy@concatSYM\@recthy@concatSYM@Default
+  \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
+
+  \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
+  \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
+  \newcommand*{\@recthy@pair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
+  \newcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+  \newcommand*{\@recthy@code}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+
+  \appto{\recthy@rollback@threeSix}{
+    \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
+    \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+    % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+    \renewcommand*{\@recthy@code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
+    }
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
 \NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
 
@@ -1890,6 +1761,7 @@
     \@packinfo{No strings loading.}
 \else
     \@packinfo{Strings loading.}
+    \appto{\recthy@rollback@threeSix}{\newcommand*{\closedn}[1]{{#1}^\blacktriangledown}}
     \let\code=\@recthy@code
     \let\str=\@recthy@str
     \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
@@ -1939,6 +1811,180 @@
     \fi
 \fi
 
+\ifrecthy@noprioritytrees
+    \@packinfo{Not loading Priority Tree Helper}
+\else
+    \@packinfo{Loading Priority Tree Helper.}
+    \providecommand{\PriorityTree}{\mathbb{T}}
+    \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
+    \providecommand{\leftof}{\mathbin{<_L}}
+    \providecommand{\leftofeq}{\mathbin{\leq_L}}
+    \providecommand{\rightof}{\mathbin{>_L}}
+    \providecommand{\rightofeq}{\mathbin{\geq_L}}
+    \providecommand{\nleftof}{\mathbin{\nless_L}}
+    \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
+    \providecommand{\nrightof}{\mathbin{\ngtr_L}}
+    \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
+    \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
+    \let\module=\PriorityTreeModule
+    \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
+\fi
+
+\ifrecthy@nosuppprioritytrees
+    \@packinfo{Not loading Priority Tree Supplemental Helper}
+\else
+    \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
+    \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
+    \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
+    \let\modof=\reqof
+    \providecommand{\ancestor}{\succ}
+    \providecommand{\descendant}{\prec}
+    \providecommand{\ancestoreq}{\succeq}
+    \providecommand{\descendanteq}{\preceq}
+    \let\ances=\ancestor
+    \let\anceseq=\ancestoreq
+    \let\desc=\descendant
+    \let\desceq=\descendanteq
+\fi
 
 
+\ifrecthy@nopfcases
+    \@packinfo{Not loading Proof Cases Helper}
+\else
+    \@packinfo{Loading Proof Cases Helper.}
+    \RequirePackage{enumitem}
+    \appto{\recthy@rollback@threeSeven}{
+        \setlist[pfcasesnonum]{
+          label={\pmg@casefont{Case}}\protect\thiscase:~,
+          align=left,
+          labelsep=!,
+          itemindent=-1em,
+        }
+        \setlist[pfcasesnumbered]{
+          align=left,
+          labelsep=!,
+          itemindent=-1em,
+        }
+        \setlist[pfcasesnumbered,1]{
+          label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
+        }
+        \setlist[pfcasesnumbered,2]{
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
+        }
+        \setlist[pfcasesnumbered,3]{
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
+        }
+        \renewenvironment{pfcases*}{
+            \ProvideDocumentCommand{\case}{o}{
+                \IfNoValueTF{##1}{
+                    \def\thiscase{}%
+                }{
+                    \def\thiscase{~##1}%
+                }
+                \item  \ltx@ifpackageloaded{cleveref}{%
+                \cref@constructprefix{pfcases}{\cref@result}%
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
+        }
+        \begin{pfcasesnonum}
+        }
+        {\end{pfcasesnonum}}
+        \renewenvironment{pfcases}{
+            \ProvideDocumentCommand{\case}{o}{
+                \IfNoValueTF{##1}{
+                    \def\thiscase{}%
+                }{
+                    \def\thiscase{~##1}%
+                }
+                \item \ltx@ifpackageloaded{cleveref}{%
+                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
+        }
+        \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
+    }
+
+
+  \ltx@ifpackageloaded{cleveref}{
+    \crefformat{pfcasesnonumi}{#2case~#1#3}
+    \Crefformat{pfcasesnonumi}{#2Case~#1#3}
+    \crefformat{pfcasesnonumii}{#2subcase~#1#3}
+    \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
+    \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
+    \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
+    \crefformat{pfcasesnumberedi}{#2case~#1#3}
+    \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
+    \crefformat{pfcasesnumberedii}{#2case~#1#3}
+    \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
+    \crefformat{pfcasesnumberediii}{#2case~#1#3}
+    \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
+    }{}
+    \newlist{pfcasesnonum}{enumerate}{3}
+    \setlist[pfcasesnonum]{
+      label={\pmg@casefont{Case}},
+      align=left,
+      labelsep=0pt,
+      itemindent=!,
+      leftmargin=2em,
+      labelindent=0pt,
+      labelwidth=0pt
+    }
+    \setlist[pfcasesnonum,1]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumi},
+    }
+    \setlist[pfcasesnonum,2]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumii},
+    }
+    \setlist[pfcasesnonum,3]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumiii},
+    }
+    \newlist{pfcasesnumbered}{enumerate}{3}
+    \setlist[pfcasesnumbered]{
+      align=left,
+      labelsep=0pt,
+      itemindent=!,
+      leftmargin=2em,
+      labelindent=0pt,
+      labelwidth=0pt
+    }
+    \setlist[pfcasesnumbered,1]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberedi},
+      label={{\pmg@casefont{Case}}~\arabic*},
+      ref={\arabic*},
+    }
+    \setlist[pfcasesnumbered,2]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberedii},
+      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*},
+      ref={\arabic{pfcasesnumberedi}\alph*},
+      labelindent=-1em,
+    }
+    \setlist[pfcasesnumbered,3]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberediii},
+      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+      ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+      labelindent=-1em,
+    }
+    \def\@recthy@cases@labelindent{0pt}
+    \newenvironment{pfcases*}{
+        \def\@recthy@cases@labelindent{-1em}
+        \ProvideDocumentCommand{\case}{r[]}{
+                \def\thiscase{~##1}%
+            \item~##1: %
+            \ltx@ifpackageloaded{cleveref}{%
+            \cref@constructprefix{pfcases}{\cref@result}%
+            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
+    \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
+
+    \newenvironment{pfcases}{
+        \ProvideDocumentCommand{\case}{o}{
+            \IfNoValueTF{##1}{
+                \def\thiscase{}%
+            }{
+                \def\thiscase{~##1}%
+            }
+            \item~##1: \linebreak[1]%
+            \ltx@ifpackageloaded{cleveref}{%
+            \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
+            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
+    
+    \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
+\fi
 
