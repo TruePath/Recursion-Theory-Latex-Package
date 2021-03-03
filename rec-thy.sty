@@ -256,6 +256,19 @@
 % \ProcessOptionsX<\@recthy@family>
 \ProcessOptionsX
 
+%misc tools
+
+\def\@recthy@ignorespacesandallparsafterend{\ifhmode\unskip\fi
+\aftergroup\@recthy@useignorespacesandallpars}
+\def\@recthy@useignorespacesandallpars#1\ignorespaces\fi{%
+#1\fi\@recthy@ignorespacesandallpars}
+\def\@recthy@ignorespacesandallpars{%
+  \@ifnextchar\par
+    {\expandafter\@recthy@ignorespacesandallpars\@gobble}%
+    {}%
+}
+
+
 \ifrecthy@fix@typeset
       %Defining \overbar
       \let\save@mathaccent\mathaccent
@@ -447,54 +460,54 @@
 \else
     \@packinfo{Loading Proof Cases Helper.}
     \RequirePackage{enumitem}
-    % \appto{\recthy@rollback@threeSeven}{
-    %     \setlist[pfcasesnonum]{
-    %       label={\pmg@casefont{Case}}\protect\thiscase:~,
-    %       align=left,
-    %       labelsep=!,
-    %       itemindent=-1em,
-    %     }
-    %     \setlist[pfcasesnumbered]{
-    %       align=left,
-    %       labelsep=!,
-    %       itemindent=-1em,
-    %     }
-    %     \setlist[pfcasesnumbered,1]{
-    %       label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
-    %     }
-    %     \setlist[pfcasesnumbered,2]{
-    %       label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
-    %     }
-    %     \setlist[pfcasesnumbered,3]{
-    %       label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
-    %     }
-    %     \renewenvironment{pfcases*}{
-    %         \ProvideDocumentCommand{\case}{o}{
-    %             \IfNoValueTF{##1}{
-    %                 \def\thiscase{}%
-    %             }{
-    %                 \def\thiscase{~##1}%
-    %             }
-    %             \item  \ltx@ifpackageloaded{cleveref}{%
-    %             \cref@constructprefix{pfcases}{\cref@result}%
-    %             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
-    %     }
-    %     \begin{pfcasesnonum}
-    %     }
-    %     {\end{pfcasesnonum}}
-    %     \renewenvironment{pfcases}{
-    %         \ProvideDocumentCommand{\case}{o}{
-    %             \IfNoValueTF{##1}{
-    %                 \def\thiscase{}%
-    %             }{
-    %                 \def\thiscase{~##1}%
-    %             }
-    %             \item \ltx@ifpackageloaded{cleveref}{%
-    %             \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
-    %             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
-    %     }
-    %     \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
-    % }
+    \appto{\recthy@rollback@threeSeven}{
+        \setlist[pfcasesnonum]{
+          label={\pmg@casefont{Case}}\protect\thiscase:~,
+          align=left,
+          labelsep=!,
+          itemindent=-1em,
+        }
+        \setlist[pfcasesnumbered]{
+          align=left,
+          labelsep=!,
+          itemindent=-1em,
+        }
+        \setlist[pfcasesnumbered,1]{
+          label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
+        }
+        \setlist[pfcasesnumbered,2]{
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
+        }
+        \setlist[pfcasesnumbered,3]{
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
+        }
+        \renewenvironment{pfcases*}{
+            \ProvideDocumentCommand{\case}{o}{
+                \IfNoValueTF{##1}{
+                    \def\thiscase{}%
+                }{
+                    \def\thiscase{~##1}%
+                }
+                \item  \ltx@ifpackageloaded{cleveref}{%
+                \cref@constructprefix{pfcases}{\cref@result}%
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
+        }
+        \begin{pfcasesnonum}
+        }
+        {\end{pfcasesnonum}}
+        \renewenvironment{pfcases}{
+            \ProvideDocumentCommand{\case}{o}{
+                \IfNoValueTF{##1}{
+                    \def\thiscase{}%
+                }{
+                    \def\thiscase{~##1}%
+                }
+                \item \ltx@ifpackageloaded{cleveref}{%
+                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
+        }
+        \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
+    }
 
 
   \ltx@ifpackageloaded{cleveref}{
@@ -648,15 +661,7 @@
   \NewDocumentCommand{\nsupfuneq}{o}{\nsucceq\IfNoValueTF{#1}{}{_{#1}}}
 \fi
 
-\def\@recthy@ignorespacesandallparsatend{\ifhmode\unskip\fi
-\aftergroup\useignorespacesandallpars}
-\def\@recthy@useignorespacesandallpars#1\ignorespaces\fi{%
-#1\fi\ignorespacesandallpars}
-\def\@recthy@ignorespacesandallpars{%
-  \@ifnextchar\par
-    {\expandafter\ignorespacesandallpars\@gobble}%
-    {}%
-}
+
 
 
 \newcommand*{\@pmg@saveeqstate}{\let\@origif@fleqn@pmg=\if@fleqn \let\@origiftagsleft@pmg=\iftagsleft@}
@@ -708,8 +713,8 @@
 
     \NewDocumentCommand{\refreq}{O{}mO{}}{\ref{\detokenize{req:#2@#1#3}}}
 
-    \NewDocumentCommand{\require@nested}{sO{}mO{}m}{
-        \tag{\req@nohref[#2#4]{#3}{#5}}\IfBooleanTF{#1}{}{\label{\detokenize{req:#3@#2#4}}}
+    \NewDocumentCommand{\require@nested}{sO{}mO{}m}{%
+        \tag{\req@nohref[#2#4]{#3}{#5}}\IfBooleanTF{#1}{}{\label{\detokenize{req:#3@#2#4}}}%
     }
 
 
@@ -741,25 +746,21 @@
           \let\require=\require@beamer %
           \begin{flalign*}%
           #1 &
-          \end{flalign*}}{}
+          \end{flalign*}}{\@recthy@ignorespacesandallparsafter}
     \else
 
-        \NewDocumentEnvironment{requirements}{}{
-        \@pmg@saveeqstate
-        \@fleqntrue
-        \setlength\@mathmargin{1.5cm}
-        \tagsleft@true
-        \usetagform{colon}
-        \let\require=\require@nested
-        % \let\maketag@@@orig@pmg=\maketag@@@
-        % \def\maketag@@@#1{\hbox{\m@th\normalfont#1:}}
-        \gather
-    }{
-        \endgather
-        \@pmg@restoreeqstate
-        \usetagform{default}
-        % \let\maketag@@@=\maketag@@@orig@pmg  
-    }
+        \NewDocumentEnvironment{requirements}{}{%
+        \@pmg@saveeqstate%
+        \@fleqntrue%
+        \setlength\@mathmargin{1.5cm}%
+        \tagsleft@true%
+        \usetagform{colon}%
+        \let\require=\require@nested%
+        \gather}{%
+        \endgather%
+        \@pmg@restoreeqstate%
+        \usetagform{default}%
+        \ignorespacesafterend}
 
  \fi
 
