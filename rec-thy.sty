@@ -2,7 +2,6 @@
 % Release Notes see README
 \RequirePackage{expl3}
 \RequirePackage{ltxcmds}
-\RequirePackage{expl3}
 \RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
@@ -164,8 +163,8 @@
 
 \newcommand*{\recthy@rollback@threeTwo}{}
 \newcommand*{\recthy@rollback@threeSix}{}
-\newcommand*{\recthy@compat@threeFive}{\recthy@rollback@threeSix}
-\newcommand*{\recthy@compat@threeOne}{\recthy@compat@threeFive\recthy@rollback@threeTwo}
+\newcommand*{\recthy@compat@threeFive}{\AtEndOfPackage{\recthy@rollback@threeSix}}
+\newcommand*{\recthy@compat@threeOne}{\recthy@compat@threeFive\AtEndOfPackage{\recthy@rollback@threeTwo}}
 
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
@@ -178,82 +177,8 @@
 \let\@recthy@ballsymb\@recthy@ballsymb@default
 \DeclareOptionX{ballsymb}[@recthy@ballsymb@default]{\letcs{\@recthy@ballsymb}{#1}}
 
-\AtEndOfPackage{
-    \ifrecthy@fix@typeset
-        %Defining \overbar
-        \let\save@mathaccent\mathaccent
-    \newcommand*\if@single[3]{%
-      \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
-      \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
-      \ifdim\ht0=\ht2 #3\else #2\fi
-      }
-    %The bar will be moved to the right by a half of \macc@kerna, which is computed by amsmath:
-    \newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
-    %If there's a superscript following the bar, then no negative kern may follow the bar;
-    %an additional {} makes sure that the superscript is high enough in this case:
-    \providecommand*\overbar{\relax}
-    \renewcommand*\overbar[1]{\@ifnextchar^{{\over@bar{#1}{0}}}{\over@bar{#1}{1}}}
-    %Use a separate algorithm for single symbols:
-    \newcommand*\over@bar[2]{\if@single{#1}{\over@bar@{#1}{#2}{1}}{\over@bar@{#1}{#2}{2}}}
-    \newcommand*\over@bar@[3]{%
-      \begingroup
-      \def\mathaccent##1##2{%
-    %Enable nesting of accents:
-        \let\mathaccent\save@mathaccent
-    %If there's more than a single symbol, use the first character instead (see below):
-        \if#32 \let\macc@nucleus\first@char \fi
-    %Determine the italic correction:
-        \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
-        \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
-        \dimen@\wd\tw@
-        \advance\dimen@-\wd\z@
-    %Now \dimen@ is the italic correction of the symbol.
-        \divide\dimen@ 3
-        \@tempdima\wd\tw@
-        \advance\@tempdima-\scriptspace
-    %Now \@tempdima is the width of the symbol.
-        \divide\@tempdima 10
-        \advance\dimen@-\@tempdima
-    %Now \dimen@ = (italic correction / 3) - (Breite / 10)
-        \ifdim\dimen@>\z@ \dimen@0pt\fi
-    %The bar will be shortened in the case \dimen@<0 !
-        \rel@kern{0.6}\kern-\dimen@
-        \if#31
-          \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
-          \advance\dimen@0.4\dimexpr\macc@kerna
-    %Place the combined final kern (-\dimen@) if it is >0 or if a superscript follows:
-          \let\final@kern#2%
-          \ifdim\dimen@<\z@ \let\final@kern1\fi
-          \if\final@kern1 \kern-\dimen@\fi
-        \else
-          \overline{\rel@kern{-0.6}\kern\dimen@#1}%
-        \fi
-      }%
-      \macc@depth\@ne
-      \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
-      \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
-      \macc@set@skewchar\relax
-      \let\mathaccentV\macc@nested@a
-    %The following initialises \macc@kerna and calls \mathaccent:
-      \if#31
-        \macc@nested@a\relax111{#1}%
-      \else
-    %If the argument consists of more than one symbol, and if the first token is
-    %a letter, use that letter for the computations:
-        \def\gobble@till@marker##1\endmarker{}%
-        \futurelet\first@char\gobble@till@marker#1\endmarker
-        \ifcat\noexpand\first@char A\else
-          \def\first@char{}%
-        \fi
-        \macc@nested@a\relax111{\first@char}%
-      \fi
-      \endgroup
-    }
-    \else
-        \@packinfo{Not loading Fix Typesetting}
-    \fi
 
-}
+
 
 
 \AtEndOfPackage{
@@ -308,7 +233,7 @@
     \else
         \@packinfo{Loading Proof Cases Helper.}
         \RequirePackage{enumitem}
-        \ltx@ifpackageloaded{cleveref}{
+      \ltx@ifpackageloaded{cleveref}{
         \crefformat{pfcasesnonumi}{#2case~#1#3}
         \Crefformat{pfcasesnonumi}{#2Case~#1#3}
         \crefformat{pfcasesnonumii}{#2subcase~#1#3}
@@ -324,10 +249,10 @@
         }{}
         \newlist{pfcasesnonum}{enumerate}{3}
         \setlist[pfcasesnonum]{
-          label={\pmg@casefont{Case}}\protect\thiscase:~,
+          label={\pmg@casefont{Case}},
           align=left,
-          labelsep=!,
-          itemindent=-1em,
+          labelsep=0pt,
+          itemindent=!,
           leftmargin=2em,
           labelindent=0pt,
           labelwidth=0pt
@@ -337,48 +262,48 @@
         }
         \setlist[pfcasesnonum,2]{
             before=\def\pfcasecounter@pmg{pfcasesnonumii},
+            labelindent=-1em,
         }
         \setlist[pfcasesnonum,3]{
             before=\def\pfcasecounter@pmg{pfcasesnonumiii},
+            labelindent=-1em,
         }
         \newlist{pfcasesnumbered}{enumerate}{3}
         \setlist[pfcasesnumbered]{
           align=left,
-          labelsep=!,
-          itemindent=-1em,
+          labelsep=0pt,
+          itemindent=!,
           leftmargin=2em,
           labelindent=0pt,
           labelwidth=0pt
         }
         \setlist[pfcasesnumbered,1]{
             before=\def\pfcasecounter@pmg{pfcasesnumberedi},
-          label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
+          label={{\pmg@casefont{Case}}~\arabic*},
           ref={\arabic*},
         }
         \setlist[pfcasesnumbered,2]{
             before=\def\pfcasecounter@pmg{pfcasesnumberedii},
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*},
           ref={\arabic{pfcasesnumberedi}\alph*},
+          labelindent=-1em,
         }
         \setlist[pfcasesnumbered,3]{
             before=\def\pfcasecounter@pmg{pfcasesnumberediii},
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
+          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
           ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+          labelindent=-1em,
         }
+        \def\@recthy@cases@labelindent{0pt}
         \newenvironment{pfcases*}{
-            \ProvideDocumentCommand{\case}{o}{
-                \IfNoValueTF{##1}{
-                    \def\thiscase{}%
-                }{
+            \def\@recthy@cases@labelindent{-1em}
+            \ProvideDocumentCommand{\case}{r[]}{
                     \def\thiscase{~##1}%
-                }
-                \item  \ltx@ifpackageloaded{cleveref}{%
+                \item~##1: %
+                \ltx@ifpackageloaded{cleveref}{%
                 \cref@constructprefix{pfcases}{\cref@result}%
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
-        }
-        \begin{pfcasesnonum}
-        }
-        {\end{pfcasesnonum}}
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
+        \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
 
         \newenvironment{pfcases}{
             \ProvideDocumentCommand{\case}{o}{
@@ -387,11 +312,12 @@
                 }{
                     \def\thiscase{~##1}%
                 }
-                \item \ltx@ifpackageloaded{cleveref}{%
-                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
-        }
-        \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
+                \item~##1: \linebreak[1]%
+                \ltx@ifpackageloaded{cleveref}{%
+                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
+                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
+        
+        \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
     \fi
 }
 
@@ -1882,7 +1808,79 @@
 % \ProcessOptionsX<\@recthy@family>
 \ProcessOptionsX
 
-
+    \ifrecthy@fix@typeset
+      %Defining \overbar
+      \let\save@mathaccent\mathaccent
+  \newcommand*\if@single[3]{%
+    \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
+    \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
+    \ifdim\ht0=\ht2 #3\else #2\fi
+    }
+  %The bar will be moved to the right by a half of \macc@kerna, which is computed by amsmath:
+  \newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
+  %If there's a superscript following the bar, then no negative kern may follow the bar;
+  %an additional {} makes sure that the superscript is high enough in this case:
+  \providecommand*\overbar{\relax}
+  \renewcommand*\overbar[1]{\@ifnextchar^{{\over@bar{#1}{0}}}{\over@bar{#1}{1}}}
+  %Use a separate algorithm for single symbols:
+  \newcommand*\over@bar[2]{\if@single{#1}{\over@bar@{#1}{#2}{1}}{\over@bar@{#1}{#2}{2}}}
+  \newcommand*\over@bar@[3]{%
+    \begingroup
+    \def\mathaccent##1##2{%
+  %Enable nesting of accents:
+      \let\mathaccent\save@mathaccent
+  %If there's more than a single symbol, use the first character instead (see below):
+      \if#32 \let\macc@nucleus\first@char \fi
+  %Determine the italic correction:
+      \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
+      \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
+      \dimen@\wd\tw@
+      \advance\dimen@-\wd\z@
+  %Now \dimen@ is the italic correction of the symbol.
+      \divide\dimen@ 3
+      \@tempdima\wd\tw@
+      \advance\@tempdima-\scriptspace
+  %Now \@tempdima is the width of the symbol.
+      \divide\@tempdima 10
+      \advance\dimen@-\@tempdima
+  %Now \dimen@ = (italic correction / 3) - (Breite / 10)
+      \ifdim\dimen@>\z@ \dimen@0pt\fi
+  %The bar will be shortened in the case \dimen@<0 !
+      \rel@kern{0.6}\kern-\dimen@
+      \if#31
+        \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
+        \advance\dimen@0.4\dimexpr\macc@kerna
+  %Place the combined final kern (-\dimen@) if it is >0 or if a superscript follows:
+        \let\final@kern#2%
+        \ifdim\dimen@<\z@ \let\final@kern1\fi
+        \if\final@kern1 \kern-\dimen@\fi
+      \else
+        \overline{\rel@kern{-0.6}\kern\dimen@#1}%
+      \fi
+    }%
+    \macc@depth\@ne
+    \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
+    \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
+    \macc@set@skewchar\relax
+    \let\mathaccentV\macc@nested@a
+  %The following initialises \macc@kerna and calls \mathaccent:
+    \if#31
+      \macc@nested@a\relax111{#1}%
+    \else
+  %If the argument consists of more than one symbol, and if the first token is
+  %a letter, use that letter for the computations:
+      \def\gobble@till@marker##1\endmarker{}%
+      \futurelet\first@char\gobble@till@marker#1\endmarker
+      \ifcat\noexpand\first@char A\else
+        \def\first@char{}%
+      \fi
+      \macc@nested@a\relax111{\first@char}%
+    \fi
+    \endgroup
+  }
+  \else
+      \@packinfo{Not loading Fix Typesetting}
+  \fi
 
 
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
