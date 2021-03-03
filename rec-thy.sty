@@ -574,7 +574,7 @@
         \def\@recthy@cases@labelindent{-1em}
         \ProvideDocumentCommand{\case}{r[]}{
                 \def\thiscase{~##1}%
-            \item~##1: %
+            \item~##1\textbf{:} %
             \ltx@ifpackageloaded{cleveref}{%
             \cref@constructprefix{pfcases}{\cref@result}%
             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
@@ -587,7 +587,7 @@
             }{
                 \def\thiscase{~##1}%
             }
-            \item~##1: \linebreak[1]%
+            \item~##1\textbf{:} \linebreak[1]%
             \ltx@ifpackageloaded{cleveref}{%
             \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
@@ -832,7 +832,7 @@
     \@packinfo{No math loading.}
 \else
     \@packinfo{math loading.}
-    \providecommand*{\eqdef}{\stackrel{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
+    \providecommand*{\eqdef}{\overset{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
     \providecommand*{\iffdef}{\stackrel{\text{\tiny def}}{\iff}}
     \ifdefined\aut
     \else
@@ -1005,7 +1005,7 @@
 
 
 
-\NewDocumentCommand{\@recthy@set}{mg}{\left \{ #1 \IfNoValueTF{#2}{}{\mid  #2} \right \}}
+\NewDocumentCommand{\@recthy@set}{m!G{}}{\left\{#1\ifthenelse{\isempty{#1}}{}{\mid #2}\right\}}
 
 % \def\@recthy@set#1{\def\@set@argi@pmg{#1}\@ifnextchar\bgroup\@setst@pmg\@setplain@pmg}
 % \newcommand*{\@setst@pmg}[1]{\ifthenelse{\isempty{#1}}{\@setplain@pmg}{\left \{ \@set@argi@pmg \middle | #1\right \}}}
@@ -1793,12 +1793,18 @@
     %\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
     %\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
 
-    \NewDocumentCommand{\recfnl@improved}{omm!g!d()}{{
+    \NewDocumentCommand{\recfnl@improved}{oD(){}m!G{#2}!g!d()}{{
+      \def\temp@pmg@arg{}
+      \IfValueTF{#5}{\ifthenelse{\isempty{#5}}{}{\def\temp@pmg@arg{; #5}}}{\IfValueTF{#6}{\ifthenelse{\isempty{#6}}{}{\def\temp@pmg@arg{; #6}}}}
+        \@recthy@recfnlSYM_{#3\IfValueT{#1}{, #1}}\ifthenelse{\isempty{#4}}{}{\!\left(#4\temp@pmg@arg \right)}
+    }}
+
+    \NewDocumentCommand{\recfnl@threeSix}{omm!g!d()}{{
       \def\temp@pmg@arg{}
       \IfValueTF{#4}{\ifthenelse{\isempty{#4}}{}{\def\temp@pmg@arg{; #4}}}{\IfValueTF{#5}{\ifthenelse{\isempty{#5}}{}{\def\temp@pmg@arg{; #5}}}}
         \@recthy@recfnlSYM_{#2\IfValueT{#1}{, #1}}\ifthenelse{\isempty{#3}}{}{\!\left(#3\temp@pmg@arg \right)}
     }}
-    \newcommand*{\recfnl@old}[4][]{\@recthy@recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,{#1}} }%
+    \newcommand*{\recfnl@threeFive}[4][]{\@recthy@recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,{#1}} }%
         \ifthenelse{\isempty{#4}}%
         {\ifthenelse{\isempty{#3}}%
             {}% No args then print no parents
@@ -1808,7 +1814,10 @@
     }}
     \let\recfnl=\recfnl@improved
     \appto{\recthy@rollback@threeSix}{
-      \let\recfnl=\recfnl@old
+      \let\recfnl=\recfnl@threeFive
+    }
+    \appto{\recthy@rollback@threeSeven}{
+      \let\recfnl=\recfnl@threeSix
     }
     \NewDocumentCommand{\recf}{od()md()}{
         \@recthy@recfSYM_{#3\IfNoValueTF{#1}{}{\ifthenelse{\isempty{#3}}{}{, }{#1}}}\IfNoValueTF{#2}{}{^{#2}}\IfNoValueTF{#4}{}{(#4)}
