@@ -42,22 +42,22 @@
 
 \AtBeginDocument{
 % \@ifundefined{hyperref}{\providecommand{\texorpdfstring}[2]{def}  }
-\ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
-\ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
-\ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
-\ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
-\ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
-% Undertilde doesn't exist in texlive so we remove the dependency and define it again.
-\ltx@ifpackageloaded{undertilde}{}{
-    \newlength\knuthian@fdfive
-    \def\mathpal@save#1{\let\was@math@style=#1\relax}
-    \def\utilde#1{\mathpalette\mathpal@save
-                  {\setbox124=\hbox{$\was@math@style#1$}%
-    \setbox125=\hbox{$\fam=3\global\knuthian@fdfive=\fontdimen5\font$}
-    \setbox125=\hbox{$\widetilde{\vrule height 0pt depth 0pt width \wd124}$}%
-                   \baselineskip=1pt\relax
-                   \vtop{\copy124\copy125\vskip -\knuthian@fdfive}}}
-    }
+  \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
+  \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
+  \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
+  \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
+  \ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
+  % Undertilde doesn't exist in texlive so we remove the dependency and define it again.
+  \ltx@ifpackageloaded{undertilde}{}{
+      \newlength\knuthian@fdfive
+      \def\mathpal@save#1{\let\was@math@style=#1\relax}
+      \def\utilde#1{\mathpalette\mathpal@save
+                    {\setbox124=\hbox{$\was@math@style#1$}%
+      \setbox125=\hbox{$\fam=3\global\knuthian@fdfive=\fontdimen5\font$}
+      \setbox125=\hbox{$\widetilde{\vrule height 0pt depth 0pt width \wd124}$}%
+                     \baselineskip=1pt\relax
+                     \vtop{\copy124\copy125\vskip -\knuthian@fdfive}}}
+      }
 }
 
 % \ifxetex  %workaround for bug...hopefully can dispense on later
@@ -192,84 +192,476 @@
 \DeclareOptionX{pfcasefont}[textsc]{\letcs{\pmg@casefont}{#1}}
 
 
-\AtEndOfPackage{
-\ifrecthy@nosubfun
-    \@packinfo{Not loading subfun defs.}
-\else
-    \@packinfo{Loading subfun defs.}
-    %DOCUMENT ME
-    \newcommand{\@pnrelbar}{%
-  \linethickness{\dimen2}%
-  \sbox\z@{$\m@th\prec$}%
-  \dimen@=1.1\ht\z@
-  \begin{picture}(\dimen@,.4ex)
-  \roundcap
-  \put(0,.2ex){\line(1,0){\dimen@}}
-  \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-  \end{picture}%
-}
-
-
-    \newcommand{\@snrelbar}{%
-  \linethickness{\dimen2}%
-  \sbox\z@{$\m@th\succ$}%
-  \dimen@=1.1\ht\z@
-  \begin{picture}(\dimen@,.4ex)
-  \roundcap
-  \put(0,.2ex){\line(1,0){\dimen@}}
-  \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
-  \end{picture}%
-}
-
-
-\newcommand{\@precneq}{\mathrel{\vcenter{\hbox{\text{\prec@neq}}}}}
-\newcommand{\prec@neq}{%
-  \dimen2=\f@size\dimexpr.04pt\relax
-  \oalign{%
-    \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
-    $\m@th\prec$\cr
-    \noalign{\kern-.5\dimen2}
-    \hidewidth\@pnrelbar\hidewidth\cr
-  }%
-}
-
-
-\newcommand{\@succneq}{\mathrel{\vcenter{\hbox{\text{\succ@neq}}}}}
-\newcommand{\succ@neq}{%
-  \dimen2=\f@size\dimexpr.04pt\relax
-  \oalign{%
-    \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
-    $\m@th\prec$\cr
-    \noalign{\kern-.5\dimen2}
-    \hidewidth\@snrelbar\hidewidth\cr
-  }%
-}
-
-
-    \NewDocumentCommand{\subfun}{o}{\prec\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\supfun}{o}{\succ\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\nsubfun}{o}{\nprec\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\nsupfun}{o}{\nsucc\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\subfuneq}{o}{\preceq\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\subfunneq}{o}{\@precneq\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\supfuneq}{o}{\succeq\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\supfunneq}{o}{\@succneq\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\nsubfuneq}{o}{\npreceq\IfNoValueTF{#1}{}{_{#1}}}
-    \NewDocumentCommand{\nsupfuneq}{o}{\nsucceq\IfNoValueTF{#1}{}{_{#1}}}
-\fi
-}
-
-
 
 \let\@recthy@reqscr\mathscr
 \DeclareOptionX{reqscr}[mathscr]{\letcs{\@recthy@reqscr}{#1}}
 % \DeclareOptionX{beamerreq}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
 
+
+
+
+
+
+
+
+% \newcommand*{\@recthy@REA}{\ensuremath{\text{REA}}}
+% \WithSuffix\def\@recthy@REA[#1]{#1-\@recthy@REA\relax}
+% \newcommand*{\@recthy@CEA}{\ensuremath{\text{CEA}}}
+% \WithSuffix\def\@recthy@CEA[#1]{#1-\@recthy@CEA\relax}
+
+\DeclareOptionX{reterms}{%
+    \let\@recthy@ce=\@recthy@re
+    \let\@recthy@computable=\@recthy@recursive
+    \let\@recthy@computablyEnumerable=\@recthy@recursivelyEnumerable
+    \let\@recthy@ComputablyEnumerable=\@recthy@RecursivelyEnumerable
+    } %Make all references to ce change to re
+
+    \DeclareOptionX{reaterms}{%
+        \let\@recthy@CEA=\@recthy@REA
+        }
+
+\DeclareOptionX{ceterms}{%
+    \let\@recthy@re=\@recthy@ce
+    \let\@recthy@recursive=\@recthy@computable
+    \let\@recthy@recursivelyEnumerable=\@recthy@computablyEnumerable
+    \let\@recthy@RecursivelyEnumerable=\@recthy@ComputablyEnumerable
+    } %Make all references to re change to ce
+
+\DeclareOptionX{ceaterms}{%
+            \let\@recthy@REA=\@recthy@CEA
+            }
+
+
+\DeclareOptionX{setdiffsym}{\edef\@recthy@setdiffSYM{\expandafter\noexpand\csname #1 \endcsname}}
+
+\DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
+\DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
+\DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
+
+
+\DeclareOptionX{recfnlsym}[@recthy@recfnlSYM@default]{\letcs{\@recthy@recfnlSYM}{#1}}
+\DeclareOptionX{recfsym}[@recthy@recfSYM@default]{\letcs{\@recthy@recfSYM}{#1}}
+\DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
+
+  \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
+  \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
+
+
+
+
+
+
+
+% \ProcessOptions*
+% \ProcessOptionsX<\@recthy@family>
+\ProcessOptionsX
+
+\ifrecthy@fix@typeset
+      %Defining \overbar
+      \let\save@mathaccent\mathaccent
+  \newcommand*\if@single[3]{%
+    \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
+    \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
+    \ifdim\ht0=\ht2 #3\else #2\fi
+    }
+  %The bar will be moved to the right by a half of \macc@kerna, which is computed by amsmath:
+  \newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
+  %If there's a superscript following the bar, then no negative kern may follow the bar;
+  %an additional {} makes sure that the superscript is high enough in this case:
+  \providecommand*\overbar{\relax}
+  \renewcommand*\overbar[1]{\@ifnextchar^{{\over@bar{#1}{0}}}{\over@bar{#1}{1}}}
+  %Use a separate algorithm for single symbols:
+  \newcommand*\over@bar[2]{\if@single{#1}{\over@bar@{#1}{#2}{1}}{\over@bar@{#1}{#2}{2}}}
+  \newcommand*\over@bar@[3]{%
+    \begingroup
+    \def\mathaccent##1##2{%
+  %Enable nesting of accents:
+      \let\mathaccent\save@mathaccent
+  %If there's more than a single symbol, use the first character instead (see below):
+      \if#32 \let\macc@nucleus\first@char \fi
+  %Determine the italic correction:
+      \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
+      \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
+      \dimen@\wd\tw@
+      \advance\dimen@-\wd\z@
+  %Now \dimen@ is the italic correction of the symbol.
+      \divide\dimen@ 3
+      \@tempdima\wd\tw@
+      \advance\@tempdima-\scriptspace
+  %Now \@tempdima is the width of the symbol.
+      \divide\@tempdima 10
+      \advance\dimen@-\@tempdima
+  %Now \dimen@ = (italic correction / 3) - (Breite / 10)
+      \ifdim\dimen@>\z@ \dimen@0pt\fi
+  %The bar will be shortened in the case \dimen@<0 !
+      \rel@kern{0.6}\kern-\dimen@
+      \if#31
+        \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
+        \advance\dimen@0.4\dimexpr\macc@kerna
+  %Place the combined final kern (-\dimen@) if it is >0 or if a superscript follows:
+        \let\final@kern#2%
+        \ifdim\dimen@<\z@ \let\final@kern1\fi
+        \if\final@kern1 \kern-\dimen@\fi
+      \else
+        \overline{\rel@kern{-0.6}\kern\dimen@#1}%
+      \fi
+    }%
+    \macc@depth\@ne
+    \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
+    \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
+    \macc@set@skewchar\relax
+    \let\mathaccentV\macc@nested@a
+  %The following initialises \macc@kerna and calls \mathaccent:
+    \if#31
+      \macc@nested@a\relax111{#1}%
+    \else
+  %If the argument consists of more than one symbol, and if the first token is
+  %a letter, use that letter for the computations:
+      \def\gobble@till@marker##1\endmarker{}%
+      \futurelet\first@char\gobble@till@marker#1\endmarker
+      \ifcat\noexpand\first@char A\else
+        \def\first@char{}%
+      \fi
+      \macc@nested@a\relax111{\first@char}%
+    \fi
+    \endgroup
+  }
+\else
+  \@packinfo{Not loading Fix Typesetting}
+\fi
+
+
+%Strings
+  \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
+  \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+  \let\@recthy@concatSYM\@recthy@concatSYM@Default
+  \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
+
+
+  \newcommand*{\@recthy@pair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
+  \newcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+  \newcommand*{\@recthy@code}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+
+  \appto{\recthy@rollback@threeSix}{
+    \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
+    \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+    % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+    \renewcommand*{\@recthy@code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
+    }
+\NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
+\NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
+
+\ifrecthy@nostrings
+    \@packinfo{No strings loading.}
+\else
+    \@packinfo{Strings loading.}
+    \appto{\recthy@rollback@threeSix}{\newcommand*{\closedn}[1]{{#1}^\blacktriangledown}}
+    \let\code=\@recthy@code
+    \let\str=\@recthy@str
+    \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
+    \newcommand*{\estr}{\EmptyStr}
+    \newcommand*{\decode}[2]{(#1)_{#2}}
+    \let\godelpair=\@recthy@pair
+    \let\gpair=\@recthy@pair
+    \newcommand*{\concat}{\@recthy@concatSYM}
+    \WithSuffix\def\concat[#1]{\concat\str{#1}}
+    \newcommand*{\strpred}[1]{{#1}^{-}}
+    \providecommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
+
+    \providecommand*{\incompat}{\incompat@recthy} %incompatible stringes FIX SPACING
+    \providecommand*{\incomp}{\incompat@recthy}
+    \providecommand*{\compat}{\compat@recthy}
+    \providecommand*{\nincompat}{\compat@recthy}
+    \providecommand*{\nincomp}{\compat@recthy}
+    % \newcommand*{\setcol}[2]{{#1}^{[#2]}}
+    \ExplSyntaxOn %thx stackexghance
+      \NewDocumentCommand \setcol {m m}
+      {
+        \bool_lazy_and:nnTF
+          { \int_compare_p:nNn { \tl_count:n {#1} } = 3 }
+          { \tl_if_head_eq_meaning_p:nN {#1} \setcol }
+          {
+            \pgerdes_setcol_special:nnnn #1 {#2}
+          }
+          {
+            \pgerdes_setcol_normal:nn {#1} {#2}
+          }
+      }
+      \cs_new:Npn \pgerdes_setcol_special:nnnn #1 #2 #3 #4
+      {
+        {#2} \sp { [#3] [#4] }
+      }
+      \cs_new:Npn \pgerdes_setcol_normal:nn #1 #2
+      {
+        {#1} \sp { [#2] }
+      }
+    \ExplSyntaxOff
+
+    \ifrecthy@nopair
+        \@packinfo{No redefining pair.}
+    \else
+        \@packinfo{pair=godelpair.}
+        \let\pair=\@recthy@pair
+    \fi
+\fi
+
+\ifrecthy@noprioritytrees
+    \@packinfo{Not loading Priority Tree Helper}
+\else
+    \@packinfo{Loading Priority Tree Helper.}
+    \providecommand{\PriorityTree}{\mathbb{T}}
+    \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
+    \providecommand{\leftof}{\mathbin{<_L}}
+    \providecommand{\leftofeq}{\mathbin{\leq_L}}
+    \providecommand{\rightof}{\mathbin{>_L}}
+    \providecommand{\rightofeq}{\mathbin{\geq_L}}
+    \providecommand{\nleftof}{\mathbin{\nless_L}}
+    \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
+    \providecommand{\nrightof}{\mathbin{\ngtr_L}}
+    \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
+    \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
+    \let\module=\PriorityTreeModule
+    \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
+\fi
+
+\ifrecthy@nosuppprioritytrees
+    \@packinfo{Not loading Priority Tree Supplemental Helper}
+\else
+    \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
+    \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
+    \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
+    \let\modof=\reqof
+    \providecommand{\ancestor}{\succ}
+    \providecommand{\descendant}{\prec}
+    \providecommand{\ancestoreq}{\succeq}
+    \providecommand{\descendanteq}{\preceq}
+    \let\ances=\ancestor
+    \let\anceseq=\ancestoreq
+    \let\desc=\descendant
+    \let\desceq=\descendanteq
+\fi
+
+
+\ifrecthy@nopfcases
+    \@packinfo{Not loading Proof Cases Helper}
+\else
+    \@packinfo{Loading Proof Cases Helper.}
+    \RequirePackage{enumitem}
+    % \appto{\recthy@rollback@threeSeven}{
+    %     \setlist[pfcasesnonum]{
+    %       label={\pmg@casefont{Case}}\protect\thiscase:~,
+    %       align=left,
+    %       labelsep=!,
+    %       itemindent=-1em,
+    %     }
+    %     \setlist[pfcasesnumbered]{
+    %       align=left,
+    %       labelsep=!,
+    %       itemindent=-1em,
+    %     }
+    %     \setlist[pfcasesnumbered,1]{
+    %       label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
+    %     }
+    %     \setlist[pfcasesnumbered,2]{
+    %       label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
+    %     }
+    %     \setlist[pfcasesnumbered,3]{
+    %       label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
+    %     }
+    %     \renewenvironment{pfcases*}{
+    %         \ProvideDocumentCommand{\case}{o}{
+    %             \IfNoValueTF{##1}{
+    %                 \def\thiscase{}%
+    %             }{
+    %                 \def\thiscase{~##1}%
+    %             }
+    %             \item  \ltx@ifpackageloaded{cleveref}{%
+    %             \cref@constructprefix{pfcases}{\cref@result}%
+    %             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
+    %     }
+    %     \begin{pfcasesnonum}
+    %     }
+    %     {\end{pfcasesnonum}}
+    %     \renewenvironment{pfcases}{
+    %         \ProvideDocumentCommand{\case}{o}{
+    %             \IfNoValueTF{##1}{
+    %                 \def\thiscase{}%
+    %             }{
+    %                 \def\thiscase{~##1}%
+    %             }
+    %             \item \ltx@ifpackageloaded{cleveref}{%
+    %             \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
+    %             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
+    %     }
+    %     \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
+    % }
+
+
+  \ltx@ifpackageloaded{cleveref}{
+    \crefformat{pfcasesnonumi}{#2case~#1#3}
+    \Crefformat{pfcasesnonumi}{#2Case~#1#3}
+    \crefformat{pfcasesnonumii}{#2subcase~#1#3}
+    \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
+    \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
+    \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
+    \crefformat{pfcasesnumberedi}{#2case~#1#3}
+    \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
+    \crefformat{pfcasesnumberedii}{#2case~#1#3}
+    \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
+    \crefformat{pfcasesnumberediii}{#2case~#1#3}
+    \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
+    }{}
+    \newlist{pfcasesnonum}{enumerate}{3}
+    \setlist[pfcasesnonum]{
+      label={\pmg@casefont{Case}},
+      align=left,
+      labelsep=0pt,
+      itemindent=!,
+      leftmargin=2em,
+      labelindent=0pt,
+      labelwidth=0pt
+    }
+    \setlist[pfcasesnonum,1]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumi},
+    }
+    \setlist[pfcasesnonum,2]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumii},
+    }
+    \setlist[pfcasesnonum,3]{
+        before=\def\pfcasecounter@pmg{pfcasesnonumiii},
+    }
+    \newlist{pfcasesnumbered}{enumerate}{3}
+    \setlist[pfcasesnumbered]{
+      align=left,
+      labelsep=0pt,
+      itemindent=!,
+      leftmargin=2em,
+      labelindent=0pt,
+      labelwidth=0pt
+    }
+    \setlist[pfcasesnumbered,1]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberedi},
+      label={{\pmg@casefont{Case}}~\arabic*},
+      ref={\arabic*},
+    }
+    \setlist[pfcasesnumbered,2]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberedii},
+      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*},
+      ref={\arabic{pfcasesnumberedi}\alph*},
+      labelindent=-1em,
+    }
+    \setlist[pfcasesnumbered,3]{
+        before=\def\pfcasecounter@pmg{pfcasesnumberediii},
+      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+      ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
+      labelindent=-1em,
+    }
+    \def\@recthy@cases@labelindent{0pt}
+    \newenvironment{pfcases*}{
+        \def\@recthy@cases@labelindent{-1em}
+        \ProvideDocumentCommand{\case}{r[]}{
+                \def\thiscase{~##1}%
+            \item~##1: %
+            \ltx@ifpackageloaded{cleveref}{%
+            \cref@constructprefix{pfcases}{\cref@result}%
+            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
+    \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
+
+    \newenvironment{pfcases}{
+        \ProvideDocumentCommand{\case}{o}{
+            \IfNoValueTF{##1}{
+                \def\thiscase{}%
+            }{
+                \def\thiscase{~##1}%
+            }
+            \item~##1: \linebreak[1]%
+            \ltx@ifpackageloaded{cleveref}{%
+            \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
+            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
+    
+    \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
+\fi
+
+
+\ifrecthy@nosubfun
+    \@packinfo{Not loading subfun defs.}
+\else
+    \@packinfo{Loading subfun defs.}
+    %DOCUMENT ME
+  \newcommand{\@pnrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\prec$}%
+    \dimen@=1.1\ht\z@
+    \begin{picture}(\dimen@,.4ex)
+    \roundcap
+    \put(0,.2ex){\line(1,0){\dimen@}}
+    \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
+    \end{picture}%
+  }
+
+
+  \newcommand{\@snrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\succ$}%
+    \dimen@=1.1\ht\z@
+    \begin{picture}(\dimen@,.4ex)
+    \roundcap
+    \put(0,.2ex){\line(1,0){\dimen@}}
+    \put(\dimexpr 0.5\dimen@-.2ex\relax,0){\line(1,1){.4ex}}
+    \end{picture}%
+  }
+
+
+  \newcommand{\@precneq}{\mathrel{\vcenter{\hbox{\text{\prec@neq}}}}}
+  \newcommand{\prec@neq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
+      $\m@th\prec$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@pnrelbar\hidewidth\cr
+    }%
+  }
+
+
+  \newcommand{\@succneq}{\mathrel{\vcenter{\hbox{\text{\succ@neq}}}}}
+  \newcommand{\succ@neq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
+      $\m@th\prec$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@snrelbar\hidewidth\cr
+    }%
+  }
+
+
+  \NewDocumentCommand{\subfun}{o}{\prec\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\supfun}{o}{\succ\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\nsubfun}{o}{\nprec\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\nsupfun}{o}{\nsucc\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\subfuneq}{o}{\preceq\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\subfunneq}{o}{\@precneq\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\supfuneq}{o}{\succeq\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\supfunneq}{o}{\@succneq\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\nsubfuneq}{o}{\npreceq\IfNoValueTF{#1}{}{_{#1}}}
+  \NewDocumentCommand{\nsupfuneq}{o}{\nsucceq\IfNoValueTF{#1}{}{_{#1}}}
+\fi
+
+\def\@recthy@ignorespacesandallparsatend{\ifhmode\unskip\fi
+\aftergroup\useignorespacesandallpars}
+\def\@recthy@useignorespacesandallpars#1\ignorespaces\fi{%
+#1\fi\ignorespacesandallpars}
+\def\@recthy@ignorespacesandallpars{%
+  \@ifnextchar\par
+    {\expandafter\ignorespacesandallpars\@gobble}%
+    {}%
+}
+
+
 \newcommand*{\@pmg@saveeqstate}{\let\@origif@fleqn@pmg=\if@fleqn \let\@origiftagsleft@pmg=\iftagsleft@}
 \newcommand*{\@pmg@restoreeqstate}{ \let\if@fleqn=\@origif@fleqn@pmg\let\iftagsleft@=\@origiftagsleft@pmg}
 
-
-\AtEndOfPackage{
 \ifrecthy@noreqhelper
     \@packinfo{Not loading requirement assist.}
 \else
@@ -373,68 +765,68 @@
 
 
 \fi
-}
 
 
-
-\AtEndOfPackage{
 \ifrecthy@nostructresets
     \@packinfo{Not loading r.e. set structs w/ containment.}
 \else
-    \@packinfo{Loading r.e. set structs w/ containment.}
-\let\@orig@setminus=\setminus
-\newcommand*{\promptdif}{\@orig@setminus_{\downarrow}}
-\let\setbefore=\promptdif
-\let\promptminus=\promptdif
-\let\promptsetminus=\promptdif
+  \@packinfo{Loading r.e. set structs w/ containment.}
+  \let\@orig@setminus=\setminus
+  \newcommand*{\promptdif}{\@orig@setminus_{\downarrow}}
+  \let\setbefore=\promptdif
+  \let\promptminus=\promptdif
+  \let\promptsetminus=\promptdif
 
-\newcommand*{\StrcE}{\ensuremath{\mathscr{E}}}
-\WithSuffix\def\StrcE*{\ensuremath{\mathscr{E}^{*}}}
-\let\strucE\StrcE
-\newcommand*{\StrcL}[1]{\mathscr{L}(#1)}
-\newcommand*{\StrcStarL}[1]{\mathscr{L}^{*}(#1)}
-\WithSuffix\def\StrcL*{\StrcStarL}
-\newcommand*{\splitof}{\sqsubset}
-\newcommand*{\splitby}{\sqsupset}
-\newcommand*{\StrcR}{\ensuremath{\mathcal{R}}}
-\newcommand*{\StrcD}{\ensuremath{\mathcal{D}}}
+  \newcommand*{\StrcE}{\ensuremath{\mathscr{E}}}
+  \WithSuffix\def\StrcE*{\ensuremath{\mathscr{E}^{*}}}
+  \let\strucE\StrcE
+  \newcommand*{\StrcL}[1]{\mathscr{L}(#1)}
+  \newcommand*{\StrcStarL}[1]{\mathscr{L}^{*}(#1)}
+  \WithSuffix\def\StrcL*{\StrcStarL}
+  \newcommand*{\splitof}{\sqsubset}
+  \newcommand*{\splitby}{\sqsupset}
+  \newcommand*{\StrcR}{\ensuremath{\mathcal{R}}}
+  \newcommand*{\StrcD}{\ensuremath{\mathcal{D}}}
 
 
 \fi
-}
 
-\AtEndOfPackage{
+
 \ifrecthy@nohyphenation
     \@packinfo{No hyphenation loading.}
 \else
 \hyphenation{ra-tion-als ra-tion-al Harrington Slaman Cholak Knight Gerdes Lange}
 \fi
-}
 
 
-\AtEndOfPackage{
+
+
 \ifrecthy@mrref
     \@packinfo{MRref helper loading}
-    \RequirePackage{hyperref}
-    \def\recthy@checkMR MR#1#2#3 #4\relax%
-      {\ifx#1M%
-         \ifx#2R\recthy@MR{#3}\else\recthy@MR{#1#2#3}\fi
-       \else
-         \recthy@MR{#1#2#3}%
-       \fi}
-    \def\MR#1{\recthy@checkMR MR#1 \relax}
-    \newcommand{\recthy@MR}[1]{\recthy@MRhref{#1}{MR #1}}
-    % % \MRhref is called by the amsart/book/proc definition of \MR.
-    \newcommand{\recthy@MRhref}[2]{\href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}}
+    \AtBeginDocument{
+      \@ifpackageloaded{hyperref}{
+        \def\recthy@checkMR MR#1#2#3 #4\relax%
+          {\ifx#1M%
+             \ifx#2R\recthy@MR{#3}\else\recthy@MR{#1#2#3}\fi
+           \else
+             \recthy@MR{#1#2#3}%
+           \fi}
+        \def\MR#1{\recthy@checkMR MR#1 \relax}
+        \newcommand{\recthy@MR}[1]{\recthy@MRhref{#1}{MR #1}}
+        % % \MRhref is called by the amsart/book/proc definition of \MR.
+        \newcommand{\recthy@MRhref}[2]{\href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}}
+      }
+    }
 \else
     \@packinfo{MRref helper not loading}
 \fi
-}
+
 
 % \newcommand*{\@recthy@abs}[1]{\lvert#1\rvert}
 \DeclarePairedDelimiter\@recthy@abs{\lvert}{\rvert}
 \newcommand*{\@recthy@ensuretext}[1]{\ensuremath{\text{#1}}}
-\AtEndOfPackage{
+
+
 \ifrecthy@nomath
     \@packinfo{No math loading.}
 \else
@@ -499,10 +891,10 @@
     \newcommand{\FinParFuncs}[2]{{#2}^{\subset_{< \infty} #1}}
     \recthy@strip{ensuretext}
 \fi
-}
 
 
-\AtEndOfPackage{
+
+
 \ifrecthy@nooperators
     \@packinfo{No operators loading.}
 \else
@@ -517,14 +909,13 @@
         \DeclareMathOperator{\xor}{xor}
     \fi
 \fi
-}
+
 
 \newcommand*{\@recthy@llangle}{\langle\!\langle}
 \newcommand*{\@recthy@rrangle}{\rangle\!\rangle}
 
 
 
-\AtEndOfPackage{
 \ifrecthy@nodelim
     \@packinfo{No delimiters loading.}
 \else
@@ -564,7 +955,7 @@
       \let\rrangle=\@recthy@rrangle
     \fi
 \fi
-}
+
 
 \newcommand*{\@recthy@re}{\@recthy@ensuretext{r.e.\ }}
 \newcommand*{\@recthy@ce}{\@recthy@ensuretext{c.e.\ }}
@@ -586,37 +977,7 @@
 \NewDocumentCommand{\REA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@REA}\IfValueTF{#1}{(#1)}{}}}
 \NewDocumentCommand{\CEA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@CEA}\IfValueTF{#1}{(#1)}{}}}
 
-% \newcommand*{\@recthy@REA}{\ensuremath{\text{REA}}}
-% \WithSuffix\def\@recthy@REA[#1]{#1-\@recthy@REA\relax}
-% \newcommand*{\@recthy@CEA}{\ensuremath{\text{CEA}}}
-% \WithSuffix\def\@recthy@CEA[#1]{#1-\@recthy@CEA\relax}
 
-\DeclareOptionX{reterms}{%
-    \let\@recthy@ce=\@recthy@re
-    \let\@recthy@computable=\@recthy@recursive
-    \let\@recthy@computablyEnumerable=\@recthy@recursivelyEnumerable
-    \let\@recthy@ComputablyEnumerable=\@recthy@RecursivelyEnumerable
-    } %Make all references to ce change to re
-
-    \DeclareOptionX{reaterms}{%
-        \let\@recthy@CEA=\@recthy@REA
-        }
-
-\DeclareOptionX{ceterms}{%
-    \let\@recthy@re=\@recthy@ce
-    \let\@recthy@recursive=\@recthy@computable
-    \let\@recthy@recursivelyEnumerable=\@recthy@computablyEnumerable
-    \let\@recthy@RecursivelyEnumerable=\@recthy@ComputablyEnumerable
-    } %Make all references to re change to ce
-
-\DeclareOptionX{ceaterms}{%
-            \let\@recthy@REA=\@recthy@CEA
-            }
-
-
-
-
-\AtEndOfPackage{
 \ifrecthy@nonames
     \@packinfo{No names loading.}
 \else
@@ -636,7 +997,7 @@
     \recthy@strip{RecursivelyEnumerable}
     \recthy@strip{ComputablyEnumerable}
 \fi
-}
+
 
 
 % Set stuff
@@ -666,13 +1027,12 @@
 \def\@recthy@setdiffSYM{-}
 \newcommand*{\@recthy@setdiff}{\mathbin{\@recthy@setdiffSYM}}
 
-\DeclareOptionX{setdiffsym}{\edef\@recthy@setdiffSYM{\expandafter\noexpand\csname #1 \endcsname}}
 
 
 
 
 
-\AtEndOfPackage{
+
 % \WithSuffix\def\@recthy@setcmp[#1]#2{#1\@recthy@setminus#2}
 \ifrecthy@nosets
     \@packinfo{No set cmds loading.}
@@ -707,9 +1067,9 @@
         % \DeclareMathOperator{\clos}{cl}
     % \fi
 \fi
-}
 
-\AtEndOfPackage{
+
+
 \ifrecthy@noquants
     \@packinfo{No quants loading.}
 \else
@@ -782,229 +1142,6 @@
     \providecommand*{\limplies}{\ensuremath{\rightarrow}}
 
 \fi
-}
-
-
-
-
-\AtEndOfPackage{
-\ifrecthy@nospaces
-    \@packinfo{No spaces loading.}
-\else
-    \@packinfo{Spaces loading.}
-
-    \providecommand*{\bstrs}{2^{<\omega}}
-    \providecommand*{\wstrs}{\omega^{<\omega}}
-
-    \providecommand*{\cantor}{2^{\omega}}
-    % \WithSuffix\def\cantor*{\left(2\union \diverge \right)^{\omega}}
-    \providecommand*{\baire}{\omega^{\omega}}
-    % \WithSuffix\def\baire*{\left(\omega \union \diverge \right)^{\omega}}
-    \providecommand*{\Baire}{\mathcal{N}}
-\fi
-}
-
-
-
-
-
-\AtEndOfPackage{
-\ifrecthy@notrees
-    \@packinfo{No trees loading.}
-\else
-    \@packinfo{Trees loading.}
-    \newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
-    \newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
-    \newcommand*{\hgt}[1]{\lVert #1 \rVert}
-\fi
-}
-
-
-
-
-
-% Tree arguments
-
-% \newcommand*{\truepath}[2][]{\Gamma_{#1}\ifthenelse{\isempty{#2}}{}{(#2)}}
-% \newcommand*{\Tpath}{\truepath}
-
-
-
-
-%re set relations
-\AtEndOfPackage{
-\ifrecthy@nosetrels
-    \@packinfo{No setrels loading.}
-\else
-    \@packinfo{setrels loading.}
-    \AtBeginDocument{
-        \providecommand*{\nsupset}{\not\supset@recthy@orig}
-        \providecommand*{\nsubset}{\not\subset@recthy@orig}
-        \let\nsubset@recthy@orig=\nsubset
-        \let\nsupset@recthy@orig=\nsupset
-        \let\subset@recthy@orig=\subset
-        \let\supset@recthy@orig=\supset
-        \let\subseteq@recthy@orig=\subseteq
-        \let\supseteq@recthy@orig=\supseteq
-        \let\subsetneq@recthy@orig=\subsetneq
-        \let\supsetneq@recthy@orig=\supsetneq
-        \newcommand*{\subset@recthy}{\subset@recthy@orig}
-        \newcommand*{\supset@recthy}{\supset@recthy@orig}
-        \newcommand*{\subseteq@recthy}{\subseteq@recthy@orig}
-        \newcommand*{\supseteq@recthy}{\supseteq@recthy@orig}
-        \newcommand*{\nsubset@recthy}{\nsubset@recthy@orig}
-        \newcommand*{\nsupset@recthy}{\nsupset@recthy@orig}
-        \newcommand*{\nsubseteq@recthy}{\nsubseteq@recthy@orig}
-        \newcommand*{\nsupseteq@recthy}{\nsupseteq@recthy@orig}
-        \WithSuffix\def\subset@recthy*{\subset@recthy@orig^{*}}
-        \WithSuffix\def\supset@recthy*{\supset@recthy@orig^{*}}
-        \WithSuffix\def\subseteq@recthy*{\subseteq@recthy@orig^{*}}
-        \WithSuffix\def\supseteq@recthy*{\supseteq@recthy@orig^{*}}
-        \WithSuffix\def\subsetneq@recthy*{\subsetneq@recthy@orig^{*}}
-        \WithSuffix\def\supsetneq@recthy*{\supsetneq@recthy@orig^{*}}
-        \WithSuffix\def\nsubset@recthy*{\nsubset^{*}}
-        \WithSuffix\def\nsupset@recthy*{\nsupset^{*}}
-        \WithSuffix\def\nsubseteq@recthy*{\nsubseteq^{*}}
-        \WithSuffix\def\nsupseteq@recthy*{\nsupseteq^{*}}
-        \let\subset=\subset@recthy
-        \let\supset=\supset@recthy
-        \let\subseteq=\subseteq@recthy
-        \let\supseteq=\supseteq@recthy
-        \let\subsetneq=\subsetneq@recthy
-        \let\supsetneq=\supsetneq@recthy
-        \let\nsubset=\nsubset@recthy
-        \let\nsupset=\nsupset@recthy
-        \let\nsubseteq=\nsubseteq@recthy
-        \let\nsupseteq=\nsupseteq@recthy
-
-
-        \newcommand*{\eq}{=}
-        \WithSuffix\def\eq*{=^{*}}
-        \newcommand*{\eqae}{=^{*}}
-            \newcommand*{\neqae}{\neq^{*}}
-        \WithSuffix\def\neq*{\neq^{*}}
-
-        \newcommand*{\infsubset}{\subset_{\infty}}
-        \WithSuffix\def\infsubset*{\infsubset^{*}}
-        \let\subsetnaeq=\infsubset
-        \newcommand*{\infsupset}{\supset_{\infty}}
-        \WithSuffix\def\infsupset*{\infsupset^{*}}
-        \let\supsetnaeq=\infsupset
-        \newcommand*{\majsubset}{\subset_{m}}
-        \newcommand*{\majsupset}{\supset_{m}}
-    }
-\fi
-}
-
-
-
-
-
-
-
-
-
-
-
-%%% ORdinal notations
-% constructive/recursive ordinals
-
-\AtEndOfPackage{
-\ifrecthy@noordinalnotations
-    \@packinfo{No ordinal notations loading.}
-\else
-    \@packinfo{ordinal notations loading.}
-
-\providecommand*{\wck}{\ensuremath{\omega^{\mathrm{CK}}_1}}
-  % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
-    \newcommand*{\ordzero}{\ensuremath{0}}
-  \def\kleeneOSYM{\mathcal{O}}
-   \NewDocumentCommand{\kleeneO}{sD(){}oD(){}}{{
-       \kleeneOSYM^{#2#4}_{%
-            \IfNoValueTF{#1}{%
-                \IfNoValueTF{#3}{}{%
-                    \abs{#3}}% 
-                }%
-                {%
-                    1%
-                    \IfNoValueTF{#3}{}{%
-                        , \abs{#3}
-                    }%
-                }%
-        }%
-    }}
-    % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
-    % \newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
-    % ^{\@PMG@parenarg}%
-    % \fi%
-    % \ifdefined\@PMG@braketarg
-    % _{\abs{\@PMG@braketarg}}%
-    % \fi}
-    % \WithSuffix\def\@kleeneObody(#1){\def\@PMG@parenarg{#1}\@kleeneObody}
-    % \WithSuffix\def\@kleeneObody[#1]{\def\@PMG@braketarg{#1}\@kleeneObody}
-    % \WithSuffix\def\@kleeneObody*{\def\kleeneOSYM{\mathcal{O}}\@kleeneObody}
-
-% \newcommand*{\kleeneObelow}[2][]{\kleeneOSYM_{<#2\ifthenelse{\isempty{#1}}{}{, #1}}}
-% \let\kleeneOless\kleeneObelow
-
-    \newcommand*{\kleeneOuniq}{\kleeneO*}
-    \let\ordNotations=\kleeneO
-    \let\uniqOrdNotations=\kleeneOuniq
-    \newcommand*{\kleeneNum}[1]{{#1}_{\kleeneO}}
-    \newcommand*{\kleeneZero}{\kleeneNum{0}}
-    \newcommand*{\kleeneOne}{\kleeneNum{1}}
-    \NewDocumentCommand{\kleeneless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \let\kleenel=\kleeneless
-    \NewDocumentCommand{\kleeneleq}{o}{\leq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \NewDocumentCommand{\kleenenless}{o}{\nless_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \let\kleenenl=\kleenenless
-    \NewDocumentCommand{\kleenenleq}{o}{\nleq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \NewDocumentCommand{\kleenegtr}{o}{>_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \let\kleeneg=\kleenegtr
-    \NewDocumentCommand{\kleenegeq}{o}{\geq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \NewDocumentCommand{\kleenengtr}{o}{\ngtr_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \let\kleeneng=\kleenengtr
-    \NewDocumentCommand{\kleenengeq}{o}{\ngeq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
-    \newcommand*{\kleenePlus}{\mathbin{+_{\kleeneO}}}
-    \newcommand*{\kleeneMul}{\cdot_{\kleeneO}}
-    \newcommand*{\kleenehgt}[1]{\lVert #1\rVert_{\kleeneO}}
-    \let\kleeneHgt=\kleenehgt
-    % \let\hgtO=\kleenehgt
-    \newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
-    \newcommand*{\kleenepred}[1]{{#1}^{-}}
-
-\fi
-}
-
-
-
-
-% \newcommand*{\axiom}{2}{#1}
-%alpha REA stuff
-% \newcommand*{\alphaREA}[1][\alpha]{\ensuremath{ #1 \text{-REA}} }
-
-
-\newcommand*{\@PMG@VdashStar}{{\Vdash\smash{\mkern-12mu\raise4\p@\hbox{\text{\tiny*}}}\mkern2mu}}
-
-% Forcing
-\AtEndOfPackage{
-\ifrecthy@noforcing
-    \@packinfo{No forcing loading.}
-\else
-    \@packinfo{forcing loading.}
-    \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\def\@PMG@curfrcsym{\Vdash}\@forcesBody}
-    \newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
-    \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
-    \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
-    \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
-
-    % \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
-    % \newcommand{\forces}{\optparams{\forces@}{[][]}%
-    % }
-    \providecommand*{\frc}{\forces}
-\fi
-}
-
 
 %%%%%%%%% Formula Classes
 
@@ -1015,15 +1152,13 @@
 \let\@recthy@CSigma=\@recthy@CSigma@default
 \let\@recthy@CPi=\@recthy@CPi@default
 
-\DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
-\DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
-\DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
+
 
 % \DeclareOptionX<\@recthy@family>{cdeltasym}[]{\def\@recthy@CDelta{#1}}
 % \DeclareOptionX<\@recthy@family>{csigmasym}[]{\def\@recthy@CSigma{#1}}
 % \DeclareOptionX<\@recthy@family>{cpisym}[]{\def\@recthy@CPi{#1}}
 
-\AtEndOfPackage{
+
 \ifrecthy@nosyntax
     \@packinfo{No syntax loading.}
 \else
@@ -1410,7 +1545,218 @@
 
 
 \fi
-}
+
+
+
+
+
+\ifrecthy@nospaces
+    \@packinfo{No spaces loading.}
+\else
+    \@packinfo{Spaces loading.}
+
+    \providecommand*{\bstrs}{2^{<\omega}}
+    \providecommand*{\wstrs}{\omega^{<\omega}}
+
+    \providecommand*{\cantor}{2^{\omega}}
+    % \WithSuffix\def\cantor*{\left(2\union \diverge \right)^{\omega}}
+    \providecommand*{\baire}{\omega^{\omega}}
+    % \WithSuffix\def\baire*{\left(\omega \union \diverge \right)^{\omega}}
+    \providecommand*{\Baire}{\mathcal{N}}
+\fi
+
+
+
+
+
+
+
+\ifrecthy@notrees
+    \@packinfo{No trees loading.}
+\else
+    \@packinfo{Trees loading.}
+    \newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
+    \newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
+    \newcommand*{\hgt}[1]{\lVert #1 \rVert}
+\fi
+
+
+
+
+
+
+
+%re set relations
+\ifrecthy@nosetrels
+    \@packinfo{No setrels loading.}
+\else
+    \@packinfo{setrels loading.}
+    \AtBeginDocument{
+        \providecommand*{\nsupset}{\not\supset@recthy@orig}
+        \providecommand*{\nsubset}{\not\subset@recthy@orig}
+        \let\nsubset@recthy@orig=\nsubset
+        \let\nsupset@recthy@orig=\nsupset
+        \let\subset@recthy@orig=\subset
+        \let\supset@recthy@orig=\supset
+        \let\subseteq@recthy@orig=\subseteq
+        \let\supseteq@recthy@orig=\supseteq
+        \let\subsetneq@recthy@orig=\subsetneq
+        \let\supsetneq@recthy@orig=\supsetneq
+    }
+        \newcommand*{\subset@recthy}{\subset@recthy@orig}
+        \newcommand*{\supset@recthy}{\supset@recthy@orig}
+        \newcommand*{\subseteq@recthy}{\subseteq@recthy@orig}
+        \newcommand*{\supseteq@recthy}{\supseteq@recthy@orig}
+        \newcommand*{\nsubset@recthy}{\nsubset@recthy@orig}
+        \newcommand*{\nsupset@recthy}{\nsupset@recthy@orig}
+        \newcommand*{\nsubseteq@recthy}{\nsubseteq@recthy@orig}
+        \newcommand*{\nsupseteq@recthy}{\nsupseteq@recthy@orig}
+        \WithSuffix\def\subset@recthy*{\subset@recthy@orig^{*}}
+        \WithSuffix\def\supset@recthy*{\supset@recthy@orig^{*}}
+        \WithSuffix\def\subseteq@recthy*{\subseteq@recthy@orig^{*}}
+        \WithSuffix\def\supseteq@recthy*{\supseteq@recthy@orig^{*}}
+        \WithSuffix\def\subsetneq@recthy*{\subsetneq@recthy@orig^{*}}
+        \WithSuffix\def\supsetneq@recthy*{\supsetneq@recthy@orig^{*}}
+        \WithSuffix\def\nsubset@recthy*{\nsubset^{*}}
+        \WithSuffix\def\nsupset@recthy*{\nsupset^{*}}
+        \WithSuffix\def\nsubseteq@recthy*{\nsubseteq^{*}}
+        \WithSuffix\def\nsupseteq@recthy*{\nsupseteq^{*}}
+        \AtBeginDocument{
+          \let\subset=\subset@recthy
+          \let\supset=\supset@recthy
+          \let\subseteq=\subseteq@recthy
+          \let\supseteq=\supseteq@recthy
+          \let\subsetneq=\subsetneq@recthy
+          \let\supsetneq=\supsetneq@recthy
+          \let\nsubset=\nsubset@recthy
+          \let\nsupset=\nsupset@recthy
+          \let\nsubseteq=\nsubseteq@recthy
+          \let\nsupseteq=\nsupseteq@recthy
+        }
+
+        \newcommand*{\eq}{=}
+        \WithSuffix\def\eq*{=^{*}}
+        \newcommand*{\eqae}{=^{*}}
+            \newcommand*{\neqae}{\neq^{*}}
+        \WithSuffix\def\neq*{\neq^{*}}
+
+        \newcommand*{\infsubset}{\subset_{\infty}}
+        \WithSuffix\def\infsubset*{\infsubset^{*}}
+        \let\subsetnaeq=\infsubset
+        \newcommand*{\infsupset}{\supset_{\infty}}
+        \WithSuffix\def\infsupset*{\infsupset^{*}}
+        \let\supsetnaeq=\infsupset
+        \newcommand*{\majsubset}{\subset_{m}}
+        \newcommand*{\majsupset}{\supset_{m}}
+\fi
+
+
+
+
+
+
+
+
+
+
+
+
+%%% ORdinal notations
+% constructive/recursive ordinals
+
+\ifrecthy@noordinalnotations
+    \@packinfo{No ordinal notations loading.}
+\else
+    \@packinfo{ordinal notations loading.}
+
+\providecommand*{\wck}{\ensuremath{\omega^{\mathrm{CK}}_1}}
+  % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
+    \newcommand*{\ordzero}{\ensuremath{0}}
+  \def\kleeneOSYM{\mathcal{O}}
+   \NewDocumentCommand{\kleeneO}{sD(){}oD(){}}{{
+       \kleeneOSYM^{#2#4}_{%
+            \IfNoValueTF{#1}{%
+                \IfNoValueTF{#3}{}{%
+                    \abs{#3}}% 
+                }%
+                {%
+                    1%
+                    \IfNoValueTF{#3}{}{%
+                        , \abs{#3}
+                    }%
+                }%
+        }%
+    }}
+    % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
+    % \newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
+    % ^{\@PMG@parenarg}%
+    % \fi%
+    % \ifdefined\@PMG@braketarg
+    % _{\abs{\@PMG@braketarg}}%
+    % \fi}
+    % \WithSuffix\def\@kleeneObody(#1){\def\@PMG@parenarg{#1}\@kleeneObody}
+    % \WithSuffix\def\@kleeneObody[#1]{\def\@PMG@braketarg{#1}\@kleeneObody}
+    % \WithSuffix\def\@kleeneObody*{\def\kleeneOSYM{\mathcal{O}}\@kleeneObody}
+
+% \newcommand*{\kleeneObelow}[2][]{\kleeneOSYM_{<#2\ifthenelse{\isempty{#1}}{}{, #1}}}
+% \let\kleeneOless\kleeneObelow
+
+    \newcommand*{\kleeneOuniq}{\kleeneO*}
+    \let\ordNotations=\kleeneO
+    \let\uniqOrdNotations=\kleeneOuniq
+    \newcommand*{\kleeneNum}[1]{{#1}_{\kleeneO}}
+    \newcommand*{\kleeneZero}{\kleeneNum{0}}
+    \newcommand*{\kleeneOne}{\kleeneNum{1}}
+    \NewDocumentCommand{\kleeneless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\kleenel=\kleeneless
+    \NewDocumentCommand{\kleeneleq}{o}{\leq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\kleenenless}{o}{\nless_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\kleenenl=\kleenenless
+    \NewDocumentCommand{\kleenenleq}{o}{\nleq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\kleenegtr}{o}{>_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\kleeneg=\kleenegtr
+    \NewDocumentCommand{\kleenegeq}{o}{\geq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\kleenengtr}{o}{\ngtr_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\kleeneng=\kleenengtr
+    \NewDocumentCommand{\kleenengeq}{o}{\ngeq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \newcommand*{\kleenePlus}{\mathbin{+_{\kleeneO}}}
+    \newcommand*{\kleeneMul}{\cdot_{\kleeneO}}
+    \newcommand*{\kleenehgt}[1]{\lVert #1\rVert_{\kleeneO}}
+    \let\kleeneHgt=\kleenehgt
+    % \let\hgtO=\kleenehgt
+    \newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
+    \newcommand*{\kleenepred}[1]{{#1}^{-}}
+
+\fi
+
+
+
+
+
+% \newcommand*{\axiom}{2}{#1}
+%alpha REA stuff
+% \newcommand*{\alphaREA}[1][\alpha]{\ensuremath{ #1 \text{-REA}} }
+
+
+\newcommand*{\@PMG@VdashStar}{{\Vdash\smash{\mkern-12mu\raise4\p@\hbox{\text{\tiny*}}}\mkern2mu}}
+
+% Forcing
+\ifrecthy@noforcing
+    \@packinfo{No forcing loading.}
+\else
+    \@packinfo{forcing loading.}
+    \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\def\@PMG@curfrcsym{\Vdash}\@forcesBody}
+    \newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
+    \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
+    \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
+    \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
+
+    % \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
+    % \newcommand{\forces}{\optparams{\forces@}{[][]}%
+    % }
+    \providecommand*{\frc}{\forces}
+\fi
+
 
 
 \def\@recthy@recfSYM@default{\phi}
@@ -1420,13 +1766,9 @@
 \def\@recthy@useSYM@default{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}}
 \let\@recthy@useSYM=\@recthy@useSYM@default
 %%%ABREVIATIONS
-\DeclareOptionX{recfnlsym}[@recthy@recfnlSYM@default]{\letcs{\@recthy@recfnlSYM}{#1}}
-\DeclareOptionX{recfsym}[@recthy@recfSYM@default]{\letcs{\@recthy@recfSYM}{#1}}
-\DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
 
 
 %Degree Classes
-\AtEndOfPackage{
 \ifrecthy@nodegclasses
     \@packinfo{No degree classes loading.}
 \else
@@ -1435,9 +1777,9 @@
     \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
     \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
 \fi
-}
 
-\AtEndOfPackage{
+
+
 \ifrecthy@nocomputations
     \@packinfo{No computations loading.}
 \else
@@ -1650,341 +1992,5 @@
     \newcommand*{\ttless}{<_{\@recthy@ttSYM}}
     \newcommand*{\ttnleq}{\nleq_{\@recthy@ttSYM}}
     \newcommand*{\ttngeq}{\ngeq_{\@recthy@ttSYM}}
-\fi
-
-}
-
-
-
-
-% \ProcessOptions*
-% \ProcessOptionsX<\@recthy@family>
-\ProcessOptionsX\relax
-
-\ifrecthy@fix@typeset
-      %Defining \overbar
-      \let\save@mathaccent\mathaccent
-  \newcommand*\if@single[3]{%
-    \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
-    \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
-    \ifdim\ht0=\ht2 #3\else #2\fi
-    }
-  %The bar will be moved to the right by a half of \macc@kerna, which is computed by amsmath:
-  \newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
-  %If there's a superscript following the bar, then no negative kern may follow the bar;
-  %an additional {} makes sure that the superscript is high enough in this case:
-  \providecommand*\overbar{\relax}
-  \renewcommand*\overbar[1]{\@ifnextchar^{{\over@bar{#1}{0}}}{\over@bar{#1}{1}}}
-  %Use a separate algorithm for single symbols:
-  \newcommand*\over@bar[2]{\if@single{#1}{\over@bar@{#1}{#2}{1}}{\over@bar@{#1}{#2}{2}}}
-  \newcommand*\over@bar@[3]{%
-    \begingroup
-    \def\mathaccent##1##2{%
-  %Enable nesting of accents:
-      \let\mathaccent\save@mathaccent
-  %If there's more than a single symbol, use the first character instead (see below):
-      \if#32 \let\macc@nucleus\first@char \fi
-  %Determine the italic correction:
-      \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
-      \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
-      \dimen@\wd\tw@
-      \advance\dimen@-\wd\z@
-  %Now \dimen@ is the italic correction of the symbol.
-      \divide\dimen@ 3
-      \@tempdima\wd\tw@
-      \advance\@tempdima-\scriptspace
-  %Now \@tempdima is the width of the symbol.
-      \divide\@tempdima 10
-      \advance\dimen@-\@tempdima
-  %Now \dimen@ = (italic correction / 3) - (Breite / 10)
-      \ifdim\dimen@>\z@ \dimen@0pt\fi
-  %The bar will be shortened in the case \dimen@<0 !
-      \rel@kern{0.6}\kern-\dimen@
-      \if#31
-        \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
-        \advance\dimen@0.4\dimexpr\macc@kerna
-  %Place the combined final kern (-\dimen@) if it is >0 or if a superscript follows:
-        \let\final@kern#2%
-        \ifdim\dimen@<\z@ \let\final@kern1\fi
-        \if\final@kern1 \kern-\dimen@\fi
-      \else
-        \overline{\rel@kern{-0.6}\kern\dimen@#1}%
-      \fi
-    }%
-    \macc@depth\@ne
-    \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
-    \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
-    \macc@set@skewchar\relax
-    \let\mathaccentV\macc@nested@a
-  %The following initialises \macc@kerna and calls \mathaccent:
-    \if#31
-      \macc@nested@a\relax111{#1}%
-    \else
-  %If the argument consists of more than one symbol, and if the first token is
-  %a letter, use that letter for the computations:
-      \def\gobble@till@marker##1\endmarker{}%
-      \futurelet\first@char\gobble@till@marker#1\endmarker
-      \ifcat\noexpand\first@char A\else
-        \def\first@char{}%
-      \fi
-      \macc@nested@a\relax111{\first@char}%
-    \fi
-    \endgroup
-  }
-\else
-  \@packinfo{Not loading Fix Typesetting}
-\fi
-
-
-%Strings
-  \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
-  \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-  \let\@recthy@concatSYM\@recthy@concatSYM@Default
-  \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
-
-  \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
-  \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
-  \newcommand*{\@recthy@pair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
-  \newcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-  \newcommand*{\@recthy@code}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-
-  \appto{\recthy@rollback@threeSix}{
-    \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
-    \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-    % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-    \renewcommand*{\@recthy@code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
-    }
-\NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
-\NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
-
-\ifrecthy@nostrings
-    \@packinfo{No strings loading.}
-\else
-    \@packinfo{Strings loading.}
-    \appto{\recthy@rollback@threeSix}{\newcommand*{\closedn}[1]{{#1}^\blacktriangledown}}
-    \let\code=\@recthy@code
-    \let\str=\@recthy@str
-    \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
-    \newcommand*{\estr}{\EmptyStr}
-    \newcommand*{\decode}[2]{(#1)_{#2}}
-    \let\godelpair=\@recthy@pair
-    \let\gpair=\@recthy@pair
-    \newcommand*{\concat}{\@recthy@concatSYM}
-    \WithSuffix\def\concat[#1]{\concat\str{#1}}
-    \newcommand*{\strpred}[1]{{#1}^{-}}
-    \providecommand*{\lh}[2][]{\@recthy@abs{#2}_{#1}} %% Gives length of a string
-
-    \providecommand*{\incompat}{\incompat@recthy} %incompatible stringes FIX SPACING
-    \providecommand*{\incomp}{\incompat@recthy}
-    \providecommand*{\compat}{\compat@recthy}
-    \providecommand*{\nincompat}{\compat@recthy}
-    \providecommand*{\nincomp}{\compat@recthy}
-    % \newcommand*{\setcol}[2]{{#1}^{[#2]}}
-    \ExplSyntaxOn %thx stackexghance
-      \NewDocumentCommand \setcol {m m}
-      {
-        \bool_lazy_and:nnTF
-          { \int_compare_p:nNn { \tl_count:n {#1} } = 3 }
-          { \tl_if_head_eq_meaning_p:nN {#1} \setcol }
-          {
-            \pgerdes_setcol_special:nnnn #1 {#2}
-          }
-          {
-            \pgerdes_setcol_normal:nn {#1} {#2}
-          }
-      }
-      \cs_new:Npn \pgerdes_setcol_special:nnnn #1 #2 #3 #4
-      {
-        {#2} \sp { [#3] [#4] }
-      }
-      \cs_new:Npn \pgerdes_setcol_normal:nn #1 #2
-      {
-        {#1} \sp { [#2] }
-      }
-    \ExplSyntaxOff
-
-    \ifrecthy@nopair
-        \@packinfo{No redefining pair.}
-    \else
-        \@packinfo{pair=godelpair.}
-        \let\pair=\@recthy@pair
-    \fi
-\fi
-
-\ifrecthy@noprioritytrees
-    \@packinfo{Not loading Priority Tree Helper}
-\else
-    \@packinfo{Loading Priority Tree Helper.}
-    \providecommand{\PriorityTree}{\mathbb{T}}
-    \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
-    \providecommand{\leftof}{\mathbin{<_L}}
-    \providecommand{\leftofeq}{\mathbin{\leq_L}}
-    \providecommand{\rightof}{\mathbin{>_L}}
-    \providecommand{\rightofeq}{\mathbin{\geq_L}}
-    \providecommand{\nleftof}{\mathbin{\nless_L}}
-    \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
-    \providecommand{\nrightof}{\mathbin{\ngtr_L}}
-    \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
-    \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
-    \let\module=\PriorityTreeModule
-    \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
-\fi
-
-\ifrecthy@nosuppprioritytrees
-    \@packinfo{Not loading Priority Tree Supplemental Helper}
-\else
-    \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
-    \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
-    \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
-    \let\modof=\reqof
-    \providecommand{\ancestor}{\succ}
-    \providecommand{\descendant}{\prec}
-    \providecommand{\ancestoreq}{\succeq}
-    \providecommand{\descendanteq}{\preceq}
-    \let\ances=\ancestor
-    \let\anceseq=\ancestoreq
-    \let\desc=\descendant
-    \let\desceq=\descendanteq
-\fi
-
-
-\ifrecthy@nopfcases
-    \@packinfo{Not loading Proof Cases Helper}
-\else
-    \@packinfo{Loading Proof Cases Helper.}
-    \RequirePackage{enumitem}
-    \appto{\recthy@rollback@threeSeven}{
-        \setlist[pfcasesnonum]{
-          label={\pmg@casefont{Case}}\protect\thiscase:~,
-          align=left,
-          labelsep=!,
-          itemindent=-1em,
-        }
-        \setlist[pfcasesnumbered]{
-          align=left,
-          labelsep=!,
-          itemindent=-1em,
-        }
-        \setlist[pfcasesnumbered,1]{
-          label={{\pmg@casefont{Case}}~\arabic*\protect\thiscase:~},
-        }
-        \setlist[pfcasesnumbered,2]{
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*:\protect\thiscase.~},
-        }
-        \setlist[pfcasesnumbered,3]{
-          label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*:\protect\thiscase.~},
-        }
-        \renewenvironment{pfcases*}{
-            \ProvideDocumentCommand{\case}{o}{
-                \IfNoValueTF{##1}{
-                    \def\thiscase{}%
-                }{
-                    \def\thiscase{~##1}%
-                }
-                \item  \ltx@ifpackageloaded{cleveref}{%
-                \cref@constructprefix{pfcases}{\cref@result}%
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}%
-        }
-        \begin{pfcasesnonum}
-        }
-        {\end{pfcasesnonum}}
-        \renewenvironment{pfcases}{
-            \ProvideDocumentCommand{\case}{o}{
-                \IfNoValueTF{##1}{
-                    \def\thiscase{}%
-                }{
-                    \def\thiscase{~##1}%
-                }
-                \item \ltx@ifpackageloaded{cleveref}{%
-                \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}
-                \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result] \csname the\pfcasecounter@pmg \endcsname}}{}%
-        }
-        \begin{pfcasesnumbered}}{\end{pfcasesnumbered}}
-    }
-
-
-  \ltx@ifpackageloaded{cleveref}{
-    \crefformat{pfcasesnonumi}{#2case~#1#3}
-    \Crefformat{pfcasesnonumi}{#2Case~#1#3}
-    \crefformat{pfcasesnonumii}{#2subcase~#1#3}
-    \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
-    \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
-    \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
-    \crefformat{pfcasesnumberedi}{#2case~#1#3}
-    \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
-    \crefformat{pfcasesnumberedii}{#2case~#1#3}
-    \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
-    \crefformat{pfcasesnumberediii}{#2case~#1#3}
-    \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
-    }{}
-    \newlist{pfcasesnonum}{enumerate}{3}
-    \setlist[pfcasesnonum]{
-      label={\pmg@casefont{Case}},
-      align=left,
-      labelsep=0pt,
-      itemindent=!,
-      leftmargin=2em,
-      labelindent=0pt,
-      labelwidth=0pt
-    }
-    \setlist[pfcasesnonum,1]{
-        before=\def\pfcasecounter@pmg{pfcasesnonumi},
-    }
-    \setlist[pfcasesnonum,2]{
-        before=\def\pfcasecounter@pmg{pfcasesnonumii},
-    }
-    \setlist[pfcasesnonum,3]{
-        before=\def\pfcasecounter@pmg{pfcasesnonumiii},
-    }
-    \newlist{pfcasesnumbered}{enumerate}{3}
-    \setlist[pfcasesnumbered]{
-      align=left,
-      labelsep=0pt,
-      itemindent=!,
-      leftmargin=2em,
-      labelindent=0pt,
-      labelwidth=0pt
-    }
-    \setlist[pfcasesnumbered,1]{
-        before=\def\pfcasecounter@pmg{pfcasesnumberedi},
-      label={{\pmg@casefont{Case}}~\arabic*},
-      ref={\arabic*},
-    }
-    \setlist[pfcasesnumbered,2]{
-        before=\def\pfcasecounter@pmg{pfcasesnumberedii},
-      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph*},
-      ref={\arabic{pfcasesnumberedi}\alph*},
-      labelindent=-1em,
-    }
-    \setlist[pfcasesnumbered,3]{
-        before=\def\pfcasecounter@pmg{pfcasesnumberediii},
-      label={{\pmg@casefont{Case}}~\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
-      ref={\arabic{pfcasesnumberedi}\alph{pfcasesnumberedii}.\roman*},
-      labelindent=-1em,
-    }
-    \def\@recthy@cases@labelindent{0pt}
-    \newenvironment{pfcases*}{
-        \def\@recthy@cases@labelindent{-1em}
-        \ProvideDocumentCommand{\case}{r[]}{
-                \def\thiscase{~##1}%
-            \item~##1: %
-            \ltx@ifpackageloaded{cleveref}{%
-            \cref@constructprefix{pfcases}{\cref@result}%
-            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
-    \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
-
-    \newenvironment{pfcases}{
-        \ProvideDocumentCommand{\case}{o}{
-            \IfNoValueTF{##1}{
-                \def\thiscase{}%
-            }{
-                \def\thiscase{~##1}%
-            }
-            \item~##1: \linebreak[1]%
-            \ltx@ifpackageloaded{cleveref}{%
-            \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
-            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
-    
-    \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
 \fi
 
