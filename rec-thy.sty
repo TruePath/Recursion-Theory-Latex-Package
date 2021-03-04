@@ -1005,7 +1005,7 @@
 
 
 
-\NewDocumentCommand{\@recthy@set}{m!G{}}{\left\{#1\ifthenelse{\isempty{#1}}{}{\mid #2}\right\}}
+\NewDocumentCommand{\@recthy@set}{m!G{}}{{\let\st=\mid\left\{#1 \ifthenelse{\isempty{#2}}{}{\mid #2} \right\}}}
 
 % \def\@recthy@set#1{\def\@set@argi@pmg{#1}\@ifnextchar\bgroup\@setst@pmg\@setplain@pmg}
 % \newcommand*{\@setst@pmg}[1]{\ifthenelse{\isempty{#1}}{\@setplain@pmg}{\left \{ \@set@argi@pmg \middle | #1\right \}}}
@@ -1020,7 +1020,8 @@
 \newcommand*{\@recthy@isect}{\mathbin{\cap}}
 \newcommand*{\@recthy@Isect}{\mathop{\bigcap}}
 \newcommand*{\@recthy@nin}{\notin}
-\newcommand*{\@recthy@powset}[1]{\mathcal{P}\left(#1\right)}
+\NewDocumentCommand{\@recthy@powset}{O{}m}{\mathcal{P}_{#1}\left(#2\right)}
+\NewDocumentCommand{\@recthy@finSsets}{r[]E{^}{{< \omega}}}{\left[#1\right]^{#2}}
 \newcommand*{\@recthy@eset}{\emptyset}
 \newcommand*{\@recthy@setovercmp}[1]{\overline{#1}}
 \newcommand*{\@recthy@setsimcmp}[1]{\backsim #1}
@@ -1046,6 +1047,9 @@
     \recthy@strip{isect}
     \recthy@strip{Isect}
     \recthy@strip{powset}
+    \recthy@strip{finSsets}
+    \let\ssetsOfsize\finSsets
+    \newcommand*{\finsets}{\finSsets[\omega]\relax}
     \recthy@strip{eset}
     \recthy@strip{nin}
     \recthy@strip{setcmp}
