@@ -37,16 +37,17 @@
 
 
 
-\robustify\(
-\robustify\)
 
-\AtBeginDocument{
-% \@ifundefined{hyperref}{\providecommand{\texorpdfstring}[2]{def}  }
+\ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
   \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
   \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
   \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
+\AtBeginDocument{
+% \@ifundefined{hyperref}{\providecommand{\texorpdfstring}[2]{def}  }
+  \robustify\(
+  \robustify\)
   \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
-  \ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}\RequirePackage{mathbbol}}
+  
   % Undertilde doesn't exist in texlive so we remove the dependency and define it again.
   \ltx@ifpackageloaded{undertilde}{}{
       \newlength\knuthian@fdfive
@@ -231,27 +232,51 @@
             \let\@recthy@REA=\@recthy@CEA
             }
 
-
-\DeclareOptionX{diffsym}{\edef\@recthy@setdiffSYM{\expandafter\noexpand\csname #1 \endcsname}}
-
-\DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
-\DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
-\DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
+\def\@recthy@setdiffSYMdefault{-}
+\DeclareOptionX{diffsym}[@recthy@setdiffSYMdefault]{\letcs{\@recthy@setdiffSYM}{#1}}
+% \newcommand*{\@recthy@Cform@default}{\prescript{\mathcal{C}}{}{\Pi}}
 
 
+\newcommand*{\@recthy@CDelta@default}{\prescript{\mathcal{C}}{}{\Delta}}
+\newcommand*{\@recthy@CSigma@default}{\prescript{\mathcal{C}}{}{\Sigma}}
+\newcommand*{\@recthy@CPi@default}{\prescript{\mathcal{C}}{}{\Pi}}
+\let\@recthy@CDelta=\@recthy@CDelta@default
+\let\@recthy@CSigma=\@recthy@CSigma@default
+\let\@recthy@CPi=\@recthy@CPi@default
+\DeclareOptionX{cdeltasym}[@recthy@Cform@default]{\letcs{\@recthy@CDelta}{#1}}
+\DeclareOptionX{csigmasym}[@recthy@Cform@default]{\letcs{\@recthy@CSigma}{#1}}
+\DeclareOptionX{cpisym}[@recthy@Cform@default]{\letcs{\@recthy@CPi}{#1}}
+% \DeclareOptionX{cformsym}[@recthy@Cform@default]{\letcs{\@recthy@CPi}{#1}\letcs{\@recthy@CSigma}{#1}\letcs{\@recthy@CDelta}{#1}}
+
+
+\def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
+\def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
+\let\@recthy@concatSYM\@recthy@concatSYM@Default
+\let\@recthy@EmptyStr\@recthy@EmptyStr@Default
 \DeclareOptionX{recfnlsym}[@recthy@recfnlSYM@default]{\letcs{\@recthy@recfnlSYM}{#1}}
 \DeclareOptionX{recfsym}[@recthy@recfSYM@default]{\letcs{\@recthy@recfSYM}{#1}}
 \DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
 
-  \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
-  \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
-\DeclareOptionX{lstrdelim}[@recthy@langle]{\letcs{\@recthy@lstrdelim}{#1}}
-\DeclareOptionX{rstrdelim}[@recthy@rangle]{\letcs{\@recthy@rstrdelim}{#1}}
-\DeclareOptionX{lcodedelim}[@recthy@langle]{\letcs{\@recthy@lcodedelim}{#1}}
-\DeclareOptionX{rcodedelim}[@recthy@rangle]{\letcs{\@recthy@rcodedelim}{#1}}
-\DeclareOptionX{lpairdelim}[@recthy@langle]{\letcs{\@recthy@lpairdelim}{#1}}
-\DeclareOptionX{rpairdelim}[@recthy@rangle]{\letcs{\@recthy@rpairdelim}{#1}}
-\DeclareOptionX{pairsup}[2]{\letcs{\@recthy@pairsup}{#1}}
+\let\@recthy@EmptyStr=\@recthy@EmptyStr@Default
+\let\@recthy@concatSYM=\@recthy@concatSYM@Default
+\let\@recthy@lstrdelim=\langle
+\let\@recthy@rstrdelim=\rangle
+\let\@recthy@lcodedelim=\langle
+\let\@recthy@rcodedelim=\rangle
+\let\@recthy@lpairdelim=\langle
+\let\@recthy@rpairdelim=\rangle
+\def\@recthy@pairsup@default{2}
+\let\@recthy@pairsup=\@recthy@pairsup@default
+
+\DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
+\DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
+\DeclareOptionX{lstrdelim}[langle]{\letcs{\@recthy@lstrdelim}{#1}}
+\DeclareOptionX{rstrdelim}[rangle]{\letcs{\@recthy@rstrdelim}{#1}}
+\DeclareOptionX{lcodedelim}[langle]{\letcs{\@recthy@lcodedelim}{#1}}
+\DeclareOptionX{rcodedelim}[rangle]{\letcs{\@recthy@rcodedelim}{#1}}
+\DeclareOptionX{lpairdelim}[langle]{\letcs{\@recthy@lpairdelim}{#1}}
+\DeclareOptionX{rpairdelim}[rangle]{\letcs{\@recthy@rpairdelim}{#1}}
+\DeclareOptionX{pairsup}[@recthy@pairsup@default]{\letcs{\@recthy@pairsup}{#1}}
 
 
 
@@ -350,10 +375,7 @@
 
 
 %Strings
-  \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
-  \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-  \let\@recthy@concatSYM\@recthy@concatSYM@Default
-  \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
+
 
 
   
@@ -754,7 +776,7 @@
           \let\require=\require@beamer %
           \begin{flalign*}%
           #1 &
-          \end{flalign*}}{\@recthy@ignorespacesandallparsafter}
+          \end{flalign*}}{\ignorespacesafterend}%\@recthy@ignorespacesandallparsafter}
     \else
 
         \NewDocumentEnvironment{requirements}{}{%
@@ -764,11 +786,13 @@
         \tagsleft@true%
         \usetagform{colon}%
         \let\require=\require@nested%
-        \gather}{%
+        \gather
+        }{
         \endgather%
         \@pmg@restoreeqstate%
         \usetagform{default}%
-        \ignorespacesafterend}
+        %\ignorespacesafterend%
+        }
 
  \fi
 
@@ -1036,7 +1060,6 @@
 \newcommand*{\@recthy@setovercmp}[1]{\overline{#1}}
 \newcommand*{\@recthy@setsimcmp}[1]{\backsim #1}
 \let\@recthy@setcmp=\@recthy@setovercmp
-\def\@recthy@setdiffSYM{-}
 \newcommand*{\@recthy@setdiff}{\mathbin{\@recthy@setdiffSYM}}
 
 
@@ -1160,18 +1183,7 @@
 
 %%%%%%%%% Formula Classes
 
-\newcommand*{\@recthy@CDelta@default}{\prescript{\mathcal{C}}{}{\Delta}}
-\newcommand*{\@recthy@CSigma@default}{\prescript{\mathcal{C}}{}{\Sigma}}
-\newcommand*{\@recthy@CPi@default}{\prescript{\mathcal{C}}{}{\Pi}}
-\let\@recthy@CDelta=\@recthy@CDelta@default
-\let\@recthy@CSigma=\@recthy@CSigma@default
-\let\@recthy@CPi=\@recthy@CPi@default
 
-
-
-% \DeclareOptionX<\@recthy@family>{cdeltasym}[]{\def\@recthy@CDelta{#1}}
-% \DeclareOptionX<\@recthy@family>{csigmasym}[]{\def\@recthy@CSigma{#1}}
-% \DeclareOptionX<\@recthy@family>{cpisym}[]{\def\@recthy@CPi{#1}}
 
 
 \ifrecthy@nosyntax
