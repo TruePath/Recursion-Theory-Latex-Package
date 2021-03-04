@@ -232,7 +232,7 @@
             }
 
 
-\DeclareOptionX{setdiffsym}{\edef\@recthy@setdiffSYM{\expandafter\noexpand\csname #1 \endcsname}}
+\DeclareOptionX{diffsym}{\edef\@recthy@setdiffSYM{\expandafter\noexpand\csname #1 \endcsname}}
 
 \DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
 \DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
@@ -245,8 +245,13 @@
 
   \DeclareOptionX{emptystr}[@recthy@EmptyStr@Default]{\letcs{\@recthy@EmptyStr}{#1}}
   \DeclareOptionX{concatsym}[@recthy@concatSYM@Default]{\letcs{\@recthy@concatSYM}{#1}}
-
-
+\DeclareOptionX{lstrdelim}[@recthy@langle]{\letcs{\@recthy@lstrdelim}{#1}}
+\DeclareOptionX{rstrdelim}[@recthy@rangle]{\letcs{\@recthy@rstrdelim}{#1}}
+\DeclareOptionX{lcodedelim}[@recthy@langle]{\letcs{\@recthy@lcodedelim}{#1}}
+\DeclareOptionX{rcodedelim}[@recthy@rangle]{\letcs{\@recthy@rcodedelim}{#1}}
+\DeclareOptionX{lpairdelim}[@recthy@langle]{\letcs{\@recthy@lpairdelim}{#1}}
+\DeclareOptionX{rpairdelim}[@recthy@rangle]{\letcs{\@recthy@rpairdelim}{#1}}
+\DeclareOptionX{pairsup}[2]{\letcs{\@recthy@pairsup}{#1}}
 
 
 
@@ -351,15 +356,18 @@
   \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
 
 
-  \newcommand*{\@recthy@pair}[2]{\mathopen{\langle} #1, #2 \mathclose{\rangle}}
-  \newcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-  \newcommand*{\@recthy@code}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
+  
+
+  \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@lpairdelim} #1, #2 \mathclose{\@recthy@rpairdelim}^\@recthy@pairsup}
+  \newcommand*{\@recthy@str}[1]{\mathopen{\@recthy@lstrdelim}#1\mathclose{\@recthy@rstrdelim}}
+  \newcommand*{\@recthy@code}[1]{\mathopen{\@recthy@lcodedelim}#1\mathclose{\@recthy@rcodedelim}}
+
 
   \appto{\recthy@rollback@threeSix}{
     \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
     \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
     % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-    \renewcommand*{\@recthy@code}[1]{\mathopen{\@recthy@llangle}#1\mathclose{\@recthy@rrangle}}
+    \renewcommand*{\@recthy@code}[2][]{\mathopen{\@recthy@llangle}#2\mathclose{\@recthy@rrangle}^{#1}}
     }
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
 \NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
@@ -373,7 +381,7 @@
     \let\str=\@recthy@str
     \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
     \newcommand*{\estr}{\EmptyStr}
-    \newcommand*{\decode}[2]{(#1)_{#2}}
+    \newcommand*{\decode}[2]{\left(#1\right)_{#2}}
     \let\godelpair=\@recthy@pair
     \let\gpair=\@recthy@pair
     \newcommand*{\concat}{\@recthy@concatSYM}
@@ -950,6 +958,8 @@
     \newcommand*{\godelnum}[1]{\left\ulcorner #1 \right\urcorner}
     \let\cornerquote=\godelnum
     \let\gcode=\godelnum
+    \let\@recthy@llangle@orig=\llangle
+    \let\@recthy@rrangle@orig=\rrangle
     \ifrecthy@nodoubleangles
     \else
       \let\llangle=\@recthy@llangle
@@ -1893,8 +1903,8 @@
     \NewDocumentCommand{\Hop}{oD(){}mD(){}}{\mathcal{H}_{#3\IfValueTF{#1}{, #1}{}}\left(\ifthenelse{\isempty{#2#4}}{\eset}{#2#4} \right)}
     \NewDocumentCommand{\REAop}{st+d()od()mm}{%
       {\IfBooleanTF{#1}%
-        {\mathcal{J}}%
         {\widehat{\mathcal{J}}}%
+        {\mathcal{J}}%
       }^{%
           \IfBooleanTF{#2}{\vphantom{x}^\dagger}{}%
           #7}_{#6\IfValueTF{#4}{, #4}{}}%
