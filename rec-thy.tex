@@ -88,7 +88,7 @@
 
 %\usepackage[pdftex]{graphicx}
 %\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
-\usepackage[suppPriorityTrees]{rec-thy}
+\usepackage[steps]{rec-thy}
 \title{The rec-thy Package}
 \author{Peter M. Gerdes (gerdes@invariant.org)}
 \date{\DateOfPackage{rec-thy}: Version \recthyVersion}
@@ -126,8 +126,8 @@ While the symbols used by default in the package are suggested for adoption to a
 	\item[modulescr] Sets the script used to typeset the \verb=\module= command.  Default is mathcal.
 	\item[reqscr] Sets the script used to typeset requirements.  Default is mathscr.
 	\item[pfcasefont] Sets the script used to typeset Case in the cases helper.
-	\item[emptystr] Sets the empty string symbol
-	\item[concatsym] Sets the concat symbol.
+	\item[emptystr] Sets the empty string symbol.  Default is \( \str{} \) 
+	\item[concatsym] Sets the concat symbol.  Default is \( \concat \) 
 	\item[cdeltasym] Sets the symbol used to denote computably \( \Delta \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Delta} \).
 	\item[cpisym] Same for \( \Pi \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Pi} \).
 	\item[csigmasym] Same for \( \Sigma \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Sigma} \).
@@ -135,7 +135,10 @@ While the symbols used by default in the package are suggested for adoption to a
 	\item[recfsym]  Sets the symbol used for recursive functions.  Default is \( \phi \).
 	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \symbffrak{u} \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
 	\item[ballsymb] Sets the symbol used for the ball command.  Default is \( \mathscr{B} \).
-	\item[nodoubleangles] Prevents redefinition of \verb=\rrangle= and \verb=\llangle= with versions that use the repeated angle brackets e.g., lets you use the weird XITS versions.
+	\item[lstrdelim,rstrdelim] Left and right delimiters for \verb=\str=
+	\item[lcodedelim,rcodedelim] Left and right delimiters for \verb=\code=
+	\item[lpairdelim,rpairlim,pairsup] Left and right delimiters for \verb=\pair= and superscript.
+
 \end{itemize}
 
 As an example of how to use these commands consider the following code changing the ball symbol to \( \mathbf{B} \).
@@ -170,13 +173,13 @@ Note the commands in this section double as suggestions for standardized notatio
 	\end{xtabular}          \\
 
 
-There are a few additional commands relating to priority trees which are less frequently used and require passing the option \verb=suppPriorityTrees= to the package to use.  These commands exist in a kind of limbo and will probably be removed in some future edition of the package absent popular demand and feedback for better notation.
+% There are a few additional commands relating to priority trees which are less frequently used and require passing the option \verb=suppPriorityTrees= to the package to use.  These commands exist in a kind of limbo and will probably be removed in some future edition of the package absent popular demand and feedback for better notation.
 
-\begin{xtabular}{l |  l | l}\toprule
-	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
-	\verb=\Vstages{\xi}=					& \( 	\Vstages{\xi}                   \)	& Stages where \( \xi \subfun \tpath[s] \) even if links skip \( \xi \). \\ \midrule
-	\verb=\reqof{\xi}=					& \( 	\reqof{\xi}                   \)	& Requirement implemented by a node \( \xi \). \\  \bottomrule
-\end{xtabular}
+% \begin{xtabular}{l |  l | l}\toprule
+% 	\verb=\Astages{\xi}=					& \( 	\Astages{\xi}                   \)	& Set of stages at which \( \xi \) is active. \\ \midrule
+% 	\verb=\Vstages{\xi}=					& \( 	\Vstages{\xi}                   \)	& Stages where \( \xi \subfun \tpath[s] \) even if links skip \( \xi \). \\ \midrule
+% 	\verb=\reqof{\xi}=					& \( 	\reqof{\xi}                   \)	& Requirement implemented by a node \( \xi \). \\  \bottomrule
+% \end{xtabular}
 
 
 \subsection{Computations}
@@ -212,8 +215,8 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 		\verb=\Hop[s](X){e}=                                 & \( 	\Hop[s](X){e} \)   & \\[6pt]
 		\verb=\Hop[s]{e}=                                 & \( 	\Hop[s]{e} \)   & \\[6pt]
 		\verb=\Hop{e}=                                 & \( 	\Hop{e}  \)   & \\ \midrule
-	\verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
-	\tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
+	% \verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
+	% \tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
 	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
 	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\[6pt]
 	% \verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
@@ -251,7 +254,7 @@ To disable these commands pass the option \verb=nodegrees=. \\
         \verb=X \nTgeq Y=                               	& \(  X \nTgeq Y   \)   & \\ \midrule
         \verb=X \Tincompat Y=                                      & \multirow{2}{*}{\(  X \Tincompat Y   \)}   & Turing incompatibility \\ 
         \tab \verb=X \Tincomp Y= 							& & \\ \midrule 
-        \verb=X \Tcompat Y=                               	& & \multirow{3}{*}{\(  X \Tcompat Y   \)}    \\
+        \verb=X \Tcompat Y=                               	&  \multirow{3}{*}{\(  X \Tcompat Y   \)}  &  \\
         \tab \verb=X \nTincomp Y= & & \\
         \tab \verb=X \nTincompat Y= & & \\  \midrule
 	\verb=\Tdeg{d} \Tdegjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \Tdegjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
@@ -262,7 +265,7 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\
 	\tab \verb=\TJoin_{i \in \omega} X_i=                       &    & \\ \midrule
 	% \verb=\ttSYM=                                          & \( 	\ttSYM                                	   \)   & \\ \midrule
-	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reproducibilities\\ \midrule
+	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reducibilities \\ \midrule
 	\verb=X \ttleq  Y=                                     & \( 	X \ttleq  Y                           	   \)   & \\ \midrule
 	\verb=X \ttgneq Y=                                     & \( 	X \ttgneq Y                           	   \)   & \\ \midrule
 	\verb=X \ttgeq  Y=                                     & \( 	X \ttgeq  Y                           	   \)   & \\ \midrule
@@ -388,7 +391,11 @@ Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving
 	\verb=\Isect_{i \in \omega} X_i=         &    \(   \Isect_{i \in \omega} X_i  \)    &  \\ \midrule
 	\verb=X \cross Y=                        &    \(   X \cross Y                 \)    & \multirow{2}{*}{Cartesian product (Cross Product)} \\[6pt]
 	\verb=\Cross_{i \in \omega} X_i=         &    \(   \Cross_{i \in \omega} X_i  \)    &  \\ \midrule
-	\verb=\powset{\omega}=                   &    \(   \powset{\omega}            \)    &  Powerset \\ \midrule
+	\verb=\powset{\omega}=                   &    \(   \powset{\omega}            \)    &   Powerset \\  \midrule
+	\verb=\powset[\alpha]{\omega}= 			 &    \(   \powset[\alpha]{A}    \)    & Subsets of \( A \) of  size \( < \alpha \)  \\
+	% \verb=\ssetsOfsize[A]^{< \alpha}=, \verb=\finSsets[A]^{< \alpha}=, 		 & 	   \( \ssetsOfsize[A]^{< \alpha} \) & \\ \midrule
+	% \verb=\finSsets[A]=						 & 	   \( \finSsets[A] \) & Finite subsets of \( A \)  \\ \midrule
+	% \verb=\finsets=						 & 	   \( \finSsets[A] \) & Finite subsets \\ \midrule
 	\verb=\eset=                             &    \(   \eset                      \)    &  Emptyset abbreviation\\ \midrule
 	\verb=x \nin A=                          &    \(   x \nin A                   \)    &  not an element\\ \midrule
 	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\\midrule
@@ -400,7 +407,7 @@ Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving
 	\end{tabular}          \\
 
 \subsection{Delimiters}
-To disable these commands pass the option \verb=nodelim=. \\
+To disable these commands pass the option \verb=nodelim=. To prevent only redefinition of \verb=\llangle= and \verb=\rrangle= (e.g. to use the XITS unusual default) pass the option \verb=nodoubleangles=.\\
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\
@@ -620,9 +627,13 @@ To change the syntax for the computable infinitary formulas you can pass the opt
 
 \subsection{Proof Cases}
 
-\begin{proof}
-The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.  Note these features are not available if you are using the package in a beamer document (not likely to be an issue).
 
+The pfcases enviornment provides a numbered, referenceable division of a proof segment into cases.  Pass the option \verb=nopfcases= to disable loading of this feature.  Note these features are not available if you are using the package in a beamer document (not likely to be an issue).
+
+To see how these commands work consider the following code.
+
+\begin{verbatim}
+\begin{proof}
 \begin{pfcases}
 \case[\( x = y \)]\label{case:first} %  
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
@@ -640,11 +651,73 @@ The pfcases enviornment provides a numbered, referenceable division of a proof s
 \end{pfcases}
 
 \end{pfcases}
-
+\end{proof}
 We can now reference the case number \ref{case:second} and cleveref \cref{case:second} as well as case \ref{case:second:sub1} and cleveref \cref{case:second:sub2}.
+\end{verbatim}
+
+  This produces the following output.
+
+\begin{proof}
+\begin{pfcases}
+\case[\( x = y \)]\label{case:first} %  
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+
+	Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus. Nulla at mi nisl. 
+
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} %
+	Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus pulvinar. 
+
+\begin{pfcases}
+\case[\( x=2 \)] \label{case:second:sub1} % 
+	ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
+\case[\( x = 3 \)] \label{case:second:sub2} % 
+	consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend 
+\end{pfcases}
+
+\end{pfcases}
+\end{proof}
+We may reference the case number \ref{case:second} and cleveref \cref{case:second} as well as case \ref{case:second:sub1} and cleveref \cref{case:second:sub2}.
 
 
-To skip numbering and instead reference with the argument to \verb=\case= use pfcases*
+
+To skip numbering and instead reference with the argument to \verb=\case= use pfcases*.  For instance, consider the following code.
+
+\begin{verbatim}
+\begin{proof}
+\begin{pfcases*}
+\case[\( x = y \)]\label{case*:first}  Lorem ipsum dolor sit amet, consectetur
+\adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat
+\sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra.
+\Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper
+\laoreet. 
+
+Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus
+dolor, pellentesque sed orci sed, ornare pretium diam. Nam vel tincidunt tellus.
+Nulla at mi nisl. 
+
+\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second}
+\Quisque consectetur, felis non congue dictum, mauris mi suscipit sem, vel
+\laoreet justo ipsum in tellus. Suspendisse blandit malesuada velit faucibus
+\pulvinar. 
+
+\begin{pfcases*}
+\case[\( x=2 \)] \label{case*:second:sub1} Lorem ipsum dolor sit amet,
+\consectetur adipiscing elit. In et enim eget nisl luctus venenatis.
+\Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce
+\aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed
+\laoreet nunc nec semper laoreet. 
+
+\case[\( x = 3 \)] \label{case*:second:sub2}  consectetur adipiscing elit. In et
+\enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam
+\non, eleifend 
+\end{pfcases*}
+\end{pfcases*}
+\end{proof}
+
+Again we can ref case \ref{case*:second} and cleverref that \cref{case*:second}.  Also case \ref{case*:second:sub1} and cleveref \cref{case*:second:sub2}.
+\end{verbatim}
+
+\begin{proof}
 \begin{pfcases*}
 \case[\( x = y \)]\label{case*:first}  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et enim eget nisl luctus venenatis. Pellentesque sed erat sodales, tincidunt quam non, eleifend risus. Fusce aliquam dignissim pharetra. Integer id dui ac libero tincidunt consectetur. Sed laoreet nunc nec semper laoreet. 
 
@@ -660,39 +733,47 @@ Vestibulum semper eget velit ut lobortis. In vel finibus est. Nullam tellus dolo
 
 Again we can ref case \ref{case*:second} and cleverref that \cref{case*:second}.  Also case \ref{case*:second:sub1} and cleveref \cref{case*:second:sub2}.
 
+
+
 If the choice of cleveref labels aren't to your taste please let me know and I will consider changing them.  Also, note that by passing the options \verb!pfcasefont=textit! one can change the font used to typeset Case to italics (or whatever other font command you choose).
 
-\vspace{.5cm}
+\subsection{Steps}
+To enable the steps environment you \textit{must} pass the option \verb=steps= when loading the package.  This enables use of the steps environment to typeset presentation of procedures.  The command \verb=\begin{steps}= starts a list environment with an optional argument which is passed along unchanged as the optional argument to the underlying enumitem based list.  Inside the steps environment the command \verb=\step[steptitle]= prints a numbered step with steptitle displayed in bold. An example of the use of the steps environment is provided below.
 
-The above is accomplished with the following code.
 \begin{verbatim}
-\begin{proof}
-\begin{pfcases}
-	\case[\( x = y \)]\label{case:first} ...
-	\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case:second} ..
-		\begin{pfcases}
-			\case[\( x=2 \)] \label{case:second:sub1} ..
-			\case[\( x = 3 \)] \label{case:second:sub2}..
-		\end{pfcases}
-\end{pfcases}
-.. \ref{case:second}.. \cref{case:second} ..  \ref{case:second:sub1} .. \cref{case:second:sub2}
-\begin{pfcases*}
-	\case[\( x = y \)]\label{case*:first} ..
-	\case[\( x = z \land z > q \land z < r \land x + z = r \)] \label{case*:second} ..
-		\begin{pfcases*}
-			\case[\( x=2 \)] \label{case*:second:sub1} ..
-			\case[\( x = 3 \)] \label{case*:second:sub2}
-		\end{pfcases*}
-.. \ref{case*:second} .. \cref{case*:second} .. \ref{case*:second:sub1} .. 
-\cref{case*:second:sub2}.
-\end{proof}
+\begin{steps}
+    \step If \( x=5 \) fails to hold end the stage without acting.  Otherwise the module acts by executing the subsequent steps.
+
+    \step If there is \( k < m  \) with \(  s_{k} - 1 \approx_i s - 1  \) perform the following steps and end the stage. 
+        \begin{steps}
+            \step Choose \( a \nin \setcol{A}{1} \) large.
+            \step Set \( c = c_k, b = b_k, \hat{s}_0 = s_{k} - 1, \hat{s}_1 = s - 1 \).
+            \step Enumerate \( b \) into \( \setcol{A}{2} \) and set \( R_{j,e}(s) = 2  \)
+        \end{steps}
+    \step If there is no such \( k \) we instead enumerate \( c_m \) into  \( \setcol{A}{3} \) and execute the procedure for expansionary stages.
+
+\end{steps}
 \end{verbatim}
 
+This yields the following output:
+
+\begin{steps}
+    \step If \( x=5 \) fails to hold end the stage without acting.  Otherwise the module acts by executing the subsequent steps.
+
+    \step If there is \( k < m  \) with \(  s_{k} - 1 \approx_i s - 1  \) perform the following steps and end the stage. 
+        \begin{steps}
+            \step Choose \( a \nin \setcol{A}{1} \) large.
+            \step Set \( c = c_k, b = b_k, \hat{s}_0 = s_{k} - 1, \hat{s}_1 = s - 1 \).
+            \step Enumerate \( b \) into \( \setcol{A}{2} \) and set \( R_{j,e}(s) = 2  \)
+        \end{steps}
+    \step If there is no such \( k \) we instead enumerate \( c_m \) into  \( \setcol{A}{3} \) and execute the procedure for expansionary stages.
+
+\end{steps}
 
 
 \subsection{MRref}
 
-Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article.  Unless you have a good reason (like journal formatting guidelines) there is no reason not to always pass this option.  Note this option requires the hyperref package.
+Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article. 
 
 
 \section{Release Notes}
@@ -700,6 +781,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.7] Fixed cases environment (both prettier and no problem with creating newline).  Major re-factor to fix all options.  Fixed bug with \verb=\set= display.  Added \verb=\st= command inside the \verb=\set= command to depreciate second argument.  Added \verb=\finSsets= (alt \verb=\ssetsOfsize=), \verb=\finsets= and optional argument to \verb=\powset=.  Changed \verb=\REAop= so the hat is on the starred version as intended.  Added the steps (experimental) environment which requires an option to enable and fixed some problems with existing options.  Reimplemented \verb=\REset= to use xparse to avoid some errors in unusual contexts.  Fixed the display of \verb=\tpath=.   Depreciated \verb=\iREAop= and \verb=\oneREAop=.  Fixed \verb=\Join=.
 	\item[3.6] Fixed \verb=\REA[n]= so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \verb=\req*= error.  Improved syntax for \verb=\recfnl= so it can accept a parenthesis delimited argument as the oracle.  Improved \verb=\setcol= to allow it to be used in a nested fashion without typesetting bugs.  Changed the \verb=\code= and \verb=\pair= commands to use only a single angle bracket.
 	\item[3.5] Added \verb=\Hop= and misc code cleanup.
 	\item[3.4] Eliminated dependence on undertilde which is missing from texlive

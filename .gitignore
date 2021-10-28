@@ -1,9 +1,9 @@
 .DS_Store
-rec-thy.log
+*.log
 rec-thy.sublime-project
-rec-thy.sublime-workspace
+*.sublime-workspace
 rec-thy.aud
-rec-thy.aux
-rec-thy.out
-rec-thy.zip
-texput.out
+*.aux
+*.out
+*.zip
+Output/

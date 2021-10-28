@@ -2,7 +2,7 @@
 % Release Notes see README
 \RequirePackage{expl3}
 \RequirePackage{ltxcmds}
-\RequirePackage{iftex,ifpdf}
+\RequirePackage{ifxetex,ifpdf}
 \RequirePackage{suffix}
 \RequirePackage{ifmtarg}
 \RequirePackage{xifthen}
@@ -13,7 +13,7 @@
 \def\recthyVersion{3.7}
 \ProvidesExplPackage
   {rec-thy}
-  {2021/03/30}
+  {2021/02/28}
   {\recthyVersion}
   {Provides commands for writing up recursion theory papers}
 
@@ -41,8 +41,8 @@
 \robustify\)
 \ltx@ifpackageloaded{unicode-math}{}{\RequirePackage{mathrsfs}}%\RequirePackage{mathbbol}}
   \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
-  % \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
-  % \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
+  \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
+  \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
 \AtBeginDocument{
 % \@ifundefined{hyperref}{\providecommand{\texorpdfstring}[2]{def}  }
 
@@ -62,11 +62,9 @@
 }
 
 % \ifxetex  %workaround for bug...hopefully can dispense on later
-\ifpdftex
-    \def\symbf#1{\mathbf{#1}}
-    \mathchardef\@recthy@mhyphen="2D % Define a "math hyphen"
+\ifxetex
 \else
-  \def\@recthy@mhyphen{\mathhyphen}
+    \def\symbf#1{\mathbf{#1}}
 \fi
 
 
@@ -275,9 +273,6 @@
 \DeclareOptionX{recfsym}[@recthy@recfSYM@default]{\letcs{\@recthy@recfSYM}{#1}}
 \DeclareOptionX{usesym}[@recthy@useSYM@default]{\letcs{\@recthy@useSYM}{#1}}
 
-\newcommand*{\@recthy@llangle}{\langle\!\langle}
-\newcommand*{\@recthy@rrangle}{\rangle\!\rangle}
-
 \let\@recthy@EmptyStr=\@recthy@EmptyStr@Default
 \let\@recthy@concatSYM=\@recthy@concatSYM@Default
 \def\@recthy@langle{\langle}
@@ -288,7 +283,8 @@
 \let\@recthy@rcodedelim=\@recthy@rangle
 \let\@recthy@lpairdelim=\@recthy@langle
 \let\@recthy@rpairdelim=\@recthy@rangle
-
+\def\@recthy@pairsup@default{2}
+\let\@recthy@pairsup=\@recthy@pairsup@default
 
 \def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
 \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
@@ -301,9 +297,9 @@
 \DeclareOptionX{rstrdelim}[@recthy@rangle]{\letcs{\@recthy@rstrdelim}{#1}}
 \DeclareOptionX{lcodedelim}[@recthy@langle]{\letcs{\@recthy@lcodedelim}{#1}}
 \DeclareOptionX{rcodedelim}[@recthy@rangle]{\letcs{\@recthy@rcodedelim}{#1}}
-\DeclareOptionX{lpairdelim}[@recthy@llangle]{\letcs{\@recthy@lpairdelim}{#1}}
-\DeclareOptionX{rpairdelim}[@recthy@rrangle]{\letcs{\@recthy@rpairdelim}{#1}}
-
+\DeclareOptionX{lpairdelim}[@recthy@langle]{\letcs{\@recthy@lpairdelim}{#1}}
+\DeclareOptionX{rpairdelim}[@recthy@rangle]{\letcs{\@recthy@rpairdelim}{#1}}
+\DeclareOptionX{pairsup}[@recthy@pairsup@default]{\letcs{\@recthy@pairsup}{#1}}
 
 
 
@@ -407,7 +403,7 @@
 
   
 
-  \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@lpairdelim} #1, #2 \mathclose{\@recthy@rpairdelim}}
+  \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@lpairdelim} #1, #2 \mathclose{\@recthy@rpairdelim}^\@recthy@pairsup}
   \newcommand*{\@recthy@str}[1]{\mathopen{\@recthy@lstrdelim}#1\mathclose{\@recthy@rstrdelim}}
   \newcommand*{\@recthy@code}[1]{\mathopen{\@recthy@lcodedelim}#1\mathclose{\@recthy@rcodedelim}}
 
@@ -480,7 +476,7 @@
 \else
     \@packinfo{Loading Priority Tree Helper.}
     \providecommand{\PriorityTree}{\mathbb{T}}
-    \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\mathbb{f}}{\mathbb{f}_{#1}}}
+    \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\symbf{f}}{\mathbb{f}_{#1}}}
     \providecommand{\leftof}{\mathbin{<_L}}
     \providecommand{\leftofeq}{\mathbin{\leq_L}}
     \providecommand{\rightof}{\mathbin{>_L}}
@@ -960,11 +956,8 @@
         \providecommand*{\meet}{\mathbin{\wedge}}
     \providecommand*{\join}{\mathbin{\vee}}
     \providecommand*{\Meet}{\mathop{\bigwedge}}
-    \let\MnJoin=\Join %save MnVersion in case wanted
-    \newcommand*{\Join@recthy}{\mathop{\bigvee}}
-    \AtBeginDocument{
-      \let\Join=\Join@recthy
-    }
+    \let\MnJoin=\Join
+    \renewcommand*{\Join}{\mathop{\bigvee}}
     \ifdefined\xor
     \else
         \DeclareMathOperator{\xor}{xor}
@@ -972,7 +965,8 @@
 \fi
 
 
-
+\newcommand*{\@recthy@llangle}{\langle\!\langle}
+\newcommand*{\@recthy@rrangle}{\rangle\!\rangle}
 
 
 
@@ -1037,7 +1031,8 @@
 \newcommand*{\@recthy@ComputablyEnumerable}{\@recthy@ensuretext{Computably enumerable}}
 \def\@recthy@REA{REA}
 \def\@recthy@CEA{CEA}
-
+% \mathchardef\@recthy@mhyphen="2D % Define a "math hyphen"
+\def\@recthy@mhyphen{\mathhyphen}
 \NewDocumentCommand{\REA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@REA}\IfValueTF{#1}{(#1)}{}}}
 \NewDocumentCommand{\CEA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@CEA}\IfValueTF{#1}{(#1)}{}}}
 
@@ -1824,8 +1819,6 @@
     \@packinfo{No degree classes loading.}
 \else
     \@packinfo{Degree classes loading.}
-    \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
-    \newcommand*{\REdegrees}{\ensuremath{\mathscr{R}}}
     \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
     \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
     \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
@@ -1926,18 +1919,18 @@
     % \NewDocumentCommand{\REset}{D(){}omd()}{
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}
     % }
-    \NewDocumentCommand{\REset}{D(){}oD(){#1}mD(){#3}}{{W_{#4\IfValueTF{#2}{, #2}{}}^{#5}}}
-    % \newcommand*{\REset}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@REsetbody}
-    % \newcommand*{\@REsetbody}[1]{W\ifdefined\@PMG@parenarg
-    % ^{\@PMG@parenarg}%
-    % \fi%
-    % \ifdefined\@PMG@braketarg
-    % _{#1, {\@PMG@braketarg}}%
-    % \else
-    % _{#1}
-    % \fi}
-    % \WithSuffix\def\@REsetbody(#1){\def\@PMG@parenarg{#1}\@REsetbody}
-    % \WithSuffix\def\@REsetbody[#1]{\def\@PMG@braketarg{#1}\@REsetbody}
+
+    \newcommand*{\REset}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@REsetbody}
+    \newcommand*{\@REsetbody}[1]{W\ifdefined\@PMG@parenarg
+    ^{\@PMG@parenarg}%
+    \fi%
+    \ifdefined\@PMG@braketarg
+    _{#1, {\@PMG@braketarg}}%
+    \else
+    _{#1}
+    \fi}
+    \WithSuffix\def\@REsetbody(#1){\def\@PMG@parenarg{#1}\@REsetbody}
+    \WithSuffix\def\@REsetbody[#1]{\def\@PMG@braketarg{#1}\@REsetbody}
     \NewDocumentCommand{\Hop}{oD(){}mD(){}}{\mathcal{H}_{#3\IfValueTF{#1}{, #1}{}}\left(\ifthenelse{\isempty{#2#4}}{\eset}{#2#4} \right)}
     \NewDocumentCommand{\REAop}{st+d()od()mm}{%
       {\IfBooleanTF{#1}%
@@ -1948,15 +1941,11 @@
           #7}_{#6\IfValueTF{#4}{, #4}{}}%
           \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}%
     }
-     
+      \NewDocumentCommand{\oneREAop}{st+d()od()m}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
+    \let\iREAop=\oneREAop
 
     \newcommand*{\entersat}[1]{\mathbin{\searrow_{#1}}}
     
-
-    \appto{\recthy@rollback@threeSeven}{
-       \NewDocumentCommand{\oneREAop}{st+d()od()m}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
-    \let\iREAop=\oneREAop
-    }
 
     % \newcommand*{\alphaREAop}[2][]{\mathcal{J}^{#2}_{#1}}
     \appto{\recthy@rollback@threeTwo}{
@@ -1988,18 +1977,15 @@
 
     \providecommand*{\Tdegvar}[1]{\symbf{#1}}
     \providecommand*{\Tdegof}[1]{\utilde{#1}}
-    \protected\def\Tdeg#1{\ifthenelse{
+    \providecommand*{\Tdeg}[1]{\ifthenelse{
     % \equal{\detokenize{\Tzero}}{\futurelet\next@pmg\discard#1\@nil\expandafter\detokenize{\next@pmg}}
                                         \equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR  
-                                        \equal{\detokenize{\Tzeroj}}{\detokenize{#1}} \OR 
-                                        \equal{\detokenize{\Tzerojj}}{\detokenize{#1}} \OR
-                                        \equal{\detokenize{\Tzerojjj}}{\detokenize{#1}} \OR  
+                                        \equal{\detokenize{\Tzero}}{\detokenize{#1}} \OR 
                                         \equal{\detokenize{\zeroj}}{\detokenize{#1}} \OR 
                                         \equal{\detokenize{\zerojj}}{\detokenize{#1}} \OR 
                                         \equal{\detokenize{\zerojjj}}{\detokenize{#1}} \OR 
                                         \equal{\string \zeron }{\expandafter\string \first@pmg@rdmxs(#1)}  
-                                       }{#1}{\Tdegvar{#1}}}
-
+                                       }{\Tdegof{#1}}{\Tdegvar{#1}}}
 
     \providecommand*{\Tjump}[1]{#1'}
     \let\jump=\Tjump
@@ -2065,7 +2051,7 @@
 
 
 \ifrecthy@stepsenv
-  \@packinfo{Experimental steps code loaded.}
+
   \newlist{pmg@steps}{enumerate}{4}
   \setlist[pmg@steps,1]{label={Step \arabic*}, ref={\arabic*}, labelsep=1em}
   \setlist[pmg@steps,2]{label={Step \arabic{pmg@stepsi}\alph*}, ref={\arabic{pmg@stepsi}\alph*}}
