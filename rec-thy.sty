@@ -777,17 +777,26 @@
 
 
 \ifrecthy@beamersupp
-        \newtheorem{reqblock}{Requirements}
-    \let\OLDreqblock=\reqblock
-    \def\reqblock{%
+        \theoremstyle{plain}
+        \newtheorem{reqsblock@recthy}{Requirements}
+        \newtheorem{reqblock@recthy}{Requirement}
+    \let\OLDreqsblock@recthy=\reqsblock@recthy
+    \let\OLDreqblock@recthy=\reqblock@recthy
+    \def\reqsblock@recthy{%
       \setbeamercolor{block title}{fg=white,bg=Maroon}%
-      \setbeamercolor{block body}{fg=black,bg=Maroon!10}\OLDreqblock
+      \setbeamercolor{block body}{fg=black,bg=Maroon!10}\OLDreqsblock@recthy
+    }
+    \def\reqblock@recthy{%
+      \setbeamercolor{block title}{fg=white,bg=Maroon}%
+      \setbeamercolor{block body}{fg=black,bg=Maroon!10}\OLDreqblock@recthy
     }
 
       \NewDocumentCommand{\require@beamer}{sO{}mO{}m}{\tag{$\@ifmtarg{#2#4}{\mathscr{#3}_{#5}}{\mathscr{#3}_{#5}^{#2#4}}$} \IfBooleanTF{#1}{}{\label{\detokenize{req:#3@#2#4}}} & }
 
-    \NewDocumentEnvironment{BeamerRequirements}{d<>b}{\IfValueTF{#1}{\begin{reqblock}<#1>}{\begin{reqblock}}%
-    \vspace*{-.5cm}
+    \NewDocumentEnvironment{BeamerRequirements}{d<>b}{\IfValueTF{#1}{\begin{reqsblock@recthy}<#1>}{\begin{reqsblock@recthy}}%
+      \setlength{\abovedisplayskip}{0pt}%
+      \setlength{\belowdisplayskip}{0pt}%
+    % \vspace*{-.5cm}
     \usetagform{colon} %
           \let\myhalign\halign%
             \def\halign{\let\mylb\\ \renewcommand{\\}{& \mylb}\myhalign}%
@@ -795,7 +804,7 @@
           \begin{flalign*}%
           #2 &
           \end{flalign*}%
-          \end{reqblock}}{}
+          \end{reqsblock@recthy}}{}
 
     \NewDocumentEnvironment{requirements}{b}{\usetagform{colon} %
           \let\myhalign\halign%
@@ -804,7 +813,27 @@
           \begin{flalign*}%
           #1 &
           \end{flalign*}}{\ignorespacesafterend}%\@recthy@ignorespacesandallparsafter}
-    \else
+
+
+   \NewDocumentEnvironment{BeamerRequire}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
+        \setlength{\abovedisplayskip}{0pt}%
+        \setlength{\belowdisplayskip}{0pt}%
+        \begin{requirement}{\req@nohref[#2#4]{#3}{#5}} \label{\detokenize{req:#3@#2#4}}%
+    }{
+        \end{requirement}%
+        \vspace*{-.3cm}%
+        \end{reqblock@recthy}%
+    }
+    \NewDocumentEnvironment{BeamerRequire*}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
+        \setlength{\abovedisplayskip}{0pt}%
+        \setlength{\belowdisplayskip}{0pt}%
+        \begin{requirement}{\req@nohref[#2#4]{#3}{#5}}
+    }{
+        \end{requirement}%
+        \vspace*{-.3cm}%
+        \end{reqblock@recthy}%
+    }       
+\else
 
         \NewDocumentEnvironment{requirements}{}{%
         \@pmg@saveeqstate%
