@@ -302,7 +302,7 @@ Giving output
 		\recfnl{r}{B}{} = \REset{j} \implies   \exists[k] \left( \Upsilon^{j}_k(C \Tplus \REset{j}) = B) \lor \REset{j} \Tleq \Tzero \right) 
 	\end{requirement}
 
-The require environment merges the \verb=\req[\nu]{R}{e\}= command directly into the environment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third argument contains only indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e\}= automatically links to the defining require environment.
+The require environment merges the \verb=\req[\nu]{R}{e}= command directly into the environment arguments.  It also creates an automatic label which makes use of the 1st and 2nd arguments but assumes the third argument contains only indexes whose names are subject to change.  Unless \verb=nohyperreqs= is passed the \verb=\req[\nu]{R}{e}= automatically links to the defining require environment.
 
 \begin{lstlisting}[breaklines]
 \begin{require}{R}{i}
@@ -781,6 +781,9 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.
+	\item[3.8.1] Fixed issues displaying the prime for jump operations.
+	\item[3.8] Adjusted \verb=\Tdeg= to be more beamer friendly and fixed it not to dumbly underline \verb=0^n=.  Fixed BeamerRequirements to work with differing values of \verb=\abovedisplayskip=.  Removed a few typos in docs for the requirements assistance.  Added BeamerRequire and BeamerRequire* that put the requirements in a block and offer overlay specifications.
 	\item[3.7] Fixed cases environment (both prettier and no problem with creating newline).  Major re-factor to fix all options.  Fixed bug with \verb=\set= display.  Added \verb=\st= command inside the \verb=\set= command to depreciate second argument.  Added \verb=\finSsets= (alt \verb=\ssetsOfsize=), \verb=\finsets= and optional argument to \verb=\powset=.  Changed \verb=\REAop= so the hat is on the starred version as intended.  Added the steps (experimental) environment which requires an option to enable and fixed some problems with existing options.  Reimplemented \verb=\REset= to use xparse to avoid some errors in unusual contexts.  Fixed the display of \verb=\tpath=.   Depreciated \verb=\iREAop= and \verb=\oneREAop=.  Fixed \verb=\Join=.
 	\item[3.6] Fixed \verb=\REA[n]= so that dash is shorter.  Added BeamerRequirements to add a block for requirements in beamer and fixed the requirements environment for beamer.  Fixed \verb=\req*= error.  Improved syntax for \verb=\recfnl= so it can accept a parenthesis delimited argument as the oracle.  Improved \verb=\setcol= to allow it to be used in a nested fashion without typesetting bugs.  Changed the \verb=\code= and \verb=\pair= commands to use only a single angle bracket.
 	\item[3.5] Added \verb=\Hop= and misc code cleanup.

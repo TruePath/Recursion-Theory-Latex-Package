@@ -10,10 +10,10 @@
 \RequirePackage{etoolbox}
 \RequirePackage{pict2e,picture}
 \RequirePackage{xparse}
-\def\recthyVersion{3.7}
+\def\recthyVersion{3.8.2}
 \ProvidesExplPackage
   {rec-thy}
-  {2021/03/30}
+  {2022/07/26}
   {\recthyVersion}
   {Provides commands for writing up recursion theory papers}
 
@@ -1955,7 +1955,7 @@
     % \NewDocumentCommand{\REset}{D(){}omd()}{
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}
     % }
-    \NewDocumentCommand{\REset}{D(){}oD(){#1}mD(){#3}}{{W_{#4\IfValueTF{#2}{, #2}{}}^{#5}}}
+    \NewDocumentCommand{\REset}{D(){}oD(){#1}mO{#2}}{{W_{#4\IfValueTF{#5}{, #5}{}}^{#3}}}
     % \newcommand*{\REset}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@REsetbody}
     % \newcommand*{\@REsetbody}[1]{W\ifdefined\@PMG@parenarg
     % ^{\@PMG@parenarg}%
@@ -1982,17 +1982,17 @@
     \newcommand*{\entersat}[1]{\mathbin{\searrow_{#1}}}
     
 
-    \appto{\recthy@rollback@threeSeven}{
-       \NewDocumentCommand{\oneREAop}{st+d()od()m}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
-    \let\iREAop=\oneREAop
-    }
+    % \appto{\recthy@rollback@threeSeven}{
+    %    \NewDocumentCommand{\oneREAop}{st+d()od()m}{{\IfBooleanTF{#1}{\mathcal{J}}{\widehat{\mathcal{J}}}}^{\IfBooleanTF{#1}{\vphantom{x}^\dagger}{}}_{#6\IfValueTF{#4}{, #4}{}} \IfValueTF{#3}{\left(#3\right)}{\IfValueTF{#5}{\left(#5\right)}{}}}
+    % \let\iREAop=\oneREAop
+    % }
 
-    % \newcommand*{\alphaREAop}[2][]{\mathcal{J}^{#2}_{#1}}
-    \appto{\recthy@rollback@threeTwo}{
-        \let\reaop=\REAop
-        \let\alphaREAop=\REAop
-        \let\aREAop=\alphaREAop
-    }
+    % % \newcommand*{\alphaREAop}[2][]{\mathcal{J}^{#2}_{#1}}
+    % \appto{\recthy@rollback@threeTwo}{
+    %     \let\reaop=\REAop
+    %     \let\alphaREAop=\REAop
+    %     \let\aREAop=\alphaREAop
+    % }
 
 
     
@@ -2030,18 +2030,19 @@
                                        }{#1}{\Tdegvar{#1}}}
 
 
-    \providecommand*{\Tjump}[1]{#1'}
+    \providecommand*{\Tjump}[1]{{#1}'}
     \let\jump=\Tjump
-    \providecommand*{\jumpn}[2]{#1^{(#2)}}
-    \providecommand*{\jjump}[1]{#1''}
+    \providecommand*{\jumpn}[2]{{#1}^{(#2)}}
+    \providecommand*{\jjump}[1]{{#1}''}
+    \providecommand*{\jjjump}[1]{{#1}'''}
     % \newcommand*{\Tzerosym}{\MVZero}
-    \newcommand*{\Tzerosym}{\mathbb{0}}
+    \newcommand*{\Tzerosym}{\symbf{0}}
     \providecommand*{\Tzero}{{\Tzerosym}}
     \providecommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
     \providecommand*{\zeroj}{\jump{{\Tzerosym}}}
     \let\Tzeroj=\zeroj
-    \providecommand*{\zerojj}{\jump{\jump{{\Tzerosym}}}}
-    \providecommand*{\zerojjj}{\jump{\jump{\jump{{\Tzerosym}}}}}
+    \providecommand*{\zerojj}{\jjump{\Tzerosym}}
+    \providecommand*{\zerojjj}{\jjjump{\Tzerosym}}
     \let\Tzerojj=\zerojj
     \let\Tzerojjj=\zerojjj
 
@@ -2052,8 +2053,6 @@
     \providecommand*{\Teq}{\Tequiv}
     \providecommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
     \providecommand*{\nTeq}{\nTequiv}
-    %turing below
-
     \providecommand*{\Tlneq}{\lneq_{\@recthy@TSYM}}
     \providecommand*{\Tleq}{\leq_{\@recthy@TSYM}}
     \providecommand*{\Tgneq}{\gneq_{\@recthy@TSYM}}
@@ -2090,6 +2089,35 @@
     \newcommand*{\ttless}{<_{\@recthy@ttSYM}}
     \newcommand*{\ttnleq}{\nleq_{\@recthy@ttSYM}}
     \newcommand*{\ttngeq}{\ngeq_{\@recthy@ttSYM}}
+
+%arithmetic comparisons
+
+
+
+    \newcommand*{\@recthy@ASYM}{\symbf{a}}
+    \providecommand*{\Adegvar}[1]{\symbf{#1}_{\@recthy@ASYM}}
+    \providecommand*{\Aequiv}{\mathrel{\equiv_{\@recthy@ASYM}}}
+    \providecommand*{\Aeq}{\Aequiv}
+    \providecommand*{\nAequiv}{\mathrel{\ncong_{\@recthy@ASYM}}}
+    \providecommand*{\nAeq}{\nAequiv}
+    \providecommand*{\Alneq}{\lneq_{\@recthy@ASYM}}
+    \providecommand*{\Aleq}{\leq_{\@recthy@ASYM}}
+    \providecommand*{\Agneq}{\gneq_{\@recthy@ASYM}}
+    \providecommand*{\Ageq}{\geq_{\@recthy@ASYM}}
+    \providecommand*{\Agtr}{>_{\@recthy@ASYM}}
+    \providecommand*{\Aless}{<_{\@recthy@ASYM}}
+    \providecommand*{\nAleq}{\nleq_{\@recthy@ASYM}}
+    \providecommand*{\nAgeq}{\ngeq_{\@recthy@ASYM}}
+    \providecommand*{\wjump}[1]{\jumpn{#1}{\omega}}
+    \providecommand*{\zerow}[1]{\zeron{\omega}}
+
+    \newcommand*{\Azerosym}{\symbf{0}_{\@recthy@ASYM}}
+    \providecommand*{\Azero}{{\Azerosym}}
+    \providecommand*{\Azeron}[1]{{\Azerosym}^{(#1)}}
+    \providecommand*{\Azeroj}{\jump{{\Azerosym}}}
+    \providecommand*{\Azerojj}{\jjump{\Azerosym}}
+    \providecommand*{\Azerojjj}{\jjjump{\Azerosym}}
+
 \fi
 
 
