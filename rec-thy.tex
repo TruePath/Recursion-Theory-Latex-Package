@@ -474,7 +474,8 @@ To disable these commands pass the option \verb=nospaces=.\\
 	\verb=\wstrs=                 & \( \wstrs  \) & Finite sequences of integers \\ 	\midrule
 	\verb=\cantor=                & \( \cantor \) & Cantor space		     \\    \midrule
 	\verb=\baire=                 & \( \baire  \) & Baire space                  \\[6pt]
-	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\
+	\verb=\Baire=                 & \( \Baire  \) & Alternate baire space        \\ \midrule
+	\verb=\bpfuncs= 							& \( \bpfuncs \) & Finite binary partial functions      \\	
 		\bottomrule
 	\end{tabular}
 
@@ -781,6 +782,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.8.3]  Added the \verb=\bpfuncs= command.
 	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.
 	\item[3.8.1] Fixed issues displaying the prime for jump operations.
 	\item[3.8] Adjusted \verb=\Tdeg= to be more beamer friendly and fixed it not to dumbly underline \verb=0^n=.  Fixed BeamerRequirements to work with differing values of \verb=\abovedisplayskip=.  Removed a few typos in docs for the requirements assistance.  Added BeamerRequire and BeamerRequire* that put the requirements in a block and offer overlay specifications.

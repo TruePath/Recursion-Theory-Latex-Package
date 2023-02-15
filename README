@@ -43,3 +43,7 @@ v3.7 - Fixed cases enviornment (both prettier and no problem with creating newli
 v3.8 - Adjusted \Tdeg to be more beamer friendly and fixed it not to dumbly underline 0^n.  Fixed BeamerRequirements to work with differing values of \abovedisplayskip.  Removed a few typos in docs for the requirements assistance.  Added BeamerRequire and BeamerRequire* that put the requirements in a block and offer overlay specifications.
 v3.8.1 Fixed issues displaying the prime for jump operations
 v3.8.2 Removed option to put the set at the end of an \REset operation to avoid capturing later paren arguments, e.g. \REset{i}(A) no longer works to avoid confusion with \REset{i}(x).
+v3.8.3 Added bpfuncs.  Changed default for code to use double angle brackets.  Improved the indentation for the cases enviornment.
+
+DON'T RELEASE WITHOUT CHECKING DEF OF COMPAT
+ALT: \mathrel{\rlap{\ensuremath{\not}}\ensuremath{\mid}}

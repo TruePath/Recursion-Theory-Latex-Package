@@ -1,5 +1,8 @@
 % \NeedsTeXFormat{LaTeX2e}
 % Release Notes see README
+%CHECK DEF OF COMPAT
+% POSSIBLE ALT: \mathrel{\rlap{\ensuremath{\not}}\ensuremath{\mid}}
+
 \RequirePackage{expl3}
 \RequirePackage{ltxcmds}
 \RequirePackage{iftex,ifpdf}
@@ -102,11 +105,9 @@
 \newif\ifrecthy@mrref           \recthy@mrreffalse
 \newif\ifrecthy@nomath          \recthy@nomathfalse
 \newif\ifrecthy@nodelim         \recthy@nodelimfalse
-\newif\ifrecthy@nonames
-\recthy@nonamesfalse
-\newif\ifrecthy@nosets
-\recthy@nosetsfalse
-\newif\ifrecthy@noquants\recthy@noquantsfalse
+\newif\ifrecthy@nonames         \recthy@nonamesfalse
+\newif\ifrecthy@nosets          \recthy@nosetsfalse
+\newif\ifrecthy@noquants        \recthy@noquantsfalse
 \newif\ifrecthy@nospaces        \recthy@nospacesfalse
 \newif\ifrecthy@nostrings       \recthy@nostringsfalse
 \newif\ifrecthy@notrees         \recthy@notreesfalse
@@ -131,6 +132,7 @@
 \newif\ifrecthy@fix@typeset \recthy@fix@typesettrue
 \newif\ifrecthy@nodoubleangles \recthy@nodoubleanglesfalse
 \newif\ifrecthy@stepsenv \recthy@stepsenvfalse
+% \newif\ifrecthy@codesqquote \recthy@codesqquotetrue
 \newif\ifrecthy@compatThreeSixOrEarlier \recthy@compatThreeSixOrEarlierfalse
 
 \DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
@@ -161,6 +163,7 @@
 \DeclareOptionX{nofixtype}{\recthy@fix@typesetfalse}
 \DeclareOptionX{nodoubleangles}{\recthy@nodoubleanglestrue}
 \DeclareOptionX{steps}{\recthy@stepsenvtrue}
+% \DeclareOptionX{nocodequotes}{\recthy@codesqquotefalse}
 
 \DeclareOptionX{compat31}{\recthy@compat@threeOne}
 \DeclareOptionX{compat35}{\recthy@compat@threeFive}
@@ -284,8 +287,8 @@
 \def\@recthy@rangle{\rangle}
 \let\@recthy@lstrdelim=\@recthy@langle
 \let\@recthy@rstrdelim=\@recthy@rangle
-\let\@recthy@lcodedelim=\@recthy@langle
-\let\@recthy@rcodedelim=\@recthy@rangle
+\let\@recthy@lcodedelim=\@recthy@llangle
+\let\@recthy@rcodedelim=\@recthy@rrangle
 \let\@recthy@lpairdelim=\@recthy@langle
 \let\@recthy@rpairdelim=\@recthy@rangle
 
@@ -410,6 +413,9 @@
   \newcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@lpairdelim} #1, #2 \mathclose{\@recthy@rpairdelim}}
   \newcommand*{\@recthy@str}[1]{\mathopen{\@recthy@lstrdelim}#1\mathclose{\@recthy@rstrdelim}}
   \newcommand*{\@recthy@code}[1]{\mathopen{\@recthy@lcodedelim}#1\mathclose{\@recthy@rcodedelim}}
+  % \ifrecthy@codesqquote
+  %   \renewcommand*{\@recthy@code}[1]{\godelnum{\mathopen{\@recthy@lcodedelim}#1\mathclose{\@recthy@rcodedelim}}}
+  % \fi
 
 
   \appto{\recthy@rollback@threeSix}{
@@ -418,8 +424,9 @@
     % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
     \renewcommand*{\@recthy@code}[2][]{\mathopen{\@recthy@llangle}#2\mathclose{\@recthy@rrangle}^{#1}}
     }
+
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
-\NewDocumentCommand{\compat@recthy}{o}{\mathrel{\not\mid}\IfValueTF{#1}{_{#1}}{}}
+\NewDocumentCommand{\compat@recthy}{o}{{\Mathbin{\not{}|}}\IfValueTF{#1}{_{#1}}{}}
 
 \ifrecthy@nostrings
     \@packinfo{No strings loading.}
@@ -440,8 +447,10 @@
 
     \providecommand*{\incompat}{\incompat@recthy} %incompatible stringes FIX SPACING
     \providecommand*{\incomp}{\incompat@recthy}
-    \providecommand*{\compat}{\compat@recthy}
-    \providecommand*{\nincompat}{\compat@recthy}
+    \let\compat=\compat@recthy
+    \let\incompat=\incompat@recthy
+    % \providecommand*{\compat}{\compat@recthy}
+    % \providecommand*{\nincompat}{\compat@recthy}
     \providecommand*{\nincomp}{\compat@recthy}
     % \newcommand*{\setcol}[2]{{#1}^{[#2]}}
     \ExplSyntaxOn %thx stackexghance
@@ -585,11 +594,8 @@
     \setlist[pfcasesnonum]{
       label={\pmg@casefont{Case}},
       align=left,
-      labelsep=0pt,
-      itemindent=!,
-      leftmargin=2em,
-      labelindent=0pt,
-      labelwidth=0pt
+      left=0pt .. 1.5em,
+      itemindent=* 
     }
     \setlist[pfcasesnonum,1]{
         before=\def\pfcasecounter@pmg{pfcasesnonumi},
@@ -603,12 +609,17 @@
     \newlist{pfcasesnumbered}{enumerate}{3}
     \setlist[pfcasesnumbered]{
       align=left,
-      labelsep=0pt,
-      itemindent=!,
-      leftmargin=2em,
-      labelindent=0pt,
-      labelwidth=0pt
+      left=0pt .. 1.5em,
+      itemindent=* 
     }
+    % \setlist[pfcasesnumbered]{
+    %   align=left,
+    %   labelsep=0pt,
+    %   itemindent=!,
+    %   leftmargin=2em,
+    %   labelindent=0pt,
+    %   labelwidth=0pt
+    % }
     \setlist[pfcasesnumbered,1]{
         before=\def\pfcasecounter@pmg{pfcasesnumberedi},
       label={{\pmg@casefont{Case}}~\arabic*},
@@ -635,7 +646,7 @@
             \ltx@ifpackageloaded{cleveref}{%
             \cref@constructprefix{pfcases}{\cref@result}%
             \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
-    \begin{pfcasesnonum}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
+        \begin{pfcasesnonum}\def\@recthy@cases@labelindent{1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
 
     \newenvironment{pfcases}{
         \ProvideDocumentCommand{\case}{o}{
@@ -1641,6 +1652,7 @@
     \@packinfo{Spaces loading.}
 
     \providecommand*{\bstrs}{2^{<\omega}}
+    \newcommand{\bpfuncs}{{\lbrace 0,1, \diverge \rbrace}^{< \omega}}
     \providecommand*{\wstrs}{\omega^{<\omega}}
 
     \providecommand*{\cantor}{2^{\omega}}
