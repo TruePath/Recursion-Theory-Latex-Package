@@ -424,9 +424,8 @@
     % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
     \renewcommand*{\@recthy@code}[2][]{\mathopen{\@recthy@llangle}#2\mathclose{\@recthy@rrangle}^{#1}}
     }
-
 \NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
-\NewDocumentCommand{\compat@recthy}{o}{{\Mathbin{\not{}|}}\IfValueTF{#1}{_{#1}}{}}
+\NewDocumentCommand{\compat@recthy}{o}{{\mathbin{\not|}}\IfValueTF{#1}{_{#1}}{}}
 
 \ifrecthy@nostrings
     \@packinfo{No strings loading.}
@@ -447,10 +446,8 @@
 
     \providecommand*{\incompat}{\incompat@recthy} %incompatible stringes FIX SPACING
     \providecommand*{\incomp}{\incompat@recthy}
-    \let\compat=\compat@recthy
-    \let\incompat=\incompat@recthy
-    % \providecommand*{\compat}{\compat@recthy}
-    % \providecommand*{\nincompat}{\compat@recthy}
+    \providecommand*{\compat}{\compat@recthy}
+    \providecommand*{\nincompat}{\compat@recthy}
     \providecommand*{\nincomp}{\compat@recthy}
     % \newcommand*{\setcol}[2]{{#1}^{[#2]}}
     \ExplSyntaxOn %thx stackexghance
@@ -788,6 +785,8 @@
 
 
 \ifrecthy@beamersupp
+
+\AtBeginDocument{
         \theoremstyle{plain}
         \newtheorem{reqsblock@recthy}{Requirements}
         \newtheorem{reqblock@recthy}{Requirement}
@@ -801,10 +800,11 @@
       \setbeamercolor{block title}{fg=white,bg=Maroon}%
       \setbeamercolor{block body}{fg=black,bg=Maroon!10}\OLDreqblock@recthy
     }
+  }
 
       \NewDocumentCommand{\require@beamer}{sO{}mO{}m}{\tag{$\@ifmtarg{#2#4}{\mathscr{#3}_{#5}}{\mathscr{#3}_{#5}^{#2#4}}$} \IfBooleanTF{#1}{}{\label{\detokenize{req:#3@#2#4}}} & }
 
-    \NewDocumentEnvironment{BeamerRequirements}{d<>b}{\IfValueTF{#1}{\begin{reqsblock@recthy}<#1>}{\begin{reqsblock@recthy}}%
+    \NewDocumentEnvironment{requirements}{d<>b}{\IfValueTF{#1}{\begin{reqsblock@recthy}<#1>}{\begin{reqsblock@recthy}}%
       \setlength{\abovedisplayskip}{0pt}%
       \setlength{\belowdisplayskip}{0pt}%
     % \vspace*{-.5cm}
@@ -813,37 +813,37 @@
             \def\halign{\let\mylb\\ \renewcommand{\\}{& \mylb}\myhalign}%
           \let\require=\require@beamer %
           \begin{flalign*}%
-          #2 &
+          #2
           \end{flalign*}%
           \end{reqsblock@recthy}}{}
 
-    \NewDocumentEnvironment{requirements}{b}{\usetagform{colon} %
+    \NewDocumentEnvironment{requirements*}{b}{\usetagform{colon} %
           \let\myhalign\halign%
             \def\halign{\let\mylb\\ \renewcommand{\\}{& \mylb}\myhalign}%
           \let\require=\require@beamer %
           \begin{flalign*}%
-          #1 &
+          #1
           \end{flalign*}}{\ignorespacesafterend}%\@recthy@ignorespacesandallparsafter}
 
 
-   \NewDocumentEnvironment{BeamerRequire}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
-        \setlength{\abovedisplayskip}{0pt}%
-        \setlength{\belowdisplayskip}{0pt}%
-        \begin{requirement}{\req@nohref[#2#4]{#3}{#5}} \label{\detokenize{req:#3@#2#4}}%
-    }{
-        \end{requirement}%
-        \vspace*{-.3cm}%
-        \end{reqblock@recthy}%
-    }
-    \NewDocumentEnvironment{BeamerRequire*}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
-        \setlength{\abovedisplayskip}{0pt}%
-        \setlength{\belowdisplayskip}{0pt}%
-        \begin{requirement}{\req@nohref[#2#4]{#3}{#5}}
-    }{
-        \end{requirement}%
-        \vspace*{-.3cm}%
-        \end{reqblock@recthy}%
-    }       
+   % \NewDocumentEnvironment{BeamerRequire}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
+   %      \setlength{\abovedisplayskip}{0pt}%
+   %      \setlength{\belowdisplayskip}{0pt}%
+   %      \begin{requirement}{\req@nohref[#2#4]{#3}{#5}} \label{\detokenize{req:#3@#2#4}}%
+   %  }{
+   %      \end{requirement}%
+   %      \vspace*{-.3cm}%
+   %      \end{reqblock@recthy}%
+   %  }
+   %  \NewDocumentEnvironment{BeamerRequire*}{d<>O{}mO{}m}{\IfValueTF{#1}{\begin{reqblock@recthy}<#1>}{\begin{reqblock@recthy}}%
+   %      \setlength{\abovedisplayskip}{0pt}%
+   %      \setlength{\belowdisplayskip}{0pt}%
+   %      \begin{requirement}{\req@nohref[#2#4]{#3}{#5}}
+   %  }{
+   %      \end{requirement}%
+   %      \vspace*{-.3cm}%
+   %      \end{reqblock@recthy}%
+   %  }       
 \else
 
         \NewDocumentEnvironment{requirements}{}{%
