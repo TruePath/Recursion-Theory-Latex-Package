@@ -47,3 +47,4 @@ v3.8.3 Added bpfuncs.  Changed default for code to use double angle brackets.  I
 
 DON'T RELEASE WITHOUT CHECKING DEF OF COMPAT
 ALT: \mathrel{\rlap{\ensuremath{\not}}\ensuremath{\mid}}
+UPDATE to match rec-thy.tex

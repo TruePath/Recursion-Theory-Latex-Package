@@ -230,6 +230,11 @@ To disable these commands pass the option \verb=nodegrees=. \\
 
 
 \begin{xtabular}{l |  l | l}\toprule
+  \verb=\Tdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of \( \powset{\omega} \) under \( \Tleq \) \\ \midrule
+  \verb=\REdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of \re sets under \( \Tleq \) \\ \midrule
+  \verb=\Adegrees=                                        & \( 	\Adegrees                              	   \)   & The structure of \( \powset{\omega} \) under \( \Aleq \) \\ \midrule
+  \verb=\AREAdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of the \( \REA[\omega] \) sets under \( \Aleq \) \\ \midrule
+
 	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & Turing degree \\ \midrule
 	\verb=\Tjump{X}=                                       & \multirow{2}{*}{\( 	\Tjump{X}                             	   \)}   & \multirow{2}{*}{Turing jump} \\
 	\tab \verb=\jump{X}=                                        &  & \\ \midrule
@@ -240,26 +245,21 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=\zerojj=                                         & \( 	\zerojj                               	   \)   & \\ \midrule
 	\verb=\zerojjj=                                        & \( 	\zerojjj                              	   \)   & \\ \midrule
 	\verb=\zeron{n}=                                       & \( 	\zeron{n}                             	   \)   & \\ \midrule
-	\verb=X \Tequiv Y=                                     & \multirow{2}{*}{\( 	X \Tequiv Y                           	   \)}   & \multirow{2}{*}{Turing equivalence}\\
-	\tab \verb=X \Teq Y=                                        &   & \\ \midrule
-	\verb=X \nTequiv Y=                                    & \multirow{2}{*}{\( 	X \nTequiv Y                          	   \)}   & \multirow{2}{*}{Turing inequivalence} \\
-	\tab \verb=X \nTeq Y=                                       &    & \\ \midrule
-        \verb=X \Tlneq Y=                               	& \(  X \Tlneq Y   \)   & \\ \midrule
-        \verb=X \Tleq  Y=                               	& \(  X \Tleq  Y   \)   & \\ \midrule
-        \verb=X \Tgneq Y=                               	& \(  X \Tgneq Y   \)   & \\ \midrule
-        \verb=X \Tgeq  Y=                               	& \(  X \Tgeq  Y   \)   & \\ \midrule
-        \verb=X \Tgtr  Y=                               	& \(  X \Tgtr  Y   \)   & \\ \midrule
-        \verb=X \Tless Y=                               	& \(  X \Tless Y   \)   & \\ \midrule
-        \verb=X \nTleq Y=                               	& \(  X \nTleq Y   \)   & \\ \midrule
-        \verb=X \nTgeq Y=                               	& \(  X \nTgeq Y   \)   & \\ \midrule
-        \verb=X \Tincompat Y=                                      & \multirow{2}{*}{\(  X \Tincompat Y   \)}   & Turing incompatibility \\ 
+	\verb=X \Teq Y=                                     	 & \( 	X \Teq Y                           	   \)				& Turing equivalence \\ \midrule
+	\verb=X \nTeq Y=                                    	 & \( 	X \nTeq Y                          	   \)   		& Turing inequivalence \\ \midrule
+  \verb=X \Tlneq Y=                               			& \(  X \Tlneq Y   \)   & \\ \midrule
+  \verb=X \Tleq  Y=                               			& \(  X \Tleq  Y   \)   & \\ \midrule
+  \verb=X \Tgneq Y=                               			& \(  X \Tgneq Y   \)   & \\ \midrule
+  \verb=X \Tgeq  Y=                               			& \(  X \Tgeq  Y   \)   & \\ \midrule
+  \verb=X \Tgtr  Y=                               			& \(  X \Tgtr  Y   \)   & \\ \midrule
+  \verb=X \Tless Y=                               			& \(  X \Tless Y   \)   & \\ \midrule
+  \verb=X \nTleq Y=                               			& \(  X \nTleq Y   \)   & \\ \midrule
+  \verb=X \nTgeq Y=                               			& \(  X \nTgeq Y   \)   & \\ \midrule
+  \verb=X \Tincompat Y=                                      & \multirow{2}{*}{\(  X \Tincompat Y   \)}   & Turing incompatibility \\ 
         \tab \verb=X \Tincomp Y= 							& & \\ \midrule 
-        \verb=X \Tcompat Y=                               	&  \multirow{3}{*}{\(  X \Tcompat Y   \)}  &  \\
-        \tab \verb=X \nTincomp Y= & & \\
-        \tab \verb=X \nTincompat Y= & & \\  \midrule
-	\verb=\Tdeg{d} \Tdegjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \Tdegjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
-	\verb=\Tdeg{d} \Tdegmeet \Tdeg{d'}=                    & \multirow{2}{*}{\( 	\Tdeg{d} \Tdegmeet \Tdeg{d'}          	   \)}   & \multirow{2}{*}{Meet of degrees (when defined)} \\
-	\tab \verb=\Tdeg{d} \Tmeet \Tdeg{d'}=                       &    & \\ \midrule
+  \verb=X \Tcompat Y=                               		&  \(  X \Tcompat Y \)  &  Turing compatibility  \\ \midrule
+	\verb=\Tdeg{d} \degjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \degjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
+	\verb=\Tdeg{d} \degmeet \Tdeg{d'}=                    	& \( 	\Tdeg{d} \degmeet \Tdeg{d'}   \)   & Meet of degrees (when defined)  \\ \midrule
 	\verb=X \Tplus Y=                                      & \multirow{2}{*}{\( 	X \Tplus Y                            	   \)}   & \multirow{4}{*}{Effective join of sets} \\
 	\tab \verb=X \Tjoin Y=                                      &  & \\
 	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\
@@ -273,6 +273,23 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=X \ttless Y=                                     & \( 	X \ttless Y                           	   \)   & \\ \midrule
 	\verb=X \ttnleq Y=                                     & \( 	X \ttnleq Y                           	   \)   & \\ \midrule
         \verb=X \ttngeq Y=                                     & \(  X \ttngeq Y                             	   \)   & \\
+
+  \verb=\Azero=                                          & \( 	\Azero                                	   \)   & Arithmetic degree \\ \midrule
+  \verb=\Azeroj=                                          & \( 	\Azeroj                                	   \)   & \\ \midrule
+	\verb=\Azerojj=                                         & \( 	\Azerojj                               	   \)   & \\ \midrule
+  \verb=X \Aeq Y=                                     	 & \( 	X \Aeq Y                           	   \)				& Arithmetic equivalence \\ \midrule
+	\verb=X \nAeq Y=                                    	 & \( 	X \nAeq Y                          	   \)   		& Arithmetic inequivalence \\ \midrule
+  \verb=X \Alneq Y=                               			& \(  X \Alneq Y   \)   & \\ \midrule
+  \verb=X \Aleq  Y=                               			& \(  X \Aleq  Y   \)   & \\ \midrule
+  \verb=X \Agneq Y=                               			& \(  X \Agneq Y   \)   & \\ \midrule
+  \verb=X \Ageq  Y=                               			& \(  X \Ageq  Y   \)   & \\ \midrule
+  \verb=X \Agtr  Y=                               			& \(  X \Agtr  Y   \)   & \\ \midrule
+  \verb=X \Aless Y=                               			& \(  X \Aless Y   \)   & \\ \midrule
+  \verb=X \nAleq Y=                               			& \(  X \nAleq Y   \)   & \\ \midrule
+  \verb=X \nAgeq Y=                               			& \(  X \nAgeq Y   \)   & \\ \midrule
+  \verb=X \Aincomp Y=                                   & \(  X \Aincomp Y   \) & Turing incompatibility \\ \midrule 
+  \verb=X \Acompat Y=                               		&  \(  X \Acompat Y \)  &  Turing compatibility  \\ \midrule
+
 		\bottomrule
 	\end{xtabular}          \\
 \makeatletter
@@ -782,6 +799,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
+	\item[3.10]  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.
 	\item[3.9]  Fixed BeamerRequirements
 	\item[3.8.3]  Added the \verb=\bpfuncs= command.
 	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.

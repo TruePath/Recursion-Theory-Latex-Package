@@ -149,7 +149,6 @@
 \DeclareOptionX{nosetrels}{\recthy@nosetrelstrue}
 \DeclareOptionX{noordinalnotations}{\recthy@noordinalnotationstrue}
 \DeclareOptionX{nosyntax}{\recthy@nosyntaxtrue}
-\DeclareOptionX{nodegclasses}{\recthy@nodegclassestrue}
 \DeclareOptionX{noforcing}{\recthy@noforcingtrue}
 \DeclareOptionX{nodegrees}{\recthy@nodegreestrue}
 \DeclareOptionX{nocomputations}{\recthy@nocomputationstrue}
@@ -1865,17 +1864,13 @@
 %%%ABREVIATIONS
 
 
-%Degree Classes
-\ifrecthy@nodegclasses
-    \@packinfo{No degree classes loading.}
-\else
-    \@packinfo{Degree classes loading.}
-    \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
-    \newcommand*{\REdegrees}{\ensuremath{\mathscr{R}}}
-    \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
-    \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
-    \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
-\fi
+% %Degree Classes
+% \ifrecthy@nodegclasses
+%     \@packinfo{No degree classes loading.}
+% \else
+%     \@packinfo{Degree classes loading.}
+
+% \fi
 
 
 
@@ -2026,7 +2021,25 @@
 \ifrecthy@nodegrees
     \@packinfo{No degrees loading.}
 \else
-
+    \newcommand*{\@recthy@TSYM}{\symbf{T}}
+    \newcommand*{\@recthy@ASYM}{\mathscr{a}}
+    \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
+    \newcommand*{\Tdegreesjump}{\ensuremath{\mathscr{D}'}}
+    \WithSuffix\def\Tdegrees'\Tdegreesjump
+    % \WithSuffix\def\Tdegrees(#1){\Tdegrees\left(#1\right)}
+    % \WithSuffix\def\Tdegreesjump(#1){\Tdegreesjump\left(#1\right)}
+    \newcommand*{\REdegrees}{\ensuremath{\mathscr{R}}}
+    % \WithSuffix\def\REdegrees(#1){\REdegrees\left(#1\right)}
+    \newcommand*{\Adegrees}{\ensuremath{\mathscr{D}_\@recthy@ASYM}}
+    % \WithSuffix\def\Adegrees(#1){\Adegrees\left(#1\right)}
+    \newcommand*{\Adegreesjump}{\ensuremath{\mathscr{D}'_\@recthy@ASYM}}
+    \WithSuffix\def\Adegrees'\Adegreesjump
+    % \WithSuffix\def\Adegreesjump(#1){\Adegreesjump\left(#1\right)}
+    \newcommand*{\AREAdegrees}{\ensuremath{\mathscr{R}_\@recthy@ASYM}}
+    % \WithSuffix\def\AREdegrees(#1){\AREdegrees\left(#1\right)}
+    \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
+    \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
+    \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
 
     %%%%%%Turing Degrees
     \def\firsttokof@pmg#1{\first@pmg@rdmxs(#1)}
@@ -2055,18 +2068,21 @@
     % \newcommand*{\Tzerosym}{\MVZero}
     \newcommand*{\Tzerosym}{\symbf{0}}
     \providecommand*{\Tzero}{{\Tzerosym}}
+    \providecommand*{\Azero}{{\Tzerosym_\@recthy@ASYM}}
     \providecommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
     \providecommand*{\zeroj}{\jump{{\Tzerosym}}}
     \let\Tzeroj=\zeroj
+    \providecommand*{\Azeroj}{\jump{{\Azero}}}
     \providecommand*{\zerojj}{\jjump{\Tzerosym}}
+    \providecommand*{\Azerojj}{\jjump{{\Azero}}}
     \providecommand*{\zerojjj}{\jjjump{\Tzerosym}}
     \let\Tzerojj=\zerojj
     \let\Tzerojjj=\zerojjj
 
     %%Misc Recursion theory stuff
     %turing equivalent
-    \newcommand*{\@recthy@TSYM}{\symbf{T}}
-    \providecommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}}
+    
+    \providecommand*{\Tequiv}{\mathrel{\equiv_{\@recthy@TSYM}}} %DEPRECIATED
     \providecommand*{\Teq}{\Tequiv}
     \providecommand*{\nTequiv}{\mathrel{\ncong_{\@recthy@TSYM}}}
     \providecommand*{\nTeq}{\nTequiv}
@@ -2079,8 +2095,23 @@
     \providecommand*{\nTleq}{\nleq_{\@recthy@TSYM}}
     \providecommand*{\nTgeq}{\ngeq_{\@recthy@TSYM}}
 
-    \providecommand*{\Tdegjoin}{\mathbin{\vee_{\@recthy@TSYM}}}
-    \providecommand*{\Tdegmeet}{\mathbin{\wedge_{\@recthy@TSYM}}}
+    \providecommand*{\Aeq}{\mathrel{\equiv_{\@recthy@ASYM}}}
+    \providecommand*{\nAeq}{\mathrel{\ncong_{\@recthy@ASYM}}}
+    \providecommand*{\Alneq}{\lneq_{\@recthy@ASYM}}
+    \providecommand*{\Aleq}{\leq_{\@recthy@ASYM}}
+    \providecommand*{\Agneq}{\gneq_{\@recthy@ASYM}}
+    \providecommand*{\Ageq}{\geq_{\@recthy@ASYM}}
+    \providecommand*{\Agtr}{>_{\@recthy@ASYM}}
+    \providecommand*{\Aless}{<_{\@recthy@ASYM}}
+    \providecommand*{\nAleq}{\nleq_{\@recthy@ASYM}}
+    \providecommand*{\nAgeq}{\ngeq_{\@recthy@ASYM}}
+
+    % \providecommand*{\Tdegjoin}{\mathbin{\vee}}
+    % \providecommand*{\Tdegmeet}{\mathbin{\wedge}}
+    \providecommand*{\degjoin}{\mathbin{\vee}}
+    \providecommand*{\degmeet}{\mathbin{\wedge}}
+    \let\Tdegjoin=\degjoin
+    \let\Tdegmeet=\degmeet
     \providecommand*{\Tmeet}{\Tdegmeet}
     \providecommand*{\Tsetjoin}{\mathbin{\oplus}}
     \providecommand*{\TsetJoin}{\mathop{\bigoplus}}
