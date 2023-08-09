@@ -13,7 +13,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{pict2e,picture}
 \RequirePackage{xparse}
-\def\recthyVersion{3.8.2}
+\def\recthyVersion{3.9}
 \ProvidesExplPackage
   {rec-thy}
   {2022/07/26}
@@ -132,6 +132,8 @@
 \newif\ifrecthy@fix@typeset \recthy@fix@typesettrue
 \newif\ifrecthy@nodoubleangles \recthy@nodoubleanglesfalse
 \newif\ifrecthy@stepsenv \recthy@stepsenvfalse
+\newif\ifrecthy@shortO \recthy@shortOtrue
+\newif\ifrecthy@longO \recthy@longOfalse
 % \newif\ifrecthy@codesqquote \recthy@codesqquotetrue
 \newif\ifrecthy@compatThreeSixOrEarlier \recthy@compatThreeSixOrEarlierfalse
 
@@ -162,11 +164,15 @@
 \DeclareOptionX{nofixtype}{\recthy@fix@typesetfalse}
 \DeclareOptionX{nodoubleangles}{\recthy@nodoubleanglestrue}
 \DeclareOptionX{steps}{\recthy@stepsenvtrue}
+\DeclareOptionX{noshortO}{\recthy@shortOfalse\recthy@longOtrue}
+\DeclareOptionX{longO}{\recthy@longOtrue}
 % \DeclareOptionX{nocodequotes}{\recthy@codesqquotefalse}
 
 \DeclareOptionX{compat31}{\recthy@compat@threeOne}
 \DeclareOptionX{compat35}{\recthy@compat@threeFive}
 \DeclareOptionX{compat36}{\recthy@compat@threeSix}
+\edef\@pmg@expand{\noexpand\DeclareOptionX{version}[]}
+\DeclareOptionX{v3.9}{\recthy@shortOfalse\recthy@longOtrue}
 
 \DeclareOptionX{suppPriorityTrees}{
 \ifrecthy@compatThreeSixOrEarlier
@@ -252,16 +258,17 @@
 \DeclareOptionX{diffsym}[@recthy@setdiffSYMdefault]{\letcs{\@recthy@setdiffSYM}{#1}}
 % \newcommand*{\@recthy@Cform@default}{\prescript{\mathcal{C}}{}{\Pi}}
 
-
-\newcommand*{\@recthy@CDelta@default}{\prescript{\mathcal{C}}{}{\Delta}}
-\newcommand*{\@recthy@CSigma@default}{\prescript{\mathcal{C}}{}{\Sigma}}
-\newcommand*{\@recthy@CPi@default}{\prescript{\mathcal{C}}{}{\Pi}}
-\let\@recthy@CDelta=\@recthy@CDelta@default
-\let\@recthy@CSigma=\@recthy@CSigma@default
-\let\@recthy@CPi=\@recthy@CPi@default
-\DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
-\DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
-\DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
+%%DEPRECIATED 4.0
+% \newcommand*{\@recthy@CDelta@default}{\prescript{\mathcal{C}}{}{\Delta}}
+% \newcommand*{\@recthy@CSigma@default}{\prescript{\mathcal{C}}{}{\Sigma}}
+% \newcommand*{\@recthy@CPi@default}{\prescript{\mathcal{C}}{}{\Pi}}
+% \let\@recthy@CDelta=\@recthy@CDelta@default
+% \let\@recthy@CSigma=\@recthy@CSigma@default
+% \let\@recthy@CPi=\@recthy@CPi@default
+% \DeclareOptionX{cdeltasym}[@recthy@CDelta@default]{\letcs{\@recthy@CDelta}{#1}}
+% \DeclareOptionX{csigmasym}[@recthy@CSigma@default]{\letcs{\@recthy@CSigma}{#1}}
+% \DeclareOptionX{cpisym}[@recthy@CPi@default]{\letcs{\@recthy@CPi}{#1}}
+%%/DEPRECIATED 4.0
 % \DeclareOptionX{cformsym}[@recthy@Cform@default]{\letcs{\@recthy@CPi}{#1}\letcs{\@recthy@CSigma}{#1}\letcs{\@recthy@CDelta}{#1}}
 
 
@@ -992,6 +999,7 @@
     \newcommand{\ParFuncs}[2]{{#2}^{\subset #1}}
     \newcommand{\FinParFuncs}[2]{{#2}^{\subset_{< \infty} #1}}
     \recthy@strip{ensuretext}
+    \providecommand(\quotient){\quotient@recthy}
 \fi
 
 
@@ -1263,41 +1271,17 @@
     \@packinfo{No syntax loading.}
 \else
     \@packinfo{syntax loading.}
-    \recthy@strip{CDelta}
-    \recthy@strip{CSigma}
-    \recthy@strip{CPi}
     \newcommand*{\deltan}[1]{\Delta_{#1}}
     \WithSuffix\def\deltan[#1]#2{\Delta^{#1}_{#2}}
     % \WithSuffix\def\deltan(#1)#2{\deltan{#2}\!\left(#1\right)}
     \newcommand*{\deltaZeroN}[1]{\Delta^{0}_{#1}}
     \WithSuffix\def\deltaZeroN[#1]#2{\Delta^{0,#1}_{#2}}
     % \WithSuffix\def\deltaZeroN(#1)#2{\deltaZeroN{#2}\!\left(#1\right)}
-    \newcommand*{\deltaZeroTwo}{\deltaZeroN{2}}
-    \WithSuffix\def\deltaZeroTwo[#1]{\deltaZeroN[#1]{2}}
-    % \WithSuffix\def\deltaZeroTwo(#1){\deltaZeroN[#1]{2}}
-    \newcommand*{\deltaZeroThree}{\deltaZeroN{3}}
-    \WithSuffix\def\deltaZeroThree[#1]{\deltaZeroN[#1]{3}}
-    % \WithSuffix\def\deltaZeroThree(#1){\deltaZeroN[#1]{3}}
-    \newcommand*{\deltaZeroOne}{\deltaZeroN{1}}
-    \WithSuffix\def\deltaZeroOne[#1]{\deltaZeroN[#1]{1}}
-    % \WithSuffix\def\deltaZeroOne(#1){\deltaZeroN[#1]{1}}
-    \newcommand*{\deltaZeroZero}{\deltaZeroN{0}}
-    \WithSuffix\def\deltaZeroZero[#1]{\deltaZeroN[#1]{0}}
-    % \WithSuffix\def\deltaZeroZero(#1){\deltaZeroN[#1]{0}}
 
 
     \newcommand*{\deltaOneN}[1]{\deltan{#1}^1}
     \WithSuffix\def\deltaOneN[#1]#2{\Delta^{1,#1}_{#2}}
-    % \WithSuffix\def\deltaOneN(#1)#2{\deltaOneN{#2}\!\left(#1\right)}
-    \newcommand*{\deltaOneOne}{\deltaOneN{1}}
-    \WithSuffix\def\deltaOneOne[#1]{\deltaOneN[#1]{1}}
-    % \WithSuffix\def\deltaOneOne(#1){\deltaOneN[#1]{1}}
-    \newcommand*{\deltaOneTwo}{\deltaOneN{2}}
-    \WithSuffix\def\deltaOneTwo[#1]{\deltaOneN[#1]{2}}
-    % \WithSuffix\def\deltaOneTwo(#1){\deltaOneN[#1]{2}}
-    \newcommand*{\deltaOneThree}{\deltaOneN{3}}
-    \WithSuffix\def\deltaOneThree[#1]{\deltaOneN[#1]{3}}
-    % \WithSuffix\def\deltaOneThree(#1){\deltaOneN[#1]{3}}
+ 
 
 
 
@@ -1306,31 +1290,15 @@
     % \WithSuffix\def\sigman(#1)#2{\sigman{#2}\!\left(#1\right)}
     \newcommand*{\sigmaZeroN}[1]{\Sigma^{0}_{#1}}
     \WithSuffix\def\sigmaZeroN[#1]#2{\Sigma^{0,#1}_{#2}}
-    % \WithSuffix\def\sigmaZeroN(#1)#2{\sigmaZeroN{#2}\!\left(#1\right)}
-    \newcommand*{\sigmaZeroOne}{\sigmaZeroN{1}}
-    \WithSuffix\def\sigmaZeroOne[#1]{\sigmaZeroN[#1]{1}}
-    % \WithSuffix\def\sigmaZeroOne(#1){\sigmaZeroN[#1]{1}}
-    \newcommand*{\sigmaZeroTwo}{\sigmaZeroN{2}}
-    \WithSuffix\def\sigmaZeroTwo[#1]{\sigmaZeroN[#1]{2}}
-    % \WithSuffix\def\sigmaZeroTwo(#1){\sigmaZeroN[#1]{2}}
-    \newcommand*{\sigmaZeroThree}{\sigmaZeroN{3}}
-    \WithSuffix\def\sigmaZeroThree[#1]{\sigmaZeroN[#1]{3}}
-    % \WithSuffix\def\sigmaZeroThree(#1){\sigmaZeroN[#1]{3}}
+
+ 
 
 
 
     \newcommand*{\sigmaOneN}[1]{\Sigma^1_{#1}}
     \WithSuffix\def\sigmaOneN[#1]#2{\Sigma^{1,#1}_{#2}}
     % \WithSuffix\def\sigmaOneN(#1)#2{\sigmaOneN{#2}\!\left(#1\right)}
-    \newcommand*{\sigmaOneOne}{\sigmaOneN{1}}
-    \WithSuffix\def\sigmaOneOne[#1]{\sigmaOneN[#1]{1}}
-    % \WithSuffix\def\sigmaOneOne(#1){\sigmaOneN[#1]{1}}
-    \newcommand*{\sigmaOneTwo}{\sigmaOneN{2}}
-    \WithSuffix\def\sigmaOneTwo[#1]{\sigmaOneN[#1]{2}}
-    % \WithSuffix\def\sigmaOneTwo(#1){\sigmaOneN[#1]{2}}
-    \newcommand*{\sigmaOneThree}{\sigmaOneN{3}}
-    \WithSuffix\def\sigmaOneThree[#1]{\sigmaOneN[#1]{3}}
-    % \WithSuffix\def\sigmaOneThree(#1){\sigmaOneN[#1]{3}}
+    
 
 
 
@@ -1340,59 +1308,42 @@
     \newcommand*{\piZeroN}[1]{\Pi^0_{#1}}
     \WithSuffix\def\piZeroN[#1]#2{\Pi^{0,#1}_{#2}}
     % \WithSuffix\def\piZeroN(#1)#2{\piZeroN{#2}\left(#1\right)}
-    \newcommand*{\piZeroOne}{\piZeroN{1}}
-    \WithSuffix\def\piZeroOne[#1]{\piZeroN[#1]{1}}
-    % \WithSuffix\def\piZeroOne(#1){\piZeroN[#1]{1}}
-    \newcommand*{\piZeroTwo}{\piZeroN{2}}
-    \WithSuffix\def\piZeroTwo[#1]{\piZeroN[#1]{2}}
-    % \WithSuffix\def\piZeroTwo(#1){\piZeroN[#1]{2}}
-    \newcommand*{\piZeroThree}{\piZeroN{3}}
-    \WithSuffix\def\piZeroThree[#1]{\piZeroN[#1]{3}}
-    % \WithSuffix\def\piZeroThree(#1){\piZeroN[#1]{3}}
+   
 
     \newcommand*{\piOneN}[1]{\Pi^1_{#1}}
     \WithSuffix\def\piOneN[#1]#2{\Pi^{1,#1}_{#2}}
     % \WithSuffix\def\piOneN(#1)#2{\piOneN{#2}\!\left(#1\right)}
-    \newcommand*{\piOneOne}{\piOneN{1}}
-    \WithSuffix\def\piOneOne[#1]{\piOneN[#1]{1}}
-    % \WithSuffix\def\piOneOne(#1){\piOneN[#1]{1}}
-    \newcommand*{\piOneTwo}{\piOneN{2}}
-    \WithSuffix\def\piOneTwo[#1]{\piOneN[#1]{2}}
-    % \WithSuffix\def\piOneTwo(#1){\piOneN[#1]{2}}
-    \newcommand*{\piOneThree}{\piOneN{3}}
-    \WithSuffix\def\piOneThree[#1]{\piOneN[#1]{3}}
-    % \WithSuffix\def\piOneThree(#1){\piOneN[#1]{3}}
+
 
 
 
     %%%ABREVIATIONS
-    \newcommand*{\deltaz}{\deltaN{0}}
-    \newcommand*{\deltazn}{\deltaZeroN}
-    \newcommand*{\deltazii}{\deltaZeroTwo}
-    \newcommand*{\deltazi}{\deltaZeroOne}
-    \newcommand*{\deltazz}{\deltaZeroZero}
-    \newcommand*{\deltaziii}{\deltaZeroThree}
-    \newcommand*{\deltaIn}{\deltaOneN}
-    \newcommand*{\deltaIi}{\deltaOneOne}
-    \newcommand*{\deltaoneone}{\deltaOneOne}
-    \newcommand*{\deltaIii}{\deltaOneTwo}
-    \newcommand*{\deltaIiii}{\deltaOneThree}
-    \newcommand*{\sigmazn}{\sigmaZeroN}
-    \newcommand*{\sigmazi}{\sigmaZeroOne}
-    \newcommand*{\sigmazii}{\sigmaZeroTwo}
-    \newcommand*{\sigmaziii}{\sigmaZeroThree}
+    % \newcommand*{\deltaz}{\deltaN{0}}
+    \let\deltazn=\deltaZeroN
+    \newcommand*{\deltazii}{\deltaZeroN{2}}
+    \newcommand*{\deltazi}{\deltaZeroN{1}}
+    \newcommand*{\deltazz}{\deltaZeroN{0}}
+    \newcommand*{\deltaziii}{\deltaZeroN{3}}
+    \let\deltaIn=\deltaOneN
+    \newcommand*{\deltaIi}{\deltaOneN{1}}
+    \newcommand*{\deltaIii}{\deltaOneN{2}}
+    \newcommand*{\deltaIiii}{\deltaOneN{3}}
+    \let\sigmazn=\sigmaZeroN
+    \newcommand*{\sigmazi}{\sigmaZeroN{1}}
+    \newcommand*{\sigmazii}{\sigmaZeroN{2}}
+    \newcommand*{\sigmaziii}{\sigmaZeroN{3}}
     \newcommand*{\sigmaIn}{\sigmaOneN}
-    \newcommand*{\sigmaIi}{\sigmaOneOne}
-    \newcommand*{\sigmaIii}{\sigmaOneTwo}
-    \newcommand*{\sigmaIiii}{\sigmaOneThree}
-    \newcommand*{\pizn}{\piZeroN}
-    \newcommand*{\pizi}{\piZeroOne}
-    \newcommand*{\pizii}{\piZeroTwo}
-    \newcommand*{\piziii}{\piZeroThree}
+    \newcommand*{\sigmaIi}{\sigmaOneN{1}}
+    \newcommand*{\sigmaIii}{\sigmaOneN{2}}
+    \newcommand*{\sigmaIiii}{\sigmaOneN{3}}
+    \let\pizn=\piZeroN
+    \newcommand*{\pizi}{\piZeroN{1}}
+    \newcommand*{\pizii}{\piZeroN{2}}
+    \newcommand*{\piziii}{\piZeroN{3}}
     \newcommand*{\piIn}{\piOneN}
-    \newcommand*{\piIi}{\piOneOne}
-    \newcommand*{\piIii}{\piOneTwo}
-    \newcommand*{\piIiii}{\piOneThree}
+    \newcommand*{\piIi}{\piOneN{1}}
+    \newcommand*{\piIii}{\piOneN{2}}
+    \newcommand*{\piIiii}{\piOneN{3}}
 
     %%%%%%%%%%%%%
     % \newcommand*{\sigmapizn}[1]{\sigmazn{#1} \union \pizn{#1}}
@@ -1412,233 +1363,80 @@
 
 
 
-    %May never use...specific notation for computable formulas...supplanted by \( \sigmazn{\alpha} \) notation.
-    %%%%%%%%%%%
 
-
-
-
-
-    \newcommand*{\Cdeltan}[1]{\CDelta_{#1}}
-    \WithSuffix\def\Cdeltan[#1]#2{\Cdeltan{#2}^{#1}}
-    \newcommand*{\Cpin}[1]{\CPi_{#1}}
-    \WithSuffix\def\Cpin[#1]#2{\Cpin{#2}^{#1}}
-    \newcommand*{\Csigman}[1]{\CSigma_{#1}}
-    \WithSuffix\def\Csigman[#1]#2{\CSigma_{#2}^{#1}}
-
-        \newcommand*{\CdeltaZeroN}[1]{\Cdeltan[0]{#1}}
-    \newcommand*{\CdeltaZeroTwo}{\CdeltaZeroN{2}}
-    \newcommand*{\CdeltaZeroThree}{\CdeltaZeroN{3}}
-    \newcommand*{\CdeltaZeroOne}{\CdeltaZeroN{1}}
-    \newcommand*{\CdeltaZeroZero}{\CdeltaZeroN{0}}
-    \newcommand*{\CdeltaOneN}[1]{\Cdeltan[1]{#1}}
-    \newcommand*{\CdeltaOneOne}{\CdeltaOneN{1}}
-    \newcommand*{\CdeltaOneTwo}{\CdeltaOneN{2}}
-    \newcommand*{\CdeltaOneThree}{\CdeltaOneN{3}}
-        \newcommand*{\CpiZeroN}[1]{\Cpin[0]{#1}}
-    \newcommand*{\CpiOneN}[1]{\Cpin[1]{#1}}
-    \newcommand*{\CpiOneOne}{\CpiOneN{1}}
-    \newcommand*{\CpiOneThree}{\CpiOneN{3}}
-    \newcommand*{\CpiOneTwo}{\CpiOneN{2}}
-    \newcommand*{\CpiZeroOne}{\CpiZeroN{1}}
-    \newcommand*{\CpiZeroThree}{\CpiZeroN{3}}
-    \newcommand*{\CpiZeroTwo}{\CpiZeroN{2}}
-    \newcommand*{\CsigmaOneN}[1]{\Csigman[1]{#1}}
-    \newcommand*{\CsigmaOneOne}{\CsigmaOneN{1}}
-    \newcommand*{\CsigmaOneThree}{\CsigmaOneN{3}}
-    \newcommand*{\CsigmaOneTwo}{\CsigmaOneN{2}}
-    \newcommand*{\CsigmaZeroN}[1]{\Csigman[0]{#1}}
-    \newcommand*{\CsigmaZeroOne}{\CsigmaZeroN{1}}
-    \newcommand*{\CsigmaZeroThree}{\CsigmaZeroN{3}}
-    \newcommand*{\CsigmaZeroTwo}{\CsigmaZeroN{2}}
-
-
-    \WithSuffix\def\CsigmaOneN[#1]#2{\Csigma[1,#1]{#2}}
-    \WithSuffix\def\CsigmaOneOne[#1]{\CsigmaOneN[#1]{1}}
-    \WithSuffix\def\CsigmaOneThree[#1]{\CsigmaOneN[#1]{3}}
-    \WithSuffix\def\CsigmaOneTwo[#1]{\CsigmaOneN[#1]{2}}
-    \WithSuffix\def\CsigmaZeroN[#1]#2{\Csigma[0,#1]{#2}}
-    \WithSuffix\def\CsigmaZeroOne[#1]{\CsigmaZeroN[#1]{1}}
-    \WithSuffix\def\CsigmaZeroThree[#1]{\CsigmaZeroN[#1]{3}}
-    \WithSuffix\def\CsigmaZeroTwo[#1]{\CsigmaZeroN[#1]{2}}
-        \WithSuffix\def\CpiOneN[#1]#2{\Cpi[1,#1]{#2}}
-    \WithSuffix\def\CpiOneOne[#1]{\CpiOneN[#1]{1}}
-    \WithSuffix\def\CpiOneThree[#1]{\CpiOneN[#1]{3}}
-    \WithSuffix\def\CpiOneTwo[#1]{\CpiOneN[#1]{2}}
-    \WithSuffix\def\CpiZeroN[#1]#2{\Cpi[0,#1]{#2}}
-    \WithSuffix\def\CpiZeroOne[#1]{\CpiZeroN[#1]{1}}
-    \WithSuffix\def\CpiZeroThree[#1]{\CpiZeroN[#1]{3}}
-    \WithSuffix\def\CpiZeroTwo[#1]{\CpiZeroN[#1]{2}}
-        \WithSuffix\def\CdeltaOneN[#1]#2{\Cdelta[1,#1]{#2}}
-    \WithSuffix\def\CdeltaOneOne[#1]{\CdeltaOneN[#1]{1}}
-    \WithSuffix\def\CdeltaOneTwo[#1]{\CdeltaOneN[#1]{2}}
-    \WithSuffix\def\CdeltaOneThree[#1]{\CdeltaOneN[#1]{3}}
-        \WithSuffix\def\CdeltaZeroZero[#1]{\CdeltaZeroN[#1]{0}}
-    \WithSuffix\def\CdeltaZeroN[#1]#2{\Cdelta[0,#1]{#2}}
-        \WithSuffix\def\CdeltaZeroTwo[#1]{\CdeltaZeroN[#1]{2}}
-        \WithSuffix\def\CdeltaZeroThree[#1]{\CdeltaZeroN[#1]{3}}
-        \WithSuffix\def\CdeltaZeroOne[#1]{\CdeltaZeroN[#1]{1}}
-
-
-    %%%ABREVIATIONS
-    \newcommand*{\Cdeltaz}{\CdeltaN{0}}
-    \newcommand*{\Cdeltazn}{\CdeltaZeroN}
-    \newcommand*{\Cdeltazii}{\CdeltaZeroTwo}
-    \newcommand*{\Cdeltazi}{\CdeltaZeroOne}
-    \newcommand*{\Cdeltazz}{\CdeltaZeroZero}
-    \newcommand*{\Cdeltaziii}{\CdeltaZeroThree}
-    \newcommand*{\CdeltaIn}{\CdeltaOneN}
-    \newcommand*{\CdeltaIi}{\CdeltaOneOne}
-    \newcommand*{\Cdeltaoneone}{\CdeltaOneOne}
-    \newcommand*{\CdeltaIii}{\CdeltaOneTwo}
-    \newcommand*{\CdeltaIiii}{\CdeltaOneThree}
-    \newcommand*{\Csigmazn}{\CsigmaZeroN}
-    \newcommand*{\Csigmazi}{\CsigmaZeroOne}
-    \newcommand*{\Csigmazii}{\CsigmaZeroTwo}
-    \newcommand*{\Csigmaziii}{\CsigmaZeroThree}
-    \newcommand*{\CsigmaIn}{\CsigmaOneN}
-    \newcommand*{\CsigmaIi}{\CsigmaOneOne}
-    \newcommand*{\CsigmaIii}{\CsigmaOneTwo}
-    \newcommand*{\CsigmaIiii}{\CsigmaOneThree}
-    \newcommand*{\Cpizn}{\CpiZeroN}
-    \newcommand*{\Cpizi}{\CpiZeroOne}
-    \newcommand*{\Cpizii}{\CpiZeroTwo}
-    \newcommand*{\Cpiziii}{\CpiZeroThree}
-    \newcommand*{\CpiIn}{\CpiOneN}
-    \newcommand*{\CpiIi}{\CpiOneOne}
-    \newcommand*{\CpiIii}{\CpiOneTwo}
-    \newcommand*{\CpiIiii}{\CpiOneThree}
 
 %%%BOLDFACE
 
-    \newcommand*{\Deltan}[1]{\utilde{\symbf{\Delta}}_{#1}}
-    \WithSuffix\def\Deltan[#1]#2{\utilde{\symbf{\Delta}}^{#1}_{#2}}
+    \newcommand*{\Deltan}[1]{\symbf{\Delta}_{#1}}
+    \WithSuffix\def\Deltan[#1]#2{\symbf{\Delta}^{#1}_{#2}}
     % \WithSuffix\def\Deltan(#1)#2{\deltan{#2}\!\left(#1\right)}
-    \newcommand*{\DeltaZeroN}[1]{\utilde{\symbf{\Delta}}^{0}_{#1}}
-    \WithSuffix\def\DeltaZeroN[#1]#2{\utilde{\symbf{\Delta}}^{0,#1}_{#2}}
+    \newcommand*{\DeltaZeroN}[1]{\symbf{\Delta}^{0}_{#1}}
+    \WithSuffix\def\DeltaZeroN[#1]#2{\symbf{\Delta}^{0,#1}_{#2}}
     % \WithSuffix\def\DeltaZeroN(#1)#2{\DeltaZeroN{#2}\!\left(#1\right)}
-    \newcommand*{\DeltaZeroTwo}{\DeltaZeroN{2}}
-    \WithSuffix\def\DeltaZeroTwo[#1]{\DeltaZeroN[#1]{2}}
-    % \WithSuffix\def\DeltaZeroTwo(#1){\DeltaZeroN[#1]{2}}
-    \newcommand*{\DeltaZeroThree}{\DeltaZeroN{3}}
-    \WithSuffix\def\DeltaZeroThree[#1]{\DeltaZeroN[#1]{3}}
-    % \WithSuffix\def\DeltaZeroThree(#1){\DeltaZeroN[#1]{3}}
-    \newcommand*{\DeltaZeroOne}{\DeltaZeroN{1}}
-    \WithSuffix\def\DeltaZeroOne[#1]{\DeltaZeroN[#1]{1}}
-    % \WithSuffix\def\DeltaZeroOne(#1){\DeltaZeroN[#1]{1}}
-    \newcommand*{\DeltaZeroZero}{\DeltaZeroN{0}}
-    \WithSuffix\def\DeltaZeroZero[#1]{\DeltaZeroN[#1]{0}}
-    % \WithSuffix\def\DeltaZeroZero(#1){\DeltaZeroN[#1]{0}}
+   
 
 
     \newcommand*{\DeltaOneN}[1]{\Deltan{#1}^1}
-    \WithSuffix\def\DeltaOneN[#1]#2{\utilde{\symbf{\Delta}}^{1,#1}_{#2}}
-    % \WithSuffix\def\DeltaOneN(#1)#2{\DeltaOneN{#2}\!\left(#1\right)}
-    \newcommand*{\DeltaOneOne}{\DeltaOneN{1}}
-    \WithSuffix\def\DeltaOneOne[#1]{\DeltaOneN[#1]{1}}
-    % \WithSuffix\def\DeltaOneOne(#1){\DeltaOneN[#1]{1}}
-    \newcommand*{\DeltaOneTwo}{\DeltaOneN{2}}
-    \WithSuffix\def\DeltaOneTwo[#1]{\DeltaOneN[#1]{2}}
-    % \WithSuffix\def\DeltaOneTwo(#1){\DeltaOneN[#1]{2}}
-    \newcommand*{\DeltaOneThree}{\DeltaOneN{3}}
-    \WithSuffix\def\DeltaOneThree[#1]{\DeltaOneN[#1]{3}}
-    % \WithSuffix\def\DeltaOneThree(#1){\DeltaOneN[#1]{3}}
+    \WithSuffix\def\DeltaOneN[#1]#2{\symbf{\Delta}^{1,#1}_{#2}}
 
 
 
-    \newcommand*{\Sigman}[1]{\utilde{\symbf{\Sigma}}_{#1}}
-    \WithSuffix\def\Sigman[#1]#2{\utilde{\symbf{\Sigma}}^{#1}_{#2}}
+
+    \newcommand*{\Sigman}[1]{\symbf{\Sigma}_{#1}}
+    \WithSuffix\def\Sigman[#1]#2{\symbf{\Sigma}^{#1}_{#2}}
     % \WithSuffix\def\Sigman(#1)#2{\sigman{#2}\!\left(#1\right)}
-    \newcommand*{\SigmaZeroN}[1]{\utilde{\symbf{\Sigma}}^{0}_{#1}}
-    \WithSuffix\def\SigmaZeroN[#1]#2{\utilde{\symbf{\Sigma}}^{0,#1}_{#2}}
+    \newcommand*{\SigmaZeroN}[1]{\symbf{\Sigma}^{0}_{#1}}
+    \WithSuffix\def\SigmaZeroN[#1]#2{\symbf{\Sigma}^{0,#1}_{#2}}
     % \WithSuffix\def\SigmaZeroN(#1)#2{\SigmaZeroN{#2}\!\left(#1\right)}
-    \newcommand*{\SigmaZeroOne}{\SigmaZeroN{1}}
-    \WithSuffix\def\SigmaZeroOne[#1]{\SigmaZeroN[#1]{1}}
-    % \WithSuffix\def\SigmaZeroOne(#1){\SigmaZeroN[#1]{1}}
-    \newcommand*{\SigmaZeroTwo}{\SigmaZeroN{2}}
-    \WithSuffix\def\SigmaZeroTwo[#1]{\SigmaZeroN[#1]{2}}
-    % \WithSuffix\def\SigmaZeroTwo(#1){\SigmaZeroN[#1]{2}}
-    \newcommand*{\SigmaZeroThree}{\SigmaZeroN{3}}
-    \WithSuffix\def\SigmaZeroThree[#1]{\SigmaZeroN[#1]{3}}
-    % \WithSuffix\def\SigmaZeroThree(#1){\SigmaZeroN[#1]{3}}
 
 
 
-    \newcommand*{\SigmaOneN}[1]{\utilde{\symbf{\Sigma}}^1_{#1}}
-    \WithSuffix\def\SigmaOneN[#1]#2{\utilde{\symbf{\Sigma}}^{1,#1}_{#2}}
-    % \WithSuffix\def\SigmaOneN(#1)#2{\SigmaOneN{#2}\!\left(#1\right)}
-    \newcommand*{\SigmaOneOne}{\SigmaOneN{1}}
-    \WithSuffix\def\SigmaOneOne[#1]{\SigmaOneN[#1]{1}}
-    % \WithSuffix\def\SigmaOneOne(#1){\SigmaOneN[#1]{1}}
-    \newcommand*{\SigmaOneTwo}{\SigmaOneN{2}}
-    \WithSuffix\def\SigmaOneTwo[#1]{\SigmaOneN[#1]{2}}
-    % \WithSuffix\def\SigmaOneTwo(#1){\SigmaOneN[#1]{2}}
-    \newcommand*{\SigmaOneThree}{\SigmaOneN{3}}
-    \WithSuffix\def\SigmaOneThree[#1]{\SigmaOneN[#1]{3}}
-    % \WithSuffix\def\SigmaOneThree(#1){\SigmaOneN[#1]{3}}
+
+    \newcommand*{\SigmaOneN}[1]{\symbf{\Sigma}^1_{#1}}
+    \WithSuffix\def\SigmaOneN[#1]#2{\symbf{\Sigma}^{1,#1}_{#2}}
 
 
 
-    \newcommand*{\Pin}[1]{\utilde{\symbf{\Pi}}_{#1}}
-    \WithSuffix\def\Pin[#1]#2{\utilde{\symbf{\Pi}}^{#1}_{#2}}
+
+    \newcommand*{\Pin}[1]{\symbf{\Pi}_{#1}}
+    \WithSuffix\def\Pin[#1]#2{\symbf{\Pi}^{#1}_{#2}}
     % \WithSuffix\def\Pin(#1)#2{\pin{#2}\!\left(#1\right)}
-    \newcommand*{\PiZeroN}[1]{\utilde{\symbf{\Pi}}^0_{#1}}
-    \WithSuffix\def\PiZeroN[#1]#2{\utilde{\symbf{\Pi}}^{0,#1}_{#2}}
-    % \WithSuffix\def\PiZeroN(#1)#2{\PiZeroN{#2}\left(#1\right)}
-    \newcommand*{\PiZeroOne}{\PiZeroN{1}}
-    \WithSuffix\def\PiZeroOne[#1]{\PiZeroN[#1]{1}}
-    % \WithSuffix\def\PiZeroOne(#1){\PiZeroN[#1]{1}}
-    \newcommand*{\PiZeroTwo}{\PiZeroN{2}}
-    \WithSuffix\def\PiZeroTwo[#1]{\PiZeroN[#1]{2}}
-    % \WithSuffix\def\PiZeroTwo(#1){\PiZeroN[#1]{2}}
-    \newcommand*{\PiZeroThree}{\PiZeroN{3}}
-    \WithSuffix\def\PiZeroThree[#1]{\PiZeroN[#1]{3}}
-    % \WithSuffix\def\PiZeroThree(#1){\PiZeroN[#1]{3}}
+    \newcommand*{\PiZeroN}[1]{\symbf{\Pi}^0_{#1}}
+    \WithSuffix\def\PiZeroN[#1]#2{\symbf{\Pi}^{0,#1}_{#2}}
 
-    \newcommand*{\PiOneN}[1]{\utilde{\symbf{\Pi}}^1_{#1}}
-    \WithSuffix\def\PiOneN[#1]#2{\utilde{\symbf{\Pi}}^{1,#1}_{#2}}
-    % \WithSuffix\def\PiOneN(#1)#2{\PiOneN{#2}\!\left(#1\right)}
-    \newcommand*{\PiOneOne}{\PiOneN{1}}
-    \WithSuffix\def\PiOneOne[#1]{\PiOneN[#1]{1}}
-    % \WithSuffix\def\PiOneOne(#1){\PiOneN[#1]{1}}
-    \newcommand*{\PiOneTwo}{\PiOneN{2}}
-    \WithSuffix\def\PiOneTwo[#1]{\PiOneN[#1]{2}}
-    % \WithSuffix\def\PiOneTwo(#1){\PiOneN[#1]{2}}
-    \newcommand*{\PiOneThree}{\PiOneN{3}}
-    \WithSuffix\def\PiOneThree[#1]{\PiOneN[#1]{3}}
-    % \WithSuffix\def\PiOneThree(#1){\PiOneN[#1]{3}}
+
+    \newcommand*{\PiOneN}[1]{\symbf{\Pi}^1_{#1}}
+    \WithSuffix\def\PiOneN[#1]#2{\symbf{\Pi}^{1,#1}_{#2}}
+
 
 
 
     %%%ABREVIATIONS
-    \newcommand*{\Deltaz}{\deltaN{0}}
-    \newcommand*{\Deltazn}{\DeltaZeroN}
-    \newcommand*{\Deltazii}{\DeltaZeroTwo}
-    \newcommand*{\Deltazi}{\DeltaZeroOne}
-    \newcommand*{\Deltazz}{\DeltaZeroZero}
-    \newcommand*{\Deltaziii}{\DeltaZeroThree}
-    \newcommand*{\DeltaIn}{\DeltaOneN}
-    \newcommand*{\DeltaIi}{\DeltaOneOne}
-    \newcommand*{\Deltaoneone}{\DeltaOneOne}
-    \newcommand*{\DeltaIii}{\DeltaOneTwo}
-    \newcommand*{\DeltaIiii}{\DeltaOneThree}
-    \newcommand*{\Sigmazn}{\SigmaZeroN}
-    \newcommand*{\Sigmazi}{\SigmaZeroOne}
-    \newcommand*{\Sigmazii}{\SigmaZeroTwo}
-    \newcommand*{\Sigmaziii}{\SigmaZeroThree}
+    \let\Deltazn=\DeltaZeroN
+    \newcommand*{\Deltazii}{\DeltaZeroN{2}}
+    \newcommand*{\Deltazi}{\DeltaZeroN{1}}
+    \newcommand*{\Deltazz}{\DeltaZeroN{0}}
+    \newcommand*{\Deltaziii}{\DeltaZeroN{3}}
+    \let\DeltaIn=\DeltaOneN
+    \newcommand*{\DeltaIi}{\DeltaOneN{1}}
+    \newcommand*{\DeltaIii}{\DeltaOneN{2}}
+    \newcommand*{\DeltaIiii}{\DeltaOneN{3}}
+    \let\Sigmazn=\SigmaZeroN
+    \newcommand*{\Sigmazi}{\SigmaZeroN{1}}
+    \newcommand*{\Sigmazii}{\SigmaZeroN{2}}
+    \newcommand*{\Sigmaziii}{\SigmaZeroN{3}}
     \newcommand*{\SigmaIn}{\SigmaOneN}
-    \newcommand*{\SigmaIi}{\SigmaOneOne}
-    \newcommand*{\SigmaIii}{\SigmaOneTwo}
-    \newcommand*{\SigmaIiii}{\SigmaOneThree}
-    \newcommand*{\Pizn}{\PiZeroN}
-    \newcommand*{\Pizi}{\PiZeroOne}
-    \newcommand*{\Pizii}{\PiZeroTwo}
-    \newcommand*{\Piziii}{\PiZeroThree}
-    \newcommand*{\PiIn}{\PiOneN}
-    \newcommand*{\PiIi}{\PiOneOne}
-    \newcommand*{\PiIii}{\PiOneTwo}
-    \newcommand*{\PiIiii}{\PiOneThree}
-
+    \newcommand*{\SigmaIi}{\SigmaOneN{1}}
+    \newcommand*{\SigmaIii}{\SigmaOneN{2}}
+    \newcommand*{\SigmaIiii}{\SigmaOneN{3}}
+    \let\pizn=\piZeroN
+    \newcommand*{\pizi}{\piZeroN{1}}
+    \newcommand*{\pizii}{\piZeroN{2}}
+    \newcommand*{\piziii}{\piZeroN{3}}
+    \newcommand*{\piIn}{\piOneN}
+    \newcommand*{\piIi}{\piOneN{1}}
+    \newcommand*{\piIii}{\piOneN{2}}
+    \newcommand*{\piIiii}{\piOneN{3}}
 
 
 
@@ -1670,6 +1468,31 @@
 
 
 
+    \newcommand\quotient@recthy[2]{
+        \mathchoice
+            {% \displaystyle
+                \text{\raise1ex\hbox{$#1$}\Big/\lower1ex\hbox{$#2$}}%
+            }
+            {% \textstyle
+                #1\,/\,#2
+            }
+            {% \scriptstyle
+                #1\,/\,#2
+            }
+            {% \scriptscriptstyle  
+                #1\,/\,#2
+            }
+    }
+    \DeclareRobustCommand{\unlhdneq@recthy}{\mathrel{\text{$\m@th\@unlhdneq@recthy$}}}
+    \newcommand{\@unlhdneq@recthy}{%
+      \ooalign{$\lneq$\cr\raise.22ex\hbox{$\lhd$}\cr}%
+    }
+    \DeclareRobustCommand{\unrhdneq@recthy}{\mathrel{\text{$\m@th\@unrhdneq@recthy$}}}
+    \newcommand{\@unrhdneq@recthy}{%
+      \ooalign{$\gneq$\cr\raise.22ex\hbox{$\rhd$}\cr}%
+    }
+  %   \newcommand*{\unlhdneq@recthy}{%
+  % \mathrel{\ooalign{$\lneq$\cr\raise.22ex\hbox{$\lhd$}\cr}}}
 
 
 \ifrecthy@notrees
@@ -1679,6 +1502,10 @@
     \newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
     \newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
     \newcommand*{\hgt}[1]{\lVert #1 \rVert}
+    \let\TreeMod=\quotient@recthy
+    \newcommand*{\TreeMul}{\mathbin{\ast}}
+    \newcommand*{\TreeExt}{\mathrel{\triangleleft}}
+    \newcommand*{\TreeExtNeq}{\mathrel{\unlhdneq@recthy}}
 \fi
 
 
@@ -1774,20 +1601,12 @@
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
     \newcommand*{\ordzero}{\ensuremath{0}}
   \def\kleeneOSYM{\mathcal{O}}
-   \NewDocumentCommand{\kleeneO}{sD(){}oD(){}}{{
-       \kleeneOSYM^{#2#4}_{%
-            \IfNoValueTF{#1}{%
-                \IfNoValueTF{#3}{}{%
-                    \abs{#3}}% 
-                }%
-                {%
-                    1%
-                    \IfNoValueTF{#3}{}{%
-                        , \abs{#3}
-                    }%
-                }%
-        }%
-    }}
+     \NewDocumentCommand{\kleeneO}{st<+>t<->D(){}O{}}{{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}\IfBooleanTF{#1}{%
+      *\IfBooleanTF{#3}{, }{}%
+     }{}%
+     \IfBooleanTF{#3}{}{+}}^{#4}_{#5}}
+
+
     % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
     % \newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
     % ^{\@PMG@parenarg}%
@@ -1803,8 +1622,11 @@
 % \let\kleeneOless\kleeneObelow
 
     \newcommand*{\kleeneOuniq}{\kleeneO*}
-    \let\ordNotations=\kleeneO
-    \let\uniqOrdNotations=\kleeneOuniq
+    
+    % \NewDocumentCommand{\Obelow}{sm}{\IfNoValueTF{#1}{\kleeneO[#1]}{\kleeneO*[#1]}}
+    % \NewDocumentCommand{\ObelowOrd}{sm}{\IfNoValueTF{#1}{\kleeneO[\abs{#1}]}{\kleeneO*[\abs{#1}]}}
+    % \let\ordNotations=\kleeneO
+    % \let\uniqOrdNotations=\kleeneOuniq
     \newcommand*{\kleeneNum}[1]{{#1}_{\kleeneO}}
     \newcommand*{\kleeneZero}{\kleeneNum{0}}
     \newcommand*{\kleeneOne}{\kleeneNum{1}}
@@ -1828,6 +1650,36 @@
     \newcommand*{\kleenelim}[2]{{#1}_{[#2]}}
     \newcommand*{\kleenepred}[1]{{#1}^{-}}
 
+    \ifrecthy@shortO
+      \@packinfo{Short O enabled (disable if you define commands such as \verb=\O= elsewhere.}
+      \let\O=\kleeneO
+      \let\Oless=\kleeneless
+      \NewDocumentCommand{\Oless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+      \let\Ouniq=\kleeneOuniq
+    % \let\kleenel=\kleeneless
+    \NewDocumentCommand{\Oleq}{o}{\leq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\Onless}{o}{\nless_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\Onl=\kleenenless
+    \NewDocumentCommand{\Onleq}{o}{\nleq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\Ogtr}{o}{>_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    % \let\Og=\kleenegtr
+    \NewDocumentCommand{\Ogeq}{o}{\geq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\Ongtr}{o}{\ngtr_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \let\kleeneng=\Ongtr
+    \NewDocumentCommand{\Ongeq}{o}{\ngeq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \newcommand*{\OPlus}{\mathbin{+_{\kleeneO}}}
+    % \newcommand*{\kleeneMul}{\cdot_{\kleeneO}}
+    \newcommand*{\Oabs}[1]{\lVert #1\rVert_{\kleeneOSYM}}
+    % \let\Oabs=\Ohgt
+    % \let\kleeneHgt=\kleenehgt
+    % \let\hgtO=\kleenehgt
+    \NewDocumentCommand{\Ofunc}{mod()}{{\lbracket #1 \rbracket}^{\kleeneOSYM}\IfValueTF{#2}{_{#2}}{}\IfValueTF{#3}{\left(#3\right)}{}}
+    % \newcommand*{\Ofunc}[2]{\lbracket{#1}\rbracket^{\kleeneOSYM}\left(#2\right)}}
+    % \newcommand*{\kleenepred}[1]{{#1}^{-}}
+    % \newcomand*{\limOrd}
+    % \DeclareMathOperator{\limO}
+    \else
+    \fi
 \fi
 
 
@@ -1851,6 +1703,8 @@
     \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
     \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
     \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
+    % \newcommand*{\wforces}[]{\forces(w)[#1]}
+    \newcommand*{\wforces}[]{\mathrel{{\@PMG@curfrcsym}^{w}_{#1}}}
 
     % \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
     % \newcommand{\forces}{\optparams{\forces@}{[][]}%
@@ -2021,6 +1875,9 @@
 \ifrecthy@nodegrees
     \@packinfo{No degrees loading.}
 \else
+    \DeclareMathOperator{\@recthy@HYP}{HYP}
+    \NewDocumentCommand{\HYP}{o{}}{\@recthy@HYP\IfValueTF{#1}{\left(#1\right)}{}}
+    \let\hyp=\HYP
     \newcommand*{\@recthy@TSYM}{\symbf{T}}
     \newcommand*{\@recthy@ASYM}{\mathscr{a}}
     \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
@@ -2059,7 +1916,7 @@
                                         \equal{\string \zeron }{\expandafter\string \first@pmg@rdmxs(#1)}  
                                        }{#1}{\Tdegvar{#1}}}
 
-
+   \let\Adef=\Tdeg
     \providecommand*{\Tjump}[1]{{#1}'}
     \let\jump=\Tjump
     \providecommand*{\jumpn}[2]{{#1}^{(#2)}}

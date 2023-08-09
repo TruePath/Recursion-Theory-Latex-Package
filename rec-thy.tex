@@ -377,7 +377,8 @@ To disable these commands pass the option \verb=nomath=. \\
 	\verb=\ParFuncs{X}{Y}=						& \( \ParFuncs{X}{Y} \) & set of partial functions from \( X \) to \( Y \). \\ \midrule
 	\verb=\FinParFuncs{X}{Y}=						& \( \FinParFuncs{X}{Y} \) & set of finite partial functions from \( X \) to \( Y \). \\ \midrule
 	\verb=\( \ensuretext{blah} \)=	           	& \multirow{2}{*}{\( \ensuretext{blah} \)}& \multirow{2}{*}{Types argument in text mode} \\
-	\tab \verb=\ensuretext{blah}=			& & \\
+	\tab \verb=\ensuretext{blah}=			& & \\ \midrule
+	\verb=\quotient{X}{Y}= & \( \quotient{X}{Y} \) & \\
 	\bottomrule
 \end{tabular}          \\
 \newpage
@@ -545,6 +546,8 @@ To disable these commands pass the option \verb=notrees=.\\
 	\verb=\CBderiv[\alpha]{T}=           & \(  \CBderiv[\alpha]{T}       \) & \\ \midrule
 	\verb=\pruneTree{T}=                 & \(  \pruneTree{T}             \) & \( \set{\sigma \in T}{\exists(g)(g \in [T] \land \sigma \subset g)} \) \\ \midrule
 	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\
+	\verb=\TreeMod{T}{\sigma}=                       & \(  \TreeMod{T}{\sigma}                  \) & \\
+	\verb=\TreeMul{\sigma}{T}=                       & \(  \TreeMul{\sigma}{T}                  \) & \\
 		\bottomrule
 	\end{tabular}
 
@@ -799,7 +802,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[3.10]  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.
+	\item[3.10]  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.
 	\item[3.9]  Fixed BeamerRequirements
 	\item[3.8.3]  Added the \verb=\bpfuncs= command.
 	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.
