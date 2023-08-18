@@ -299,7 +299,7 @@
 \let\@recthy@rpairdelim=\@recthy@rangle
 
 
-\def\@recthy@concatSYM@Default{\widehat{\phantom{X}}}
+\def\@recthy@concatSYM@Default{\widehat{\phantom{x}}}
 \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
 \let\@recthy@concatSYM\@recthy@concatSYM@Default
 \let\@recthy@EmptyStr\@recthy@EmptyStr@Default
@@ -316,7 +316,7 @@
 
 
 
-
+  % \AtBeginDocument{\@ifundefined{hyperref}{\newcommand*{\texorpdfstring}[2]{#1}}{}}
 
 % \ProcessOptions*
 % \ProcessOptionsX<\@recthy@family>
@@ -999,7 +999,7 @@
     \newcommand{\ParFuncs}[2]{{#2}^{\subset #1}}
     \newcommand{\FinParFuncs}[2]{{#2}^{\subset_{< \infty} #1}}
     \recthy@strip{ensuretext}
-    \providecommand(\quotient){\quotient@recthy}
+    \providecommand{\quotient}{\quotient@recthy}
 \fi
 
 
@@ -1033,6 +1033,8 @@
 \else
     \ltx@ifpackageloaded{MnSymbol}{}{ 
     \DeclareFontFamily{OMX}{MnSymbolE}{}
+    \DeclareFontFamily{U} {MnSymbolB}{}
+    \DeclareSymbolFont{MnSyB}         {U}  {MnSymbolB}{m}{n}
     \DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
     \SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
     \DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
@@ -1053,13 +1055,35 @@
       <10-12> MnSymbolE-Bold10
       <12->   MnSymbolE-Bold12
     }{}
+      \DeclareFontShape{U}{MnSymbolB}{m}{n}{
+      <-6>  MnSymbolB5
+     <6-7>  MnSymbolB6
+     <7-8>  MnSymbolB7
+     <8-9>  MnSymbolB8
+     <9-10> MnSymbolB9
+    <10-12> MnSymbolB10
+    <12->   MnSymbolB12}{}
+  \DeclareFontShape{U}{MnSymbolB}{b}{n}{
+      <-6>  MnSymbolB-Bold5
+     <6-7>  MnSymbolB-Bold6
+     <7-8>  MnSymbolB-Bold7
+     <8-9>  MnSymbolB-Bold8
+     <9-10> MnSymbolB-Bold9
+    <10-12> MnSymbolB-Bold10
+    <12->   MnSymbolB-Bold12}{}
     \DeclareMathDelimiter{\@recthy@ulcorner}
         {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
     \DeclareMathDelimiter{\@recthy@urcorner}
         {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
         \let\ulcorner=\@recthy@ulcorner
         \let\urcorner=\@recthy@urcorner
+    \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
 }
+    \DeclareMathDelimiter{\@recthy@ulcorner}
+        {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
+    \DeclareMathDelimiter{\@recthy@urcorner}
+        {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
+
     \newcommand*{\godelnum}[1]{\left\ulcorner #1 \right\urcorner}
     \let\cornerquote=\godelnum
     \let\gcode=\godelnum
@@ -1089,6 +1113,8 @@
 \newcommand*{\@recthy@ComputablyEnumerable}{\@recthy@ensuretext{Computably enumerable}}
 \def\@recthy@REA{REA}
 \def\@recthy@CEA{CEA}
+
+
 
 \NewDocumentCommand{\REA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@REA}\IfValueTF{#1}{(#1)}{}}}
 \NewDocumentCommand{\CEA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{\@recthy@CEA}\IfValueTF{#1}{(#1)}{}}}
@@ -1429,14 +1455,14 @@
     \newcommand*{\SigmaIi}{\SigmaOneN{1}}
     \newcommand*{\SigmaIii}{\SigmaOneN{2}}
     \newcommand*{\SigmaIiii}{\SigmaOneN{3}}
-    \let\pizn=\piZeroN
-    \newcommand*{\pizi}{\piZeroN{1}}
-    \newcommand*{\pizii}{\piZeroN{2}}
-    \newcommand*{\piziii}{\piZeroN{3}}
-    \newcommand*{\piIn}{\piOneN}
-    \newcommand*{\piIi}{\piOneN{1}}
-    \newcommand*{\piIii}{\piOneN{2}}
-    \newcommand*{\piIiii}{\piOneN{3}}
+    \let\Pizn=\PiZeroN
+    \newcommand*{\Pizi}{\piZeroN{1}}
+    \newcommand*{\Pizii}{\piZeroN{2}}
+    \newcommand*{\Piziii}{\piZeroN{3}}
+    \newcommand*{\PiIn}{\piOneN}
+    \newcommand*{\PiIi}{\piOneN{1}}
+    \newcommand*{\PiIii}{\piOneN{2}}
+    \newcommand*{\PiIiii}{\piOneN{3}}
 
 
 
@@ -1601,10 +1627,7 @@
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
     \newcommand*{\ordzero}{\ensuremath{0}}
   \def\kleeneOSYM{\mathcal{O}}
-     \NewDocumentCommand{\kleeneO}{st<+>t<->D(){}O{}}{{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}\IfBooleanTF{#1}{%
-      *\IfBooleanTF{#3}{, }{}%
-     }{}%
-     \IfBooleanTF{#3}{}{+}}^{#4}_{#5}}
+     \NewDocumentCommand{\kleeneO}{st+t-D(){}o}{\IfBooleanTF{#2}{\prescript{+}{}{\kleeneOSYM}}{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}}^{#4}_{\IfBooleanTF{#1}{1\IfValueTF{#5}{,\, #5}{}}{\IfValueTF{#5}{#5}{}}}}
 
 
     % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
@@ -1630,7 +1653,7 @@
     \newcommand*{\kleeneNum}[1]{{#1}_{\kleeneO}}
     \newcommand*{\kleeneZero}{\kleeneNum{0}}
     \newcommand*{\kleeneOne}{\kleeneNum{1}}
-    \NewDocumentCommand{\kleeneless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+    \NewDocumentCommand{\kleeneless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{, #1}}}
     \let\kleenel=\kleeneless
     \NewDocumentCommand{\kleeneleq}{o}{\leq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
     \NewDocumentCommand{\kleenenless}{o}{\nless_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
@@ -1651,10 +1674,10 @@
     \newcommand*{\kleenepred}[1]{{#1}^{-}}
 
     \ifrecthy@shortO
-      \@packinfo{Short O enabled (disable if you define commands such as \verb=\O= elsewhere.}
+      \@packinfo{Short O enabled (disable if you define O to be a macro elsewhere).}
       \let\O=\kleeneO
       \let\Oless=\kleeneless
-      \NewDocumentCommand{\Oless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
+      % \NewDocumentCommand{\Oless}{o}{<_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
       \let\Ouniq=\kleeneOuniq
     % \let\kleenel=\kleeneless
     \NewDocumentCommand{\Oleq}{o}{\leq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
@@ -1673,7 +1696,7 @@
     % \let\Oabs=\Ohgt
     % \let\kleeneHgt=\kleenehgt
     % \let\hgtO=\kleenehgt
-    \NewDocumentCommand{\Ofunc}{mod()}{{\lbracket #1 \rbracket}^{\kleeneOSYM}\IfValueTF{#2}{_{#2}}{}\IfValueTF{#3}{\left(#3\right)}{}}
+    \NewDocumentCommand{\Ofunc}{mod()}{{\left\{ #1 \right\}}^{\kleeneOSYM}\IfValueTF{#2}{_{#2}}{}\IfValueTF{#3}{\left(#3\right)}{}}
     % \newcommand*{\Ofunc}[2]{\lbracket{#1}\rbracket^{\kleeneOSYM}\left(#2\right)}}
     % \newcommand*{\kleenepred}[1]{{#1}^{-}}
     % \newcomand*{\limOrd}
@@ -1698,13 +1721,15 @@
     \@packinfo{No forcing loading.}
 \else
     \@packinfo{forcing loading.}
-    \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\def\@PMG@curfrcsym{\Vdash}\@forcesBody}
+    \def\@PMG@curfrcsym{\Vdash}
+    \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\@forcesBody}
     \newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
     \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
     \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
     \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
     % \newcommand*{\wforces}[]{\forces(w)[#1]}
-    \newcommand*{\wforces}[]{\mathrel{{\@PMG@curfrcsym}^{w}_{#1}}}
+    \newcommand*{\wforces}[1][]{\forces(w)[#1]}
+    % \newcommand*{\wforces}[1][]{\mathrel{{\@PMG@curfrcsym}^{w}_{#1}}}
 
     % \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
     % \newcommand{\forces}{\optparams{\forces@}{[][]}%
@@ -1814,7 +1839,7 @@
     \let\converge=\conv
     %\newcommand*{\convs}[1]{\ensuremath{\conv_{#1}}}
 %   \NewDocumentCommand{\nconv}{o}{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}_{#1}}}
-    \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\mkern-4mu{\smallsetminus\mkern 4mu \downarrow}_{#1}}}
+    \NewDocumentCommand{\nconv}{O{}}{\mathpunct{\ndownarrow_{#1}}}
     \newcommand*{\diverge}{\mathpunct{\uparrow}}
     \newcommand*{\use}[1]{\mathop{\@recthy@useSYM}\left[#1\right]}
 % \newcommand*{\use}[1]{\ltx@ifpackageloaded{unicode-math}{\symbffrak{u}}{\mathfrak{u}}\left(#1\right)}
@@ -1876,21 +1901,23 @@
     \@packinfo{No degrees loading.}
 \else
     \DeclareMathOperator{\@recthy@HYP}{HYP}
-    \NewDocumentCommand{\HYP}{o{}}{\@recthy@HYP\IfValueTF{#1}{\left(#1\right)}{}}
+    \NewDocumentCommand{\HYP}{o}{\@recthy@HYP\IfValueTF{#1}{\left(#1\right)}{}}
     \let\hyp=\HYP
     \newcommand*{\@recthy@TSYM}{\symbf{T}}
-    \newcommand*{\@recthy@ASYM}{\mathscr{a}}
+    \newcommand*{\@recthy@ASYM}{\symbf{a}}
+    % \newcommand*{\@recthy@ASYM}{\mathscr{a}}
     \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
     \newcommand*{\Tdegreesjump}{\ensuremath{\mathscr{D}'}}
-    \WithSuffix\def\Tdegrees'\Tdegreesjump
+    % \WithSuffix\def\Tdegrees'\Tdegreesjump
     % \WithSuffix\def\Tdegrees(#1){\Tdegrees\left(#1\right)}
     % \WithSuffix\def\Tdegreesjump(#1){\Tdegreesjump\left(#1\right)}
     \newcommand*{\REdegrees}{\ensuremath{\mathscr{R}}}
     % \WithSuffix\def\REdegrees(#1){\REdegrees\left(#1\right)}
-    \newcommand*{\Adegrees}{\ensuremath{\mathscr{D}_\@recthy@ASYM}}
+
+    \newcommand*{\Adegrees}{\ensuremath{\mathscr{D}_{\@recthy@ASYM}}}
     % \WithSuffix\def\Adegrees(#1){\Adegrees\left(#1\right)}
     \newcommand*{\Adegreesjump}{\ensuremath{\mathscr{D}'_\@recthy@ASYM}}
-    \WithSuffix\def\Adegrees'\Adegreesjump
+    % \WithSuffix\def\Adegrees'\Adegreesjump
     % \WithSuffix\def\Adegreesjump(#1){\Adegreesjump\left(#1\right)}
     \newcommand*{\AREAdegrees}{\ensuremath{\mathscr{R}_\@recthy@ASYM}}
     % \WithSuffix\def\AREdegrees(#1){\AREdegrees\left(#1\right)}
@@ -1925,13 +1952,10 @@
     % \newcommand*{\Tzerosym}{\MVZero}
     \newcommand*{\Tzerosym}{\symbf{0}}
     \providecommand*{\Tzero}{{\Tzerosym}}
-    \providecommand*{\Azero}{{\Tzerosym_\@recthy@ASYM}}
     \providecommand*{\zeron}[1]{{\Tzerosym}^{(#1)}}
     \providecommand*{\zeroj}{\jump{{\Tzerosym}}}
     \let\Tzeroj=\zeroj
-    \providecommand*{\Azeroj}{\jump{{\Azero}}}
     \providecommand*{\zerojj}{\jjump{\Tzerosym}}
-    \providecommand*{\Azerojj}{\jjump{{\Azero}}}
     \providecommand*{\zerojjj}{\jjjump{\Tzerosym}}
     \let\Tzerojj=\zerojj
     \let\Tzerojjj=\zerojjj
@@ -1999,7 +2023,7 @@
 
 
 
-    \newcommand*{\@recthy@ASYM}{\symbf{a}}
+    
     \providecommand*{\Adegvar}[1]{\symbf{#1}_{\@recthy@ASYM}}
     \providecommand*{\Aequiv}{\mathrel{\equiv_{\@recthy@ASYM}}}
     \providecommand*{\Aeq}{\Aequiv}
@@ -2019,7 +2043,7 @@
     \newcommand*{\Azerosym}{\symbf{0}_{\@recthy@ASYM}}
     \providecommand*{\Azero}{{\Azerosym}}
     \providecommand*{\Azeron}[1]{{\Azerosym}^{(#1)}}
-    \providecommand*{\Azeroj}{\jump{{\Azerosym}}}
+    \providecommand*{\Azeroj}{\jump{\Azerosym}}
     \providecommand*{\Azerojj}{\jjump{\Azerosym}}
     \providecommand*{\Azerojjj}{\jjjump{\Azerosym}}
 
