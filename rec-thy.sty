@@ -101,10 +101,8 @@
 %Define boolean options true if option passed false otherwise
 
 
-\newif\ifrecthy@nohyphenation       \recthy@nohyphenationfalse
-\newif\ifrecthy@mrref           \recthy@mrreffalse
 \newif\ifrecthy@nomath          \recthy@nomathfalse
-\newif\ifrecthy@nodelim         \recthy@nodelimfalse
+\newif\ifrecthy@nosymb         \recthy@nosymbfalse
 \newif\ifrecthy@nonames         \recthy@nonamesfalse
 \newif\ifrecthy@nosets          \recthy@nosetsfalse
 \newif\ifrecthy@noquants        \recthy@noquantsfalse
@@ -126,21 +124,17 @@
 \newif\ifrecthy@nopfcases \@ifclassloaded{beamer}{\recthy@nopfcasestrue}{\recthy@nopfcasesfalse}
 \newif\ifrecthy@beamersupp \@ifclassloaded{beamer}{\recthy@beamersupptrue}{\recthy@beamersuppfalse}
 \newif\ifrecthy@noprioritytrees \recthy@noprioritytreesfalse
-\newif\ifrecthy@nosuppprioritytrees \recthy@nosuppprioritytreestrue
+% \newif\ifrecthy@nosuppprioritytrees \recthy@nosuppprioritytreestrue
 \newif\ifrecthy@hyperreqs \recthy@hyperreqstrue
 \newif\ifrecthy@nooperators \recthy@nooperatorsfalse
 \newif\ifrecthy@fix@typeset \recthy@fix@typesettrue
 \newif\ifrecthy@nodoubleangles \recthy@nodoubleanglesfalse
 \newif\ifrecthy@stepsenv \recthy@stepsenvfalse
 \newif\ifrecthy@shortO \recthy@shortOtrue
-\newif\ifrecthy@longO \recthy@longOfalse
-% \newif\ifrecthy@codesqquote \recthy@codesqquotetrue
-\newif\ifrecthy@compatThreeSixOrEarlier \recthy@compatThreeSixOrEarlierfalse
+\newif\ifrecthy@midincompat \recthy@midincompatfalse
 
-\DeclareOptionX{nohyphenation}{\recthy@nohyphenationtrue}
-\DeclareOptionX{mrref}{\recthy@mrreftrue}
 \DeclareOptionX{nomath}{\recthy@nomathtrue}
-\DeclareOptionX{nodelim}{\recthy@nodelimtrue}
+\DeclareOptionX{nosymb}{\recthy@nosymbtrue}
 \DeclareOptionX{nonames}{\recthy@nonamestrue}
 \DeclareOptionX{nosets}{\recthy@nosetstrue}
 \DeclareOptionX{noquants}{\recthy@noquantstrue}
@@ -164,31 +158,32 @@
 \DeclareOptionX{nofixtype}{\recthy@fix@typesetfalse}
 \DeclareOptionX{nodoubleangles}{\recthy@nodoubleanglestrue}
 \DeclareOptionX{steps}{\recthy@stepsenvtrue}
-\DeclareOptionX{noshortO}{\recthy@shortOfalse\recthy@longOtrue}
-\DeclareOptionX{longO}{\recthy@longOtrue}
+\DeclareOptionX{noshortO}{\recthy@shortOfalse}
+\DeclareOptionX{midincompat}{\recthy@midincompattrue}
+% \DeclareOptionX{longO}{\recthy@longOtrue}
 % \DeclareOptionX{nocodequotes}{\recthy@codesqquotefalse}
 
-\DeclareOptionX{compat31}{\recthy@compat@threeOne}
-\DeclareOptionX{compat35}{\recthy@compat@threeFive}
-\DeclareOptionX{compat36}{\recthy@compat@threeSix}
-\edef\@pmg@expand{\noexpand\DeclareOptionX{version}[]}
-\DeclareOptionX{v3.9}{\recthy@shortOfalse\recthy@longOtrue}
+% \DeclareOptionX{compat31}{\recthy@compat@threeOne}
+% \DeclareOptionX{compat35}{\recthy@compat@threeFive}
+% \DeclareOptionX{compat36}{\recthy@compat@threeSix}
+% \edef\@pmg@expand{\noexpand\DeclareOptionX{version}[]}
+% \DeclareOptionX{v3.9}{\recthy@shortOfalse\recthy@longOtrue}
 
-\DeclareOptionX{suppPriorityTrees}{
-\ifrecthy@compatThreeSixOrEarlier
-   \@packinfo{Enabling depreciated Support Priority Tree functionality.  These functions are only accessible in compatibility mode and should not be used in new documents}
-   \recthy@nosuppprioritytreesfalse
-\else
-  \PackageWarningNoLine{rec-thy}{Suplemental Priority Tree option depreciated.  Combine with one of the options compat36,compat32 or compat 31 to access these functions.}
-\fi
-}
+% \DeclareOptionX{suppPriorityTrees}{
+% \ifrecthy@compatThreeSixOrEarlier
+%    \@packinfo{Enabling depreciated Support Priority Tree functionality.  These functions are only accessible in compatibility mode and should not be used in new documents}
+%    \recthy@nosuppprioritytreesfalse
+% \else
+%   \PackageWarningNoLine{rec-thy}{Suplemental Priority Tree option depreciated.  Combine with one of the options compat36,compat32 or compat 31 to access these functions.}
+% \fi
+% }
 
-\newcommand*{\recthy@rollback@threeTwo}{}
-\newcommand*{\recthy@rollback@threeSix}{}
-% \newcommand*{\recthy@rollback@threeSeven}{}
-\newcommand*{\recthy@compat@threeSix}{\recthy@compatThreeSixOrEarliertrue}
-\newcommand*{\recthy@compat@threeFive}{\recthy@compatThreeSixOrEarliertrue\recthy@compat@threeSix\AtEndOfPackage{\recthy@rollback@threeSix}}
-\newcommand*{\recthy@compat@threeOne}{\recthy@compatThreeSixOrEarliertrue\recthy@compat@threeFive\AtEndOfPackage{\recthy@rollback@threeTwo}}
+% \newcommand*{\recthy@rollback@threeTwo}{}
+% \newcommand*{\recthy@rollback@threeSix}{}
+% % \newcommand*{\recthy@rollback@threeSeven}{}
+% \newcommand*{\recthy@compat@threeSix}{\recthy@compatThreeSixOrEarliertrue}
+% \newcommand*{\recthy@compat@threeFive}{\recthy@compatThreeSixOrEarliertrue\recthy@compat@threeSix\AtEndOfPackage{\recthy@rollback@threeSix}}
+% \newcommand*{\recthy@compat@threeOne}{\recthy@compatThreeSixOrEarliertrue\recthy@compat@threeFive\AtEndOfPackage{\recthy@rollback@threeTwo}}
 
 %\DeclareOptionX{nomodule}{\recthy@nomoduletrue}
 
@@ -197,9 +192,6 @@
 \let\@recthy@modulescr\mathcal
 \DeclareOptionX{modulescr}[mathcal]{\letcs{\@recthy@modulescr}{#1}}
 
-\def\@recthy@ballsymb@default{\mathscr{B}}
-\let\@recthy@ballsymb\@recthy@ballsymb@default
-\DeclareOptionX{ballsymb}[@recthy@ballsymb@default]{\letcs{\@recthy@ballsymb}{#1}}
 
 
 
@@ -424,20 +416,38 @@
   % \fi
 
 
-  \appto{\recthy@rollback@threeSix}{
-    \renewcommand*{\@recthy@pair}[2]{\mathopen{\@recthy@llangle} #1, #2 \mathclose{\@recthy@rrangle}}
-    \def\@recthy@EmptyStr@Default{\mathopen{\langle}\mathclose{\rangle}}
-    % \renewcommand*{\@recthy@str}[1]{\mathopen{\langle}#1\mathclose{\rangle}}
-    \renewcommand*{\@recthy@code}[2][]{\mathopen{\@recthy@llangle}#2\mathclose{\@recthy@rrangle}^{#1}}
+  \newcommand{\succprec@recthy}{\mathrel{\mathpalette\succ@prec@recthy{\succ\prec}}}
+  \newcommand{\precsucc@recthy}{\mathrel{\mathpalette\succ@prec@recthy{\prec\succ}}}
+  \newcommand{\nsuccprec@recthy}{\not\succprec@recthy}
+  \newcommand{\nprecsucc@recthy}{\not\precsucc@recthy}
+
+    \newcommand{\succ@prec@recthy}[2]{\succ@@prec@recthy#1#2}
+    \newcommand{\succ@@prec@recthy}[3]{%
+      \vcenter{\m@th\offinterlineskip
+        \sbox\z@{$#1#3$}%
+        \hbox{$#1#2$}\kern-0.4\ht\z@\box\z@
+      }%
     }
-\NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\mid}\IfValueTF{#1}{_{#1}}{}}
-\NewDocumentCommand{\compat@recthy}{o}{{\mathrel{\,\not|\,}\IfValueTF{#1}{_{#1}}{}}}
+
+    \let\incompatsymb@recthy=\mathrel{\mid}
+    \ifrecthy@midncompat
+      \@packinfo{Using mid as incompat symbol}
+      \let\compatsymb@recthy=\mathrel{\,\not|\,}
+      \let\ncompatsymb@recthy=\incompatsymb@recthy
+    \else
+      \let\compatsymb@recthy=\succprec@recthy
+      \let\ncompatsymb@recthy=\nsuccprec@recthy
+    \fi
+
+
+\NewDocumentCommand{\incompat@recthy}{o}{\incompatsymb@recthy\IfValueTF{#1}{_{#1}}{}}
+\NewDocumentCommand{\compat@recthy}{o}{{\compatsymb@recthy\IfValueTF{#1}{_{#1}}{}}}
 
 \ifrecthy@nostrings
     \@packinfo{No strings loading.}
 \else
     \@packinfo{Strings loading.}
-    \appto{\recthy@rollback@threeSix}{\newcommand*{\closedn}[1]{{#1}^\blacktriangledown}}
+    % \appto{\recthy@rollback@threeSix}{\newcommand*{\closedn}[1]{{#1}^\blacktriangledown}}
     \let\code=\@recthy@code
     \let\str=\@recthy@str
     \newcommand*{\EmptyStr}{\@recthy@EmptyStr}
@@ -503,25 +513,10 @@
     \providecommand{\nrightofeq}{\mathbin{\ngeq_L}}
     \NewDocumentCommand{\PriorityTreeModule}{mO{}m}{\ensuremath{{\@recthy@modulescr{#1}}^{#2}_{#3} }}
     \let\module=\PriorityTreeModule
-    \providecommand{\ball}[3][]{{\@recthy@ballsymb}^{#1}(#2, #3)}
 \fi
 
 
-\ifrecthy@nosuppprioritytrees
-\else
-    \providecommand*{\Astages}[1]{\mathcal{A}({#1})}
-    \providecommand*{\Vstages}[1]{\mathcal{V}(#1)}
-    \providecommand{\reqof}[2][]{\mathbb{r}(#2)}
-    \let\modof=\reqof
-    \providecommand{\ancestor}{\succ}
-    \providecommand{\descendant}{\prec}
-    \providecommand{\ancestoreq}{\succeq}
-    \providecommand{\descendanteq}{\preceq}
-    \let\ances=\ancestor
-    \let\anceseq=\ancestoreq
-    \let\desc=\descendant
-    \let\desceq=\descendanteq
-\fi
+
 
 
 \ifrecthy@nopfcases
@@ -878,58 +873,38 @@
 
 
 \ifrecthy@nostructresets
-    \@packinfo{Not loading r.e. set structs w/ containment.}
+    \@packinfo{Not loading r.e. subset commands}
 \else
-  \@packinfo{Loading r.e. set structs w/ containment.}
+  \@packinfo{Loading r.e. subset commands}
+
+  %%TODO: This stuff should be in a different section
   \let\@orig@setminus=\setminus
   \newcommand*{\promptdif}{\@orig@setminus_{\downarrow}}
   \let\setbefore=\promptdif
   \let\promptminus=\promptdif
   \let\promptsetminus=\promptdif
-
-  \newcommand*{\StrcE}{\ensuremath{\mathscr{E}}}
-  \WithSuffix\def\StrcE*{\ensuremath{\mathscr{E}^{*}}}
-  \let\strucE\StrcE
-  \newcommand*{\StrcL}[1]{\mathscr{L}(#1)}
-  \newcommand*{\StrcStarL}[1]{\mathscr{L}^{*}(#1)}
-  \WithSuffix\def\StrcL*{\StrcStarL}
   \newcommand*{\splitof}{\sqsubset}
   \newcommand*{\splitby}{\sqsupset}
-  \newcommand*{\StrcR}{\ensuremath{\mathcal{R}}}
-  \newcommand*{\StrcD}{\ensuremath{\mathcal{D}}}
+
+  %%TODO depreciate capital S for commands...and generally remove the R and D stuff
+  \newcommand*{\strcE}{\ensuremath{\mathscr{E}}}
+  \WithSuffix\def\strcE*{\ensuremath{\mathscr{E}^{*}}}
+  % \let\strcE\StrcE
+  \newcommand*{\strcL}[1]{\mathscr{L}(#1)}
+  \newcommand*{\strcStarL}[1]{\mathscr{L}^{*}(#1)}
+  \WithSuffix\def\strcL*{\StrcStarL}
+
+  % \let\strcR=\StrcR
+  % \let\strcD=\StrcD
 
 
 \fi
 
 
-\ifrecthy@nohyphenation
-    \@packinfo{No hyphenation loading.}
-\else
-\hyphenation{ra-tion-als ra-tion-al Harrington Slaman Cholak Knight Gerdes Lange}
-\fi
 
 
 
 
-\ifrecthy@mrref
-    \@packinfo{MRref helper loading}
-    \AtBeginDocument{
-      \@ifpackageloaded{hyperref}{
-        \def\recthy@checkMR MR#1#2#3 #4\relax%
-          {\ifx#1M%
-             \ifx#2R\recthy@MR{#3}\else\recthy@MR{#1#2#3}\fi
-           \else
-             \recthy@MR{#1#2#3}%
-           \fi}
-        \def\MR#1{\recthy@checkMR MR#1 \relax}
-        \newcommand{\recthy@MR}[1]{\recthy@MRhref{#1}{MR #1}}
-        % % \MRhref is called by the amsart/book/proc definition of \MR.
-        \newcommand{\recthy@MRhref}[2]{\href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}}
-      }
-    }
-\else
-    \@packinfo{MRref helper not loading}
-\fi
 
 
 % \newcommand*{\@recthy@abs}[1]{\lvert#1\rvert}
@@ -966,15 +941,15 @@
     \providecommand*{\restr}[1]{\mathpunct{\restriction_{#1}}}
     \providecommand*{\ordpair}[2]{\left( #1, #2 \right) }
     %%%%%%%%Function commands
-
-    \appto{\recthy@rollback@threeTwo}{
-        \providecommand*{\map}[2]{:##1\mapsto ##2}
-        \providecommand*{\functo}[3]{##1\map{##2}{##3}}
-        \ifdefined\funcomp
-        \else
-            \let\funcomp=\compfunc
-        \fi
-    }
+    \providecommand*{\maps}[2]{\mathop{:}#1\mapsto #2}
+    % \appto{\recthy@rollback@threeTwo}{
+    %     \providecommand*{\map}[2]{:##1\mapsto ##2}
+    %     \providecommand*{\functo}[3]{##1\map{##2}{##3}}
+    %     \ifdefined\funcomp
+    %     \else
+    %         \let\funcomp=\compfunc
+    %     \fi
+    % }
 
     \providecommand*{\compfunc}{\mathbin{\circ}}
     \ifdefined\compose
@@ -1029,8 +1004,8 @@
 
 
 
-\ifrecthy@nodelim
-    \@packinfo{No delimiters loading.}
+\ifrecthy@nosymb
+    \@packinfo{No Special Symbols Loading.}
 \else
     \ltx@ifpackageloaded{MnSymbol}{}{ 
     \DeclareFontFamily{OMX}{MnSymbolE}{}
@@ -1072,6 +1047,26 @@
      <9-10> MnSymbolB-Bold9
     <10-12> MnSymbolB-Bold10
     <12->   MnSymbolB-Bold12}{}
+    \DeclareSymbolFont{MnSyA} {U} {MnSymbolA}{m}{n}
+    \DeclareFontFamily{U} {MnSymbolA}{}
+    \DeclareFontShape{U}{MnSymbolA}{m}{n}{
+      <-6> MnSymbolA5
+      <6-7> MnSymbolA6
+      <7-8> MnSymbolA7
+      <8-9> MnSymbolA8
+      <9-10> MnSymbolA9
+      <10-12> MnSymbolA10
+      <12-> MnSymbolA12}{}
+    \DeclareFontShape{U}{MnSymbolA}{b}{n}{
+      <-6> MnSymbolA-Bold5
+      <6-7> MnSymbolA-Bold6
+      <7-8> MnSymbolA-Bold7
+      <8-9> MnSymbolA-Bold8
+      <9-10> MnSymbolA-Bold9
+      <10-12> MnSymbolA-Bold10
+      <12-> MnSymbolA-Bold12}{}
+
+
     \DeclareMathDelimiter{\@recthy@ulcorner}
         {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
     \DeclareMathDelimiter{\@recthy@urcorner}
@@ -1079,11 +1074,12 @@
         \let\ulcorner=\@recthy@ulcorner
         \let\urcorner=\@recthy@urcorner
     \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
-}
     \DeclareMathDelimiter{\@recthy@ulcorner}
         {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
     \DeclareMathDelimiter{\@recthy@urcorner}
         {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
+    \DeclareMathSymbol{\Searrow}{\mathrel}{}
+}
 
     \newcommand*{\godelnum}[1]{\left\ulcorner #1 \right\urcorner}
     \let\cornerquote=\godelnum
@@ -1786,9 +1782,9 @@
         {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
     }}
     \let\recfnl=\recfnl@improved
-    \appto{\recthy@rollback@threeSix}{
-      \let\recfnl=\recfnl@threeFive
-    }
+    % \appto{\recthy@rollback@threeSix}{
+    %   \let\recfnl=\recfnl@threeFive
+    % }
     % \appto{\recthy@rollback@threeSeven}{
     %   \let\recfnl=\recfnl@threeSix
     % }
@@ -1908,19 +1904,23 @@
     \newcommand*{\@recthy@ASYM}{\symbf{a}}
     % \newcommand*{\@recthy@ASYM}{\mathscr{a}}
     \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
+    \let\strcD=\Tdegrees
     \newcommand*{\Tdegreesjump}{\ensuremath{\mathscr{D}'}}
     % \WithSuffix\def\Tdegrees'\Tdegreesjump
     % \WithSuffix\def\Tdegrees(#1){\Tdegrees\left(#1\right)}
     % \WithSuffix\def\Tdegreesjump(#1){\Tdegreesjump\left(#1\right)}
     \newcommand*{\REdegrees}{\ensuremath{\mathscr{R}}}
+    \let\strcR=\REdegrees
     % \WithSuffix\def\REdegrees(#1){\REdegrees\left(#1\right)}
 
     \newcommand*{\Adegrees}{\ensuremath{\mathscr{D}_{\@recthy@ASYM}}}
+    \let\strcDa=\Adegrees
     % \WithSuffix\def\Adegrees(#1){\Adegrees\left(#1\right)}
     \newcommand*{\Adegreesjump}{\ensuremath{\mathscr{D}'_\@recthy@ASYM}}
     % \WithSuffix\def\Adegrees'\Adegreesjump
     % \WithSuffix\def\Adegreesjump(#1){\Adegreesjump\left(#1\right)}
     \newcommand*{\AREAdegrees}{\ensuremath{\mathscr{R}_\@recthy@ASYM}}
+    \let\strcRa=\AREAdegrees
     % \WithSuffix\def\AREdegrees(#1){\AREdegrees\left(#1\right)}
     \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
     \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}

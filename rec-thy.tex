@@ -134,20 +134,19 @@ While the symbols used by default in the package are suggested for adoption to a
 	\item[recfnlsym] Sets the symbol used for recursive functionals.  Default is \( \Phi \).
 	\item[recfsym]  Sets the symbol used for recursive functions.  Default is \( \phi \).
 	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \symbffrak{u} \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
-	\item[ballsymb] Sets the symbol used for the ball command.  Default is \( \mathscr{B} \).
 	\item[lstrdelim,rstrdelim] Left and right delimiters for \verb=\str=
 	\item[lcodedelim,rcodedelim] Left and right delimiters for \verb=\code=
 	\item[lpairdelim,rpairlim,pairsup] Left and right delimiters for \verb=\pair= and superscript.
 
 \end{itemize}
 
-As an example of how to use these commands consider the following code changing the ball symbol to \( \mathbf{B} \).
+% As an example of how to use these commands consider the following code changing the ball symbol to \( \mathbf{B} \).
 
-\begin{verbatim}
-\def\myballsymb{\mathbf{B}}
+% \begin{verbatim}
+% \def\myballsymb{\mathbf{B}}
 
-\usepackage[suppPriorityTrees, ballsymb=myballsymb]{rec-thy}
-\end{verbatim}
+% \usepackage[suppPriorityTrees, ballsymb=myballsymb]{rec-thy}
+% \end{verbatim}
 
 
 \section{Commands}
@@ -168,8 +167,8 @@ Note the commands in this section double as suggestions for standardized notatio
 	\verb=\tpath[s]=					& \( 	\tpath[s]                   \)	& Approximate Truepath. \\ \midrule
 	\verb=\xi \leftof \eta =					& \( 	\xi \leftof \eta                   \)	& The left of relation for priority tree arguments \\ \midrule
 	\verb=\module{R}[X]{i,j}=					&  \module{R}{i,j}  & Module in tree construction (superscript optional arg) \\ \midrule
-	\verb=\ball[X]{y}{s}=					& \( 	\ball[X]{y}{s}                  \)	& Location of ball \( y\) (headed to \( X \)) at \( s \)\\ \midrule
-	\verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
+	% \verb=\ball[X]{y}{s}=					& \( 	\ball[X]{y}{s}                  \)	& Location of ball \( y\) (headed to \( X \)) at \( s \)\\ \midrule
+	% \verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
 	\end{xtabular}          \\
 
 
@@ -424,13 +423,14 @@ Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving
 		\bottomrule
 	\end{tabular}          \\
 
-\subsection{Delimiters}
-To disable these commands pass the option \verb=nodelim=. To prevent only redefinition of \verb=\llangle= and \verb=\rrangle= (e.g. to use the XITS unusual default) pass the option \verb=nodoubleangles=.\\
+\subsection{Special Symbols}
+To disable these commands pass the option \verb=nosymb=. To prevent only redefinition of \verb=\llangle= and \verb=\rrangle= (e.g. to use the XITS unusual default) pass the option \verb=nodoubleangles=.\\
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\
 	\tab \verb=\godelnum{\phi}=			& &\\
 	\tab \verb=\cornerquote{\phi}=			& &\\ \midrule
+	\verb=\Searrow= & \( \Searrow \) & variant on usual entersat symbol \\ \midrule 
 	\verb=\llangle x,y,z \rrangle=			& \( \llangle x,y,z \rrangle \) & Properly spaced double angle brackets\\
 	\bottomrule
 \end{tabular}
@@ -802,9 +802,11 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[3.10]  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.  Fixed \verb=\nconv= to be the symbol from MnSymbol, fixed \verb=\concat= to not be so far above the line.  Adjusted spacing for \verb=\compat=, added abbreviations for \verb=\O= and extra options to indicate limit, successor etc.. sets of notations.  Added \verb=\Ofunc= as the effective limit for a notation.  Fixed errors in the pfcases environment and eliminated some old compatibility code that wasn't being used by anyone.
-	\item[3.9]  Fixed BeamerRequirements
-	\item[3.8.3]  Added the \verb=\bpfuncs= command.
+	\item[4.0] Stripped out non-working compatibility code and removed previously depreciated features.  Removed mref helper.  Removed the ball command.  Removed undocumented hyphenation.   Changed the default compatibility symbol and added \verb=\ncompat= and added option midincompat to use old version.  
+
+	Added the \verb=\Searrow= symbol from MnSymbol and changed option from nodelim to nosymb.
+	%TODO handle the double definition of the degree structures stuff and add strcE/strcL doc
+	Changed commands for \verb=\StrcR= and \verb=\StrcD= to be \verb=\strcR= and \verb=\strcD= for consistency and added \verb=\strcRa= and \verb=\strcDa= as synonyms for \verb=\Adegrees= and \verb=\AREAdegrees=.  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.  Fixed \verb=\nconv= to be the symbol from MnSymbol, fixed \verb=\concat= to not be so far above the line.  Adjusted spacing for \verb=\compat=, added abbreviations for \verb=\O= and extra options to indicate limit, successor etc.. sets of notations.  Added \verb=\Ofunc= as the effective limit for a notation.  Fixed errors in the pfcases environment and eliminated some old compatibility code that wasn't being used by anyone.  Added \verb=\maps= helper for normal math stuff.  Fixed BeamerRequirements.  Added the \verb=\bpfuncs= command.
 	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.
 	\item[3.8.1] Fixed issues displaying the prime for jump operations.
 	\item[3.8] Adjusted \verb=\Tdeg= to be more beamer friendly and fixed it not to dumbly underline \verb=0^n=.  Fixed BeamerRequirements to work with differing values of \verb=\abovedisplayskip=.  Removed a few typos in docs for the requirements assistance.  Added BeamerRequire and BeamerRequire* that put the requirements in a block and offer overlay specifications.
