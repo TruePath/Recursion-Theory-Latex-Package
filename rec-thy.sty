@@ -430,9 +430,10 @@
     }
 
     \def\incompatsymb@recthy{\mathrel{\mid}}
+    \def\defaulIncompatSymb@recthy{\mathrel{\,\not|\,}}
     \ifrecthy@midincompat
       \@packinfo{Using mid as incompat symbol}
-      \let\compatsymb@recthy=\mathrel{\,\not|\,}
+      \let\compatsymb@recthy=\defaulIncompatSymb@recthy
       \let\ncompatsymb@recthy=\incompatsymb@recthy
     \else
       \let\compatsymb@recthy=\succprec@recthy
