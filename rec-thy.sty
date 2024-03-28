@@ -130,8 +130,8 @@
 \newif\ifrecthy@fix@typeset \recthy@fix@typesettrue
 \newif\ifrecthy@nodoubleangles \recthy@nodoubleanglesfalse
 \newif\ifrecthy@stepsenv \recthy@stepsenvfalse
-\newif\ifrecthy@shortO \recthy@shortOtrue
-\newif\ifrecthy@midincompat \recthy@midincompatfalse
+\newif\ifrecthy@shortO \recthy@shortOfalse
+\newif\ifrecthy@midincompat \recthy@midincompattrue
 
 \DeclareOptionX{nomath}{\recthy@nomathtrue}
 \DeclareOptionX{nosymb}{\recthy@nosymbtrue}
@@ -429,8 +429,8 @@
       }%
     }
 
-    \let\incompatsymb@recthy=\mathrel{\mid}
-    \ifrecthy@midncompat
+    \def\incompatsymb@recthy{\mathrel{\mid}}
+    \ifrecthy@midincompat
       \@packinfo{Using mid as incompat symbol}
       \let\compatsymb@recthy=\mathrel{\,\not|\,}
       \let\ncompatsymb@recthy=\incompatsymb@recthy
@@ -1074,10 +1074,10 @@
         \let\ulcorner=\@recthy@ulcorner
         \let\urcorner=\@recthy@urcorner
     \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
-    \DeclareMathDelimiter{\@recthy@ulcorner}
-        {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
-    \DeclareMathDelimiter{\@recthy@urcorner}
-        {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
+    % \DeclareMathDelimiter{\@recthy@ulcorner}
+    %     {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
+    % \DeclareMathDelimiter{\@recthy@urcorner}
+    %     {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
     \DeclareMathSymbol{\Searrow}{\mathrel}{}
 }
 
@@ -1731,7 +1731,7 @@
     % \long\def\forces@[#1][#2]{\Vdash^{#2}_{#1}}
     % \newcommand{\forces}{\optparams{\forces@}{[][]}%
     % }
-    \providecommand*{\frc}{\forces}
+    % \providecommand*{\frc}{\forces}
 \fi
 
 
@@ -1762,26 +1762,13 @@
     %\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
     %\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
 
-    \NewDocumentCommand{\recfnl@improved}{oD(){}m!G{#2}!g!d()}{{
+    \NewDocumentCommand{\recfnl}{oD(){}m!G{#2}!g!d()}{{
       \def\temp@pmg@arg{}
       \IfValueTF{#5}{\ifthenelse{\isempty{#5}}{}{\def\temp@pmg@arg{; #5}}}{\IfValueTF{#6}{\ifthenelse{\isempty{#6}}{}{\def\temp@pmg@arg{; #6}}}}
         \@recthy@recfnlSYM_{#3\IfValueT{#1}{, #1}}\ifthenelse{\isempty{#4}}{}{\!\left(#4\temp@pmg@arg \right)}
     }}
 
-    \NewDocumentCommand{\recfnl@threeSix}{omm!g!d()}{{
-      \def\temp@pmg@arg{}
-      \IfValueTF{#4}{\ifthenelse{\isempty{#4}}{}{\def\temp@pmg@arg{; #4}}}{\IfValueTF{#5}{\ifthenelse{\isempty{#5}}{}{\def\temp@pmg@arg{; #5}}}}
-        \@recthy@recfnlSYM_{#2\IfValueT{#1}{, #1}}\ifthenelse{\isempty{#3}}{}{\!\left(#3\temp@pmg@arg \right)}
-    }}
-    \newcommand*{\recfnl@threeFive}[4][]{\@recthy@recfnlSYM_{#2\ifthenelse{\isempty{#1}}{}{,{#1}} }%
-        \ifthenelse{\isempty{#4}}%
-        {\ifthenelse{\isempty{#3}}%
-            {}% No args then print no parents
-            {(#3)}
-        }%If no oracle we just refer to the functional without any arguments
-        {\ifthenelse{\isempty{#3}}{(#4)}{(#3;#4)}%
-    }}
-    \let\recfnl=\recfnl@improved
+
     % \appto{\recthy@rollback@threeSix}{
     %   \let\recfnl=\recfnl@threeFive
     % }
