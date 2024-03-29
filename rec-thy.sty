@@ -13,6 +13,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{pict2e,picture}
 \RequirePackage{xparse}
+% \RequirePackage{amsmath} required below if not already loaded and we aren't using asl.cls
 \def\recthyVersion{4.0}
 \ProvidesExplPackage
   {rec-thy}
@@ -43,13 +44,17 @@
 \robustify\(
 \robustify\)
 %\RequirePackage{mathbbol}}
-  \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
-  % \ltx@ifpackageloaded{amssymb}{}{\RequirePackage{amssymb}}
-  % \ltx@ifpackageloaded{amsfonts}{}{\RequirePackage{amsfonts}}
+\@ifclassloaded{asl}{
+  
+}{
+    \ltx@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
+}
+
+
 \AtBeginDocument{
 % \@ifundefined{hyperref}{\providecommand{\texorpdfstring}[2]{def}  }
 
-  \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
+  % \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
   \ltx@ifpackageloaded{unicode-math}{
     \def\@recthy@tpathSYM{\mathbb{f}}
     \Umathchardef\@recthy@xnot="3 \symoperators "0338
@@ -625,8 +630,17 @@
 
 
 
-\newcommand*{\@pmg@saveeqstate}{\let\@origif@fleqn@pmg=\if@fleqn \let\@origiftagsleft@pmg=\iftagsleft@}
-\newcommand*{\@pmg@restoreeqstate}{ \let\if@fleqn=\@origif@fleqn@pmg\let\iftagsleft@=\@origiftagsleft@pmg}
+% \let\recthy@origtagform@=\tagform@
+\newcommand*{\@pmg@saveeqstate}{
+  \let\@origif@fleqn@pmg=\if@fleqn
+  \let\@origiftagsleft@pmg=\iftagsleft@
+  \let\recthy@savedtagform@=\tagform@
+}
+\newcommand*{\@pmg@restoreeqstate}{
+  \let\if@fleqn=\@origif@fleqn@pmg
+  \let\iftagsleft@=\@origiftagsleft@pmg
+  \let\tagform@=\recthy@savedtagform@
+  }
 
 \ifrecthy@noreqhelper
     \@packinfo{Not loading requirement assist.}
@@ -643,7 +657,9 @@
       \AtBeginDocument{\@ifundefined{hyperref}{}{\let\req=\req@href@star}}
     \fi
     
-    \newtagform{colon}{}{:}
+    % \newtagform{colon}{}{:}
+    \def\recthy@colontagform@#1{\maketag@@@{\ignorespaces#1\unskip:}}
+
 
     \NewDocumentCommand{\refreq}{O{}mO{}}{\ref{\detokenize{req:#2@#1#3}}}
 
@@ -723,7 +739,8 @@
           \@fleqntrue
           \setlength\@mathmargin{1.5cm}
           \tagsleft@true
-          \usetagform{colon}
+          \let\tagform@=\recthy@colontagform@%
+          % \usetagform{colon}
           \begin{equation}\tag{#1}
       }{
           \end{equation}
@@ -749,7 +766,8 @@
         \@fleqntrue%
         \setlength\@mathmargin{1.5cm}%
         \tagsleft@true%
-        \usetagform{colon}%
+        % \usetagform{colon}%
+        \let\tagform@=\recthy@colontagform@%
         \let\require=\require@nested%
         \gather
         }{\endgather%
