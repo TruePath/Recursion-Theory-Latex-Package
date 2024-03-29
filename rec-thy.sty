@@ -705,7 +705,7 @@
     \end{requirements*}
           \end{reqblock@recthy}}{}
 
-    \NewDocumentEnvironment{requirements*}{b}{\usetagform{colon} %
+    \NewDocumentEnvironment{requirements*}{b}{\let\tagform@=\recthy@colontagform@
           \let\myhalign\halign%
             \def\halign{\let\mylb\\ \renewcommand{\\}{& \mylb}\myhalign}%
           \let\require=\require@beamer %
@@ -745,7 +745,7 @@
       }{
           \end{equation}
           \@pmg@restoreeqstate
-          \usetagform{default}
+          % \usetagform{default}
           % \let\maketag@@@=\maketag@@@orig@pmg  
       }
 
@@ -772,7 +772,7 @@
         \gather
         }{\endgather%
         \@pmg@restoreeqstate%
-        \usetagform{default}%
+        % \usetagform{default}%
         \ignorespacesafterend}
 
  \fi
@@ -817,7 +817,8 @@
 
 
 % \newcommand*{\@recthy@abs}[1]{\lvert#1\rvert}
-\DeclarePairedDelimiter\@recthy@abs{\lvert}{\rvert}
+\NewDocumentCommand{\@recthy@abs}{sm}{\IfBooleanT{#1}{\left}\lvert #2 \IfBooleanT{#1}{\right}\rvert}
+% \DeclarePairedDelimiter\@recthy@abs{\lvert}{\rvert}
 \newcommand*{\@recthy@ensuretext}[1]{\ensuremath{\text{#1}}}
 
 
@@ -835,8 +836,10 @@
     \else
         \DeclareMathOperator{\Ord}{Ord}
     \fi
-    \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
-    \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+    \NewDocumentCommand{\ceil}{sm}{\IfBooleanT{#1}{\left}\lceil #2 \IfBooleanT{#1}{\right}\rceil}
+    % \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+    % \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+    \NewDocumentCommand{\floor}{sm}{\IfBooleanT{#1}{\left}\lfloor #2 \IfBooleanT{#1}{\right}\rfloor}
 
     \recthy@strip{abs}
     \ifdefined\dom
@@ -1321,6 +1324,8 @@
 %%% ORdinal notations
 % constructive/recursive ordinals
 
+% \DeclarePairedDelimiter\@recthy@Vert{\lVert}{\rVert}
+
 \ifrecthy@noordinalnotations
     \@packinfo{No ordinal notations loading.}
 \else
@@ -1330,7 +1335,7 @@
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
     % \newcommand*{\ordzero}{\ensuremath{0}}
   \def\kleeneOSYM{\mathcal{O}}
-     \NewDocumentCommand{\kleeneO}{st+t-D(){}o}{\IfBooleanTF{#2}{\prescript{+}{}{\kleeneOSYM}}{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}}^{#4}_{\IfBooleanTF{#1}{1\IfValueTF{#5}{,\, #5}{}}{\IfValueTF{#5}{#5}{}}}}
+     \NewDocumentCommand{\kleeneO}{st+t-D(){}o}{\IfBooleanTF{#2}{\vphantom{\kleeneOSYM}^{+}{\kleeneOSYM}}{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}}^{#4}_{\IfBooleanTF{#1}{1\IfValueTF{#5}{,\, #5}{}}{\IfValueTF{#5}{#5}{}}}}
      \newcommand*{\Ouniq}{\kleeneO*}
 
     % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
@@ -1367,7 +1372,8 @@
     \NewDocumentCommand{\Ongeq}{o}{\ngeq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
     \newcommand*{\Oadd}{\mathbin{+_{\kleeneOSYM}}}
     \newcommand*{\Omul}{\times_{\kleeneOSYM}}
-    \newcommand*{\Ohgt}[1]{\lVert #1\rVert_{\kleeneOSYM}}
+    \NewDocumentCommand{\Ohgt}{sm}{\IfBooleanT{#1}{\left}\lVert #2 \IfBooleanT{#1}{\right}\rVert_{\kleeneOSYM}}
+    % \newcommand*{\Ohgt}[1]{\lVert #1\rVert_{\kleeneOSYM}}
     \let\Oabs=\Ohgt
     % \let\hgtO=\kleenehgt
     \newcommand*{\Olim}[2]{{#1}_{[#2]}}
