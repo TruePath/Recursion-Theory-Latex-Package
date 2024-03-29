@@ -1,25 +1,34 @@
 \documentclass[leqno,11pt]{amsart}
 \usepackage{zwgetfdate}
-\usepackage{amsmath}
-% \RequirePackage{amsmath}
+\usepackage{amsmath,amssymb,amsthm,iftex}
 \usepackage[disallowspaces,fixamsmath]{mathtools}
-\usepackage{amssymb}
-\usepackage{amsthm}
 % \usepackage{amsfonts}
 % \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 % \DeclareMathAlphabet{\mathbrush}{T1}{pbsi}{xl}{n}
 % \usepackage{mathspec}
 \usepackage{comment}
-\usepackage{unicode-math}
-\unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
+
+\ifpdftex
+\else %using lualatex/xelatex
+    \usepackage{unicode-math}
+    \usepackage{fontspec}
     \setmainfont{XITS}
     \setmathfont{XITS Math}
     \setmathfont{XITS Math}[range={\mathscr,\mathbfscr}]
-    \setmathfont{XITS Math}[range={\mathcal,\mathbfcal},StylisticSet=1]
+    \setmathfont{XITS Math}[range={\mathcal,\mathbfcal},StylisticSet=1]  %% creating different styles for mathscr/mathcal using XITS
+\fi
+
+% \usepackage{unicode-math}
+% \unimathsetup{math-style=TeX,bold-style=TeX,nabla=upright,partial=italic}
+%     \setmainfont{XITS}
+%     \setmathfont{XITS Math}
+%     \setmathfont{XITS Math}[range={\mathscr,\mathbfscr}]
+%     \setmathfont{XITS Math}[range={\mathcal,\mathbfcal},StylisticSet=1]
 
 
-\usepackage{hyperxmp}
+
 \usepackage[unicode,psdextra,pdfusetitle]{hyperref}
+\usepackage{hyperxmp}
 \hypersetup{%
 	%pdfauthor={Peter M. Gerdes},
             pdfsubject={LaTeX Package for Typesetting Computability Theory},
@@ -30,20 +39,15 @@
             linkcolor=magenta,
             pdfborder={0 0 0},
             breaklinks=true,
-			pdfdisplaydoctitle=true,
-			pdfcontactaddress={107 Ardsley Drive},
-         	pdfcontactcity={Syracuse, NY},
-         	pdfcontactpostcode={13214},
-         	pdfcontactcountry={United States},
-        	pdfcontactphone={256-333-0128},
-        	pdfcontactemail={gerdes@invariant.org},
-        	pdfcontacturl={http://invariant.org},
-        	pdflang={en},
+        		pdfcontactemail={gerdes@invariant.org},
+        		pdfcontacturl={http://invariant.org},
+        		pdflang={en},
         	% pdfauthortitle={Technical Assistant, Level III},
         	% pdfdate={\today},
-        	pdfcopyright={Copyright (C) \today, Peter M. Gerdes},
-        	baseurl={http://invariant.org}
+        		pdfcopyright={Copyright (C) \today, Peter M. Gerdes},
+        		baseurl={http://invariant.org}
 }
+
 \usepackage{cleveref}
 \usepackage{listings}
 \usepackage{multirow}
@@ -97,7 +101,7 @@
 
 
 \begin{abstract}
-\noindent The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, \ce sets, stagewise computations, forcing and syntactic classes.
+\noindent The rec-thy package is designed to help mathematicians publishing papers in the area of recursion theory (aka Computability Theory) easily use standard notation.  This includes easy commands to denote Turing reductions, Turing functionals, r.e. sets, stagewise computations, forcing and syntactic classes.
 \end{abstract}
 
 
@@ -122,21 +126,23 @@ Significant use is made in this package of optional arguments delimited either b
 \section{Alternate Symbols}
 While the symbols used by default in the package are suggested for adoption to achieve greater consistency users may wish to specify their own symbols and options have been provided to enable this.  The following parameters may be specified.
 
+\makeatletter
+\let\useSYMdefault=\@recthy@useSYM@default
+\makeatother
+
 \begin{itemize}
 	\item[modulescr] Sets the script used to typeset the \verb=\module= command.  Default is mathcal.
 	\item[reqscr] Sets the script used to typeset requirements.  Default is mathscr.
 	\item[pfcasefont] Sets the script used to typeset Case in the cases helper.
 	\item[emptystr] Sets the empty string symbol.  Default is \( \str{} \) 
 	\item[concatsym] Sets the concat symbol.  Default is \( \concat \) 
-	\item[cdeltasym] Sets the symbol used to denote computably \( \Delta \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Delta} \).
-	\item[cpisym] Same for \( \Pi \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Pi} \).
-	\item[csigmasym] Same for \( \Sigma \) formulas.  Default is \( \prescript{\mathcal{C}}{}{\Sigma} \).
 	\item[recfnlsym] Sets the symbol used for recursive functionals.  Default is \( \Phi \).
 	\item[recfsym]  Sets the symbol used for recursive functions.  Default is \( \phi \).
-	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \symbffrak{u} \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
+	\item[usesym]  Sets the symbol used for the use operator.  Default is \( \useSYMdefault \) where this is printed using \verb=\symbfrak= if unicode-math is loaded and with \verb=\mathfrak= otherwise.
 	\item[lstrdelim,rstrdelim] Left and right delimiters for \verb=\str=
 	\item[lcodedelim,rcodedelim] Left and right delimiters for \verb=\code=
 	\item[lpairdelim,rpairlim,pairsup] Left and right delimiters for \verb=\pair= and superscript.
+	\item[altcompat] Uses the \verb=\succprec= and \verb=\nsuccprec= commands for \verb=\compat= and \verb=\incompat= respectively.
 
 \end{itemize}
 
@@ -152,7 +158,7 @@ While the symbols used by default in the package are suggested for adoption to a
 \section{Commands}
 A few general conventions are usually followed in the commands.  Whenever an operator can be used as a binary operator (as in \( X \union Y \)) and as an operation on some collection \( \Union_{i \in \omega} X_i \) the binary operator will begin with a lowercase letter \verb=\union= and the operation on the collection will begin with a capital letter \verb=\Union=.  If the first letter is already capitalized then the second letter is used instead.
 
-Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \).  An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  A notable exception to this rule are the formula classes where square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \), so as not to generate confusion with the alternative notion \( \pizn{2}(X) \).  Also a lowercase first letter in a formula class indicates the lightface version while a capital first letter indicates the boldface version.
+Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \). An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  For the formula classes square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \) while parenthesis place the value in parenthesises after the symbol as in \( \pizn(X){2} \).  To give boldcase versions of formulas classes a star should be used immediately following the command as in \( \pizn*(X){2} \).
 
 Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above. 
 
@@ -166,7 +172,7 @@ Note the commands in this section double as suggestions for standardized notatio
 	\verb=\tpath=					& \(  \tpath                   \)	& Truepath. \\ \midrule
 	\verb=\tpath[s]=					& \( 	\tpath[s]                   \)	& Approximate Truepath. \\ \midrule
 	\verb=\xi \leftof \eta =					& \( 	\xi \leftof \eta                   \)	& The left of relation for priority tree arguments \\ \midrule
-	\verb=\module{R}[X]{i,j}=					&  \module{R}{i,j}  & Module in tree construction (superscript optional arg) \\ \midrule
+	\verb=\module{R}[X]{i,j}=					&  \module{R}[X]{i,j}  & Module in tree construction (superscript optional arg) \\ \midrule
 	% \verb=\ball[X]{y}{s}=					& \( 	\ball[X]{y}{s}                  \)	& Location of ball \( y\) (headed to \( X \)) at \( s \)\\ \midrule
 	% \verb=\ball{y}{s}=					& \( 	\ball{y}{s}                  \)	& Location of ball \( y\)  at \( s \)\\ \bottomrule
 	\end{xtabular}          \\
@@ -217,9 +223,7 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	% \verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
 	% \tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
 	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
-	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\[6pt]
-	% \verb=\alphaREAop[f]{\alpha}(\eset)=                   & \multirow{2}{*}{\( 	\alphaREAop[f]{\alpha}(\eset)         	   \)}   & \multirow{2}{*}{with particular witness to uniformity}\\[6pt]
-	\tab \verb=\reaop[f]{\alpha}(\eset)=                        &  & \\
+	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\
 		\bottomrule
 	\end{xtabular}          \\
 
@@ -229,12 +233,15 @@ To disable these commands pass the option \verb=nodegrees=. \\
 
 
 \begin{xtabular}{l |  l | l}\toprule
-  \verb=\Tdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of \( \powset{\omega} \) under \( \Tleq \) \\ \midrule
-  \verb=\REdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of \re sets under \( \Tleq \) \\ \midrule
-  \verb=\Adegrees=                                        & \( 	\Adegrees                              	   \)   & The structure of \( \powset{\omega} \) under \( \Aleq \) \\ \midrule
-  \verb=\AREAdegrees=                                        & \( 	\Tdegrees                              	   \)   & The structure of the \( \REA[\omega] \) sets under \( \Aleq \) \\ \midrule
-
-	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & Turing degree \\ \midrule
+  \verb=\Tdegrees= & \multirow{2}{*}{\( 	\Tdegrees   \)}   & The structure of \( \powset{\omega} \) under \( \Tleq \) \\ 
+  \tab \verb=\strcD= & & alternate command \\ \midrule
+  \verb=\REdegrees=   & \multirow{2}{*}{\( 	\REdegrees   \)}   & The structure of r.e sets under \( \Tleq \) \\ 
+   \tab \verb=\strcR= & & alternate command \\ \midrule
+  \verb=\Adegrees= & \multirow{2}{*}{\( 	\Adegrees   \)}   & The structure of \( \powset{\omega} \) under \( \Aleq \) \\ 
+  \tab \verb=\strcDa= & & alternate command \\ \midrule
+  \verb=\AREAdegrees= & \multirow{2}{*}{FOO}   & The structure of the \( \REA[\omega] \) sets under \( \Aleq \) \\ 
+  \tab \verb=\strcRa= & & alternate command \\ \midrule
+	\verb=\Tdeg{d}=                                        & \( 	\Tdeg{d}                              	   \)   & indicated that the variable/entity is a Turing degree\\ \midrule
 	\verb=\Tjump{X}=                                       & \multirow{2}{*}{\( 	\Tjump{X}                             	   \)}   & \multirow{2}{*}{Turing jump} \\
 	\tab \verb=\jump{X}=                                        &  & \\ \midrule
 	\verb=\jjump{X}=                                       & \( 	\jjump{X}                             	   \)   & \\ \midrule
@@ -254,15 +261,17 @@ To disable these commands pass the option \verb=nodegrees=. \\
   \verb=X \Tless Y=                               			& \(  X \Tless Y   \)   & \\ \midrule
   \verb=X \nTleq Y=                               			& \(  X \nTleq Y   \)   & \\ \midrule
   \verb=X \nTgeq Y=                               			& \(  X \nTgeq Y   \)   & \\ \midrule
-  \verb=X \Tincompat Y=                                      & \multirow{2}{*}{\(  X \Tincompat Y   \)}   & Turing incompatibility \\ 
-        \tab \verb=X \Tincomp Y= 							& & \\ \midrule 
+  \verb=X \Tincompat Y=                                      & \(  X \Tincompat Y   \)  & Turing incompatibility \\  \midrule
   \verb=X \Tcompat Y=                               		&  \(  X \Tcompat Y \)  &  Turing compatibility  \\ \midrule
-	\verb=\Tdeg{d} \degjoin \Tdeg{d'}=                    & \( 	\Tdeg{d} \degjoin \Tdeg{d'}          	   \)   & Join of degrees\\ \midrule
-	\verb=\Tdeg{d} \degmeet \Tdeg{d'}=                    	& \( 	\Tdeg{d} \degmeet \Tdeg{d'}   \)   & Meet of degrees (when defined)  \\ \midrule
-	\verb=X \Tplus Y=                                      & \multirow{2}{*}{\( 	X \Tplus Y                            	   \)}   & \multirow{4}{*}{Effective join of sets} \\
-	\tab \verb=X \Tjoin Y=                                      &  & \\
-	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   & \\
-	\tab \verb=\TJoin_{i \in \omega} X_i=                       &    & \\ \midrule
+	\verb=\Tdeg{d} \join \Tdeg{d'}=                    & \( 	\Tdeg{d} \join \Tdeg{d'}          	   \)   & \multirow{2}{*}{Join of degrees} \\
+	\tab \verb=\Join_{i \in \omega} \Tdeg{d_i}= &  \( \Join_{i \in \omega} \Tdeg{d_i} \)    & \\ \midrule 
+	\verb=\Tdeg{d} \meet \Tdeg{d'}=                    	& \( 	\Tdeg{d} \meet \Tdeg{d'}   \)   & \multirow{2}{*}{Meet of degrees (when defined)}  \\
+	\tab \verb=\Meet_{i \in \omega} \Tdeg{d_i}= &  \( \Meet_{i \in \omega} \Tdeg{d_i} \)    & \\
+	 \midrule
+	\verb=X \Tplus Y=     & \( 	X \Tplus Y                            	   \)   & Effective join of sets (alias for \verb=\oplus=) \\ \midrule
+	\verb=\TPlus_{i \in \omega} X_i=                       & \multirow{2}{*}{\( 	\TPlus_{i \in \omega} X_i            \)}   &  Effective join of sets    \\
+	\tab \verb=\Oplus_{i \in \omega} X_i=  & & alternative name \\  \midrule
+	
 	% \verb=\ttSYM=                                          & \( 	\ttSYM                                	   \)   & \\ \midrule
 	\verb=X \ttlneq Y=                                     & \( 	X \ttlneq Y                           	   \)   & Truth table reducibilities \\ \midrule
 	\verb=X \ttleq  Y=                                     & \( 	X \ttleq  Y                           	   \)   & \\ \midrule
@@ -271,11 +280,13 @@ To disable these commands pass the option \verb=nodegrees=. \\
 	\verb=X \ttgtr  Y=                                     & \( 	X \ttgtr  Y                           	   \)   & \\ \midrule
 	\verb=X \ttless Y=                                     & \( 	X \ttless Y                           	   \)   & \\ \midrule
 	\verb=X \ttnleq Y=                                     & \( 	X \ttnleq Y                           	   \)   & \\ \midrule
-        \verb=X \ttngeq Y=                                     & \(  X \ttngeq Y                             	   \)   & \\
+        \verb=X \ttngeq Y=                                     & \(  X \ttngeq Y                             	   \)   & \\ \midrule
 
   \verb=\Azero=                                          & \( 	\Azero                                	   \)   & Arithmetic degree \\ \midrule
   \verb=\Azeroj=                                          & \( 	\Azeroj                                	   \)   & \\ \midrule
 	\verb=\Azerojj=                                         & \( 	\Azerojj                               	   \)   & \\ \midrule
+	\verb=\Azerojjj=                                         & \( 	\Azerojjj                               	   \)   & \\ \midrule
+	\verb=\Azeron{n}=                                       & \( 	\Azeron{n}                             	   \)   & \\ \midrule
   \verb=X \Aeq Y=                                     	 & \( 	X \Aeq Y                           	   \)				& Arithmetic equivalence \\ \midrule
 	\verb=X \nAeq Y=                                    	 & \( 	X \nAeq Y                          	   \)   		& Arithmetic inequivalence \\ \midrule
   \verb=X \Alneq Y=                               			& \(  X \Alneq Y   \)   & \\ \midrule
@@ -286,7 +297,7 @@ To disable these commands pass the option \verb=nodegrees=. \\
   \verb=X \Aless Y=                               			& \(  X \Aless Y   \)   & \\ \midrule
   \verb=X \nAleq Y=                               			& \(  X \nAleq Y   \)   & \\ \midrule
   \verb=X \nAgeq Y=                               			& \(  X \nAgeq Y   \)   & \\ \midrule
-  \verb=X \Aincomp Y=                                   & \(  X \Aincomp Y   \) & Turing incompatibility \\ \midrule 
+  \verb=X \Aincompat Y=                                   & \(  X \Aincompat Y   \) & Turing incompatibility \\ \midrule 
   \verb=X \Acompat Y=                               		&  \(  X \Acompat Y \)  &  Turing compatibility  \\ \midrule
 
 		\bottomrule
@@ -297,10 +308,10 @@ To disable these commands pass the option \verb=noreqhelper=. To disable the hyp
 Math mode is not required for \verb=\req{R}{e}=
 
 \begin{tabular}{l |  l | l}\toprule
-\verb=\req{R}{e}=			 &  \( \req{R}{e} \) & \multirow{3}{*}{Requirement } \\ \midrule
-\verb=\req{R}[\nu]{e}=	&  \req{R}[\nu]{e} & \\ \midrule
-\verb=\req*{R}{e}=			 &  \req{R}{e} & \multirow{3}{*}{Requirement without hyperlinks} \\ \midrule
-\verb=\req*{R}[\nu]{e}=	&  \req{R}[\nu]{e} & \\ \midrule
+\verb=\req{R}{e}=			 &  \( \req{R}{e} \) & \multirow{2}{*}{Requirement } \\ 
+\verb=\req{R}[\nu]{e}=	&  \req{R}[\nu]{e}  & \\ \midrule
+\verb=\req*{R}{e}=			 &  \req*{R}{e} & \multirow{2}{*}{Requirement without hyperlinks} \\ 
+\verb=\req*{R}[\nu]{e}=	&  \req*{R}[\nu]{e} & \\ \midrule
 	\bottomrule
 \end{tabular}          \\
 
@@ -390,7 +401,12 @@ Misc operators used in logic and computability.  To disable these commands pass 
 	\verb=\Meet_{i\in \omega} x_i=		& \( \Meet_{i\in \omega} x_i \) & \\ \midrule
 	\verb=x \join y= 				& \(x  \join y \) & \multirow{2}{*}{Join operation}  \\[6pt]
 	\verb=\Join_{i\in \omega} x_i=		& \( \Join_{i\in \omega} x_i \) & \\ \midrule
-	\verb=x \xor y=						& \( x \xor y \)  & \\ \bottomrule
+	\verb=x \xor y=						& \( x \xor y \)  & \\ \midrule
+	\verb=\Land \phi_i=				& \( \Land \phi_i \) & Operator form of and\\ \midrule
+	\verb=\Lor \phi_i=				& \( \Lor \phi_i \) & Operator form of or\\ \midrule
+	\verb=\LLand \phi_i=				& \( \LLand \phi_i \) & Infinitary conjunction\\ \midrule
+	\verb=\LLor \phi_i=				& \( \LLor \phi_i \) & Infinitary disjunction\\
+	\bottomrule
 \end{tabular}          \\	
 
 \subsection{Set Notation}
@@ -416,45 +432,28 @@ Note that \verb=\Cross= and \verb=\cross= overwrite the existing commands saving
 	\verb=\eset=                             &    \(   \eset                      \)    &  Emptyset abbreviation\\ \midrule
 	\verb=x \nin A=                          &    \(   x \nin A                   \)    &  not an element\\ \midrule
 	\verb=\setcmp{X}=                        &    \(   \setcmp{X}                 \)    &  Set compliment\\\midrule
-	\verb=X \setdiff Y=                     &    \(   X \setdiff Y              \)    & Set difference \\ \midrule
+	% \verb=X \setdiff Y=                     &    \(   X \setdiff Y              \)    & Set difference \\ \midrule
 	\verb=X \symdiff Y=                      &    \(   X \symdiff Y               \)    & Symmetric difference \\ \bottomrule
 	% \verb=\interior X=                       &    \(   \interior X                \)    & Interior \\ \midrule
 	% \verb=\closure X=                        &    \(   \clos X                 \)    & Closure \\ \midrule
 		\bottomrule
 	\end{tabular}          \\
 
-\subsection{Special Symbols}
-To disable these commands pass the option \verb=nosymb=. To prevent only redefinition of \verb=\llangle= and \verb=\rrangle= (e.g. to use the XITS unusual default) pass the option \verb=nodoubleangles=.\\
+\subsection{Improved Symbols and MnSymbol Imports}
+Unless the option \verb=nosymb= is passed a number of symbols are (re)defined for better typesetting.  To prevent only redefinition of \verb=\llangle= and \verb=\rrangle= (e.g. to use the XITS unusual default) pass the option \verb=nodoubleangles=.  A couple new symbols which can't be easily created without the MnSymbol font are also defined and are listed below.
 
 \begin{tabular}{l |  l | l}\toprule
-	\verb=\gcode{\phi}= 				& \multirow{3}{*}{\( \gcode{\phi} \)} & \multirow{3}{*}{Godel Code/Corner Quotes}\\
-	\tab \verb=\godelnum{\phi}=			& &\\
-	\tab \verb=\cornerquote{\phi}=			& &\\ \midrule
-	\verb=\Searrow= & \( \Searrow \) & variant on usual entersat symbol \\ \midrule 
-	\verb=\llangle x,y,z \rrangle=			& \( \llangle x,y,z \rrangle \) & Properly spaced double angle brackets\\
+	% \verb=\godelnum{\phi}=			& & \multirow{2}{*}{Godel Code/Corner Quotes}\\
+	% \tab \verb=\cornerquote{\phi}=			& &\\ \midrule
+	\verb=\Searrow= & \( \Searrow \) & double searrow \\ \midrule
+	\verb=\nSearrow= & \( \nSearrow \) & negated double searrow \\   
+	% \verb=\llangle x,y,z \rrangle=			& \( \llangle x,y,z \rrangle \) & Properly spaced double angle brackets\\
 	\bottomrule
 \end{tabular}
 
-\subsection{Recursive vs. Computable}
-To disable these commands pass the option \verb=nonames=. To use recursive, r.e. and recursively enumerable everywhere pass the option \verb=re=.  To use computable, c.e. and computably enumerable everywhere pass the option \verb=ce=.  To force REA and CEA use the options \verb=rea= and \verb=cea=. If none of these options are passed the macros will expand as below.  All macros in this section work in both text and math modes.\\
 
-\begin{tabular}{l |  l }\toprule
-\verb=\re=				 & \re			       \\ \midrule
-\verb=\ce=                               & \ce                         \\ \midrule
-\verb=\REA=                              & \REA                        \\ \midrule
-\verb=\CEA=                              & \CEA                        \\ \midrule
-\verb=\recursive=                        & \recursive                  \\ \midrule
-\verb=\computable=                       & \computable                 \\ \midrule
-\verb=\recursivelyEnumerable=            & \recursivelyEnumerable      \\ \midrule
-\verb=\computablyEnumerable=             & \computablyEnumerable       \\ \midrule
-\verb=\Recursive=                        & \Recursive                  \\ \midrule
-\verb=\Computable=                       & \Computable                 \\ \midrule
-\verb=\RecursivelyEnumerable=            & \RecursivelyEnumerable      \\ \midrule
-\verb=\ComputablyEnumerable=             & \ComputablyEnumerable       \\ \midrule
-	\bottomrule
-\end{tabular}
 
-\subsection{Quantifiers \& Connectives}
+\subsection{Quantifiers}
 To disable these commands pass the option \verb=noquants=. The commands \verb=\exists= and \verb=\forall= are standard but the package extends them.\\
 
 \begin{tabular}{l |  l | l}\toprule
@@ -476,19 +475,18 @@ To disable these commands pass the option \verb=noquants=. The commands \verb=\e
 	\tab \verb=\forallae=	&				  & \\[6pt]
 	\verb=\forall*[x < y]=		& \( \forall*[x < y ] \) & \\[6pt]
 	\verb=\forall*(x < y)=		& \( \forall*(x < y ) \) & \\ \midrule
-	\verb=\True=				& \( \True \) & \\ \midrule
-	\verb=\False=				& \( \False \) & \\ \midrule
-	\verb=\Land \phi_i=				& \( \Land \phi_i \) & Operator form of and\\ \midrule
-	\verb=\Lor \phi_i=				& \( \Lor \phi_i \) & Operator form of or\\ \midrule
-	\verb=\LLand \phi_i=				& \( \LLand \phi_i \) & Infinitary conjunction\\ \midrule
-	\verb=\LLor \phi_i=				& \( \LLor \phi_i \) & Infinitary disjunction\\
+	% \verb=\True=				& \( \True \) & \\ \midrule
+	% \verb=\False=				& \( \False \) & \\ \midrule
+
 	\bottomrule
 \end{tabular}
+
 \subsection{Spaces}
 To disable these commands pass the option \verb=nospaces=.\\  
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\bstrs=		       & \( \bstrs  \) & Finite binary strings        \\	\midrule
+	\verb=\cbstrs=		       & \( \cbstrs  \) & Finite sequence of binary strings (regarded as columnise specification)      \\	\midrule
 	\verb=\wstrs=                 & \( \wstrs  \) & Finite sequences of integers \\ 	\midrule
 	\verb=\cantor=                & \( \cantor \) & Cantor space		     \\    \midrule
 	\verb=\baire=                 & \( \baire  \) & Baire space                  \\[6pt]
@@ -500,26 +498,35 @@ To disable these commands pass the option \verb=nospaces=.\\
 \subsection{Strings}
 To disable these commands pass the option \verb=nostrings=.\\
 
-To specify an alternative symbol for the empty string pass \verb!emptystr=macroname!.  For instance, to use \( \lambda \) as the empty string pass \verb!emptystr=lambda!.  Similarly, to specify an alternate value for the conatination symbol pass \verb!concatsym=macroname!, e.g., if you specify \verb!\def\plus{+}! and then pass \verb!concatsym=plus! the concatenation symbol would be changed to \( + \).
+To specify an alternative symbol for the empty string pass \verb!emptystr=macroname!.  For instance, to use \( \lambda \) as the empty string pass \verb!emptystr=lambda!.  Similarly, to specify an alternate value for the concatenation symbol pass \verb!concatsym=macroname!, e.g., if you specify \verb!\def\plus{+}! and then pass \verb!concatsym=plus! the concatenation symbol would be changed to \( + \). 
+
+To use \verb=\succprec= and \verb=\nsuccprec= for \verb=\compat= and \verb=\incompat= pass the option \verb=altcompat=
+
+
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\str{1,0,1}=		     & \(   \str{1,0,1}           \) & \multirow{2}{*}{Strings/Codes for strings}  \\
 	\tab \verb=\code{5,8,13}=                & \(   \code{5,8,13}         \) &   \\ \midrule
 	\verb=\EmptyStr=                    & \(   \EmptyStr             \) &  \multirow{2}{*}{Empty string}  \\[6pt]
 	\tab \verb=\estr=                        & \(   \estr                 \) &   \\ \midrule
+	\verb=\godelnum{\phi}=			& & \multirow{2}{*}{Godel Code/Corner Quotes}\\
+	\tab \verb=\cornerquote{\phi}=			& &\\ \midrule
 	\verb=\decode{\sigma}{3}=           & \(   \decode{\sigma}{3}    \) & Alternate notation for \( \sigma(3) \)   \\ \midrule
 	\verb=\sigma\concat\tau=            & \(   \sigma\concat\tau     \) & \multirow{2}{*}{Concatenation}   \\[6pt]
 	\verb=\sigma\concat[0]=             & \(   \sigma\concat[0]      \) &   \\ \midrule
 	\verb=\strpred{\sigma}=             & \(   \strpred{\sigma}      \) & The immediate predecessor of \( \sigma \)  \\ \midrule
 	\verb=\lh{\sigma}=                  & \(   \lh{\sigma}           \) & Length of \( \sigma \)  \\ \midrule
-	\verb=\sigma \incompat \tau=        & \(   \sigma \incompat \tau  \) & \multirow{2}{*}{Incompatible strings}  \\
-	\tab \verb=\sigma \incomp \tau=          & \(   \sigma \incomp \tau   \) &   \\ \midrule
+	\verb=\sigma \incompat \tau=        & \(   \sigma \incompat \tau  \) & Incompatible strings  \\
 	\verb=\sigma \compat \tau=          & \(   \sigma \compat \tau   \) &  Compatible strings \\ \midrule
+  \verb=\sigma \nsuccprec \tau=        & \(   \sigma \nsuccprec  \tau  \) & Alternate incompatible strings  \\
+	\verb=\sigma \succprec \tau=          & \(   \sigma \succprec \tau   \) &  Alternate compatible strings \\ \midrule
+
 	\verb=\pair{x}{y}=                  & \(   \pair{x}{y}           \) & Code for the pair \( (x,y) \)  \\ \midrule
 	\verb=\setcol{X}{n}=                & \(   \setcol{X}{n}         \) & \( \set{y}{\pair{n}{y} \in X} \)  \\ \midrule
 	\verb=\setcol{X}{\leq n}=           & \(   \setcol{X}{\leq n}    \) & \( \set{ \pair{x}{y}}{\pair{x}{y} \in X \land x \leq n} \)   \\
 		\bottomrule
 	\end{tabular}
+
 
 \subsection{Subfunctions}
 To disable these commands pass the option \verb=nosubfuns=.\\
@@ -545,9 +552,9 @@ To disable these commands pass the option \verb=notrees=.\\
 	\verb=\CBderiv{T}=		      & \(  \CBderiv{T}		      \) & \multirow{2}{*}{Cantor-Bendixson Derivative} \\[6pt]
 	\verb=\CBderiv[\alpha]{T}=           & \(  \CBderiv[\alpha]{T}       \) & \\ \midrule
 	\verb=\pruneTree{T}=                 & \(  \pruneTree{T}             \) & \( \set{\sigma \in T}{\exists(g)(g \in [T] \land \sigma \subset g)} \) \\ \midrule
-	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & \\
-	\verb=\TreeMod{T}{\sigma}=                       & \(  \TreeMod{T}{\sigma}                  \) & \\
-	\verb=\TreeMul{\sigma}{T}=                       & \(  \TreeMul{\sigma}{T}                  \) & \\
+	\verb=\hgt{T}=                       & \(  \hgt{T}                   \) & Tree Height \\ \midrule
+	\verb=\TreeMod{T}{\sigma}=                       & \(  \TreeMod{T}{\sigma}                  \) & \(  \set{\tau}{\sigma\concat\tau \in T} \)   \\ \midrule
+	\verb=\sigma \TreeMul T=                       & \(  \sigma \TreeMul T               \) & \(  \set{\sigma\concat\tau}{\tau \in T} \) \\
 		\bottomrule
 	\end{tabular}
 
@@ -572,30 +579,34 @@ To disable these commands pass the option \verb=nosetrels=.\\  Note that many of
 	\end{tabular}
 
 \subsection{Ordinal Notations}
-To disable these commands pass the option \verb=noordinalnotations=.\\
+To disable these commands pass the option \verb=noordinalnotations=.  Note the name for addition is \verb=\Oadd= rather than \verb=\Oplus= to avoid a collusion with existing commands.
 
 \begin{tabular}{l |  l | l}\toprule
 	\verb=\wck=			        & \( 	\wck                      \)			       & First non-computable ordinal \\ \midrule
-	\verb=\ordzero=                        & \( 	\ordzero                   \)                          & Notation for ordinal \( 0 \)\\ \midrule
-	\verb=\abs{\alpha}=			& \( \abs{\alpha} \)						& Ordinal \( \alpha \) denotes \\ \midrule
-	\verb=\kleeneO=                        & \multirow{2}{*}{\( 	\kleeneO                   \)}         & \multirow{2}{*}{Set of ordinal notations} \\[6pt]
-\tab	\verb=\ordNotations=                   &                                                              &  \\[6pt]
-	\verb=\kleeneO*=                       & \multirow{3}{*}{\( 	\kleeneO*                  \)}         & \multirow{3}{*}{Unique set of ordinal notations} \\[6pt]
-\tab	\verb=\uniqOrdNotations=               &                                                              & \\[6pt]
-\tab	\verb=\kleeneOuniq=                    &                                                              & \\[6pt]
-	\verb=\kleeneO(X)=                     & \( 	\kleeneO(X)                \)                          & Relativized ordinal notations \\[6pt]
-	\verb=\kleeneO[\alpha]=                & \( 	\kleeneO[\alpha]           \)                          & Ordinal notations for ordinals \( < \abs{\alpha} \) \\[6pt]
-	\verb=\kleeneO*(X)[\alpha]=            & \( 	\kleeneO*(X)[\alpha]       \)                          & \\ \midrule
-	\verb=\alpha \kleeneless \beta=        & \( 	\alpha \kleeneless \beta   \)                          & Ordering on notations \\  \midrule
-	\verb=\alpha \kleenel    \beta=        & \( 	\alpha \kleenel    \beta   \)                          & \\ \midrule
-	\verb=\alpha \kleeneleq  \beta=        & \( 	\alpha \kleeneleq  \beta   \)                          & \\ \midrule
-	\verb=\alpha \kleenegtr  \beta=        & \( 	\alpha \kleenegtr  \beta   \)                          & \\ \midrule
-	\verb=\alpha \kleenegeq  \beta=        & \( 	\alpha \kleenegeq  \beta   \)                          & \\ \midrule
-	\verb=\alpha \kleenePlus \beta=        & \( 	\alpha \kleenePlus \beta   \)                          & Effective addition of notations \\ \midrule
-	\verb=\alpha \kleeneMul  \beta=        & \( 	\alpha \kleeneMul  \beta   \)                          & Effective multiplication of notations \\  \midrule
-	\verb=\kleenelim{\lambda}{n}=          & \( 	\kleenelim{\lambda}{n}     \)                          & The \( n \)-th element in effective limit defining notation \( \lambda \)\\  \midrule
-        \verb=\kleenepred{\alpha}=             & \(  \kleenepred{\alpha}          \)                          & Predecessor of \( \alpha \) if defined \\ \midrule
-	\verb=\kleenehgt{R}=                   & \( 	\kleenehgt{R}              \)        & Height of computable relation \( R \) \\
+	% \verb=\ordzero=                        & \( 	\ordzero                   \)                          & Notation for ordinal \( 0 \)\\ \midrule
+	\verb=\Oabs{\alpha}=			& \multirow{2}{*}{\( \Oabs{\alpha} \)}					& The height of the notation or well-ordering \( \alpha \) (i.e. ordinal it denotes) \\ 
+	\tab \verb=\Ohgt{\alpha}= & & Alternative command \\ \midrule
+	\verb=\kleeneO=                        & \( 	\kleeneO                   \)  & Set of ordinal notations \\
+	\tab \verb=\kleeneO-=                        & \( 	\kleeneO-                   \)  & Set of limit notations \\
+	\tab \verb=\kleeneO+=                        & \( 	\kleeneO+                   \)  & Set of successor notations \\
+	\tab \verb=\kleeneO*= or   \verb=\Ouniq=    & \( 	\kleeneO*                  \)        & Canonical unique set of ordinal notations \\
+	% \tab \verb=\Ouniq= & & Alternate command \\ 
+	\tab \verb=\kleeneO(X)=                     & \( 	\kleeneO(X)                \)                          & Relativized ordinal notations \\
+	\tab \verb=\kleeneO[\alpha]=                & \( 	\kleeneO[\alpha]  \)  & Ordinal notations for ordinals \( < \abs{\alpha} \)\\
+	\tab \verb=\kleeneO*(X)[\alpha]=            & \( 	\kleeneO*(X)[\alpha]       \)  & Multiple options work together \\ \midrule
+	\verb=\alpha \Oless \beta=        & \( 	\alpha \Oless \beta   \) & less than on the ordering on notations \\   
+	\tab \verb=\alpha \Oleq  \beta=        & \( 	\alpha \Oleq  \beta   \) & \\ \midrule
+	\tab \verb=\alpha \Ogtr  \beta=        & \( 	\alpha \Ogtr  \beta   \)                          & \\ 
+	\tab \verb=\alpha \Ogeq  \beta=        & \( 	\alpha \Ogeq  \beta   \)                          & \\ 
+	\tab \verb=\alpha \Onless \beta=        & \( 	\alpha \Onless \beta   \) & less than on the ordering on notations \\   
+	\tab \verb=\alpha \Onleq  \beta=        & \( 	\alpha \Onleq  \beta   \) & \\ \midrule
+	\tab \verb=\alpha \Ongtr  \beta=        & \( 	\alpha \Ongtr  \beta   \)                          & \\ 
+	\tab \verb=\alpha \Ongeq  \beta=        & \( 	\alpha \Ongeq  \beta   \)                          & \\\midrule
+	\verb=\alpha \Oadd \beta=        & \( 	\alpha \Oadd \beta   \)                          & Effective addition of notations \\ \midrule
+	\verb=\alpha \Omul  \beta=        & \( 	\alpha \Omul  \beta   \)                          & Effective multiplication of notations \\  \midrule
+	\verb=\Olim{\lambda}{n}=          & \( 	\Olim{\lambda}{n}     \)                          & The \( n \)-th element in effective limit defining notation \( \lambda \)\\  \midrule
+  \verb=\Opred{\alpha}=             & \(  \Opred{\alpha}          \)                          & Predecessor of \( \alpha \) if defined \\ \midrule
+  \verb=\Ofunc{\gamma}(m)= & \( \Ofunc{\gamma}(m) \)  & The \( m \)-th element in the effectively given limit defining the limit notation \( \gamma \) \\   
 % \tab	\verb=\hgtO{R}=                        & & \\
 		\bottomrule
 	\end{tabular}
@@ -604,44 +615,43 @@ To disable these commands pass the option \verb=noordinalnotations=.\\
 To disable these commands pass the option \verb=noforcing=.\\
 
 \begin{tabular}{l |  l | l}\toprule
-	\verb=\sigma \forces \phi=	        	& \multirow{2}{*}{\(  \sigma \forces \phi         \)}	& \multirow{2}{*}{\( \sigma \) forces \( \phi \)}\\
-	\tab \verb=\sigma \frc \phi=                        &    & \\
-	\verb=\sigma \forces(X) \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & \( \phi \) is formula relative to \( X \) \\
-	\verb=\sigma \forces[T] \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & Local forcing on \( T \)\\
-	\verb=\sigma \forces* \phi=                    & \(  \sigma \forces* \phi        \)    & Strong forcing \\
+	\verb=\sigma \forces \phi=	        	& \(  \sigma \forces \phi         \)	& \( \sigma \) forces \( \phi \) \\ \midrule
+	\verb=\sigma \forces(X) \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & \( \phi \) is formula relative to \( X \) \\ \midrule
+	\verb=\sigma \forces(X)[T] \phi=               & \(  \sigma \forces(X)[T] \phi    \)   & Local forcing on \( T \) relative to \( X \) \\ \midrule
+	\verb=\sigma \forces* \phi=                    & \(  \sigma \forces* \phi        \)    & Strong forcing \\ \midrule
+	\verb=\sigma \wforces \phi=                    & \(  \sigma \wforces \phi        \)    & weak forcing (takes optional paren and bracket arguments as above)  \\ 
 	\bottomrule
 \end{tabular}
 
 \subsection{Syntax}
-To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \).  Capitalizing the first letter gives the boldface version in all cases (except the computable infinitary formulas as this doesn't make sense).  Not all formulas/abbreviations are demonstrated below given the huge number but the enough are included to make it clear what command is required to generate the desired formula class, e.g., substituting pi for delta does what you think it does.
+To disable these commands pass the option \verb=nosyntax=.\\  All syntax classes can be relativized with an optional argument in square brackets even when not listed below.  Only the \( \Delta \) formula classes are listed below since the syntax is identical for \( \Sigma \) and \( \Pi \). Adding a star after the command produces the boldface version.  Do to the common usage of the zero and one versions of the formulas an abbreviation is provided unless the option \verb=noshortsyntax= is passed.
 
-To change the syntax for the computable infinitary formulas you can pass the options \verb!cdeltasym=macroname!, \verb!csigmasym=macroname! and \verb!cpisym=macroname! where macroname is the name (without the leading \verb=\=) of the macro giving the desired symbol to use for the relevant class. 
 
 \begin{xtabular}{l |  l | l}\toprule
-	\verb=\Cdeltan[X]{\alpha}=          & \( \Cdeltan[X]{2}    \)      & The computable \( \delta^{X}_\alpha \) formulas  \\ \midrule
-	\verb=\deltan{2}=              & \( \deltan{2}        \)      & \\ \midrule
-	\verb=\deltan[X]{2}=           & \( \deltan[X]{2}     \)      & \\ \midrule
-	\verb=\deltaZeroN[X]{2}=       & \multirow{2}{*}{\( \deltaZeroN[X]{2} \)}      & \\
-	\tab \verb=\deltazn[X]{2}=          &                              & \\ \midrule
-	\verb=\deltaZeroOne[X]=        & \multirow{2}{*}{\( \deltaZeroOne[X]  \)}      & \\
-	\tab \verb=\deltazi[X]=             &                              & \\ \midrule
-	\verb=\sigmaZeroTwo[X]=        & \multirow{2}{*}{\( \deltaZeroTwo[X]  \)}      & \\
-	\tab \verb=\sigmazii[X]=            &                              & \\ \midrule
-	\verb=\deltaZeroThree[X]=      & \multirow{2}{*}{\( \deltaZeroThree[X]\)}      & \\
-	\tab \verb=\deltaziii[X]=           &                              & \\ \midrule
-	\verb=\deltaOneN[X]{2}=        & \multirow{2}{*}{\( \deltaOneN[X]{2}  \)}      & \\
-	\tab \verb=\deltaIn[X]{2}=          &                              & \\ \midrule
-	\verb=\deltaOneOne[X]=         & \multirow{2}{*}{\( \deltaOneOne[X]   \)}      & \\
-	\tab \verb=\deltaIi[X]=             &                              & \\ \midrule
-	\verb=\deltaOneTwo[X]=         & \multirow{2}{*}{\( \deltaOneTwo[X]   \)}      & \\
-	\tab \verb=\deltaIii[X]=            &                              & \\ \midrule
-	\verb=\deltaOneThree[X]=       & \multirow{2}{*}{\( \deltaOneThree[X] \)}      & \\
-	\tab \verb=\deltaIiii[X]=           &                              & \\ \midrule
-	\verb=\pizi=              & \( \pizi      \)      & \\ \midrule
-	\verb=\pizn[X]{n}=              & \( \pizn[X]{n}      \)      & \\ \midrule
-	\verb=\Deltan{2}=              & \( \Deltan{2}        \)      & \\ \midrule
-	\verb=\DeltaOneN[X]{n}=         & \( \DeltaOneN[X]{n} \)  & \\ \midrule
+	\verb=\DeltaN{2}=              & \( \DeltaN{2}        \)      & \\ 
+	\tab \verb=\DeltaN(X){2}=           & \( \DeltaN(X){2}     \)      & \\ 
+	\tab \verb=\DeltaN[X]{2}=           & \( \DeltaN[X]{2}     \)      & \\
+	\tab \verb=\DeltaN[X]{2}=           & \( \DeltaN*[X]{2}     \)      &  boldface  \\ \midrule
+	% \verb=\PiN{2}=              		 & \( \PiN{2}        \)      & \\ 
+	% \tab \verb=\PiN(X){2}=           & \( \PiN(X){2}     \)      & \\ 
+	% \tab \verb=\PiN[X]{2}=           & \( \PiN[X]{2}     \)      & \\
+	% \tab \verb=\PiN[X]{2}=           & \( \PiN*[X]{2}     \)      & For boldface  \\ \midrule
+	% \verb=\SigmaN{2}=              		  & \( \SigmaN{2}        \)      & \\ 
+	% \tab \verb=\SigmaN(X){2}=           & \( \SigmaN(X){2}     \)      & \\ 
+	% \tab \verb=\SigmaN[X]{2}=           & \( \SigmaN[X]{2}     \)      & \\
+	% \tab \verb=\SigmaN[X]{2}=           & \( \SigmaN*[X]{2}     \)      & For boldface  \\ \midrule
+	\verb=\DeltaZeroN{2}=                   & \( \DeltaZeroN{2}        \)      & \\ 
+	\tab \verb=\DeltaZeroN(X){2}=           & \( \DeltaZeroN(X){2}     \)      & \\ 
+	\tab \verb=\DeltaZeroN[X]{2}=           & \( \DeltaZeroN[X]{2}     \)      & \\
+	\tab \verb=\DeltaZeroN[X]{2}=           & \( \DeltaZeroN*[X]{2}     \)      & boldface  \\ 
+	\tab \verb=\deltazn(X){2}= 							& \( \deltazn(X){2}     \)      & Abbreviated form \\ \midrule
+	\verb=\DeltaOneN{2}=                   & \( \DeltaOneN{2}        \)      & \\ 
+	\tab \verb=\DeltaOneN(X){2}=           & \( \DeltaOneN(X){2}     \)      & \\ 
+	\tab \verb=\DeltaOneN[X]{2}=           & \( \DeltaOneN[X]{2}     \)      & \\
+	\tab \verb=\DeltaOneN[X]{2}=           & \( \DeltaOneN*[X]{2}     \)      & boldface  \\ 
+	\tab \verb=\deltain(X){2}= 							& \( \deltain(X){2}     \)      & Abbreviated form \\ \midrule
 
+	
 	\verb=\logic{\omega_1}{\omega}= & \( \logic{\omega_1}{\omega} \) & Indicates the kind of infinitary logic\\
 		\bottomrule
 \end{xtabular}
@@ -791,10 +801,10 @@ This yields the following output:
 
 \end{steps}
 
+\section{Font Notes}
 
-\subsection{MRref}
+The package is designed to work with both XITS fonts using unicode-math under lualatex and xelatex as well as standard fonts under pdflatex.  The package will assume that XITS or a font with similar features is loaded if the unicode-math package is loaded.  To properly represent symbols the package needs access to different mathcal and mathscr fonts.  By default, if unicode-math isn't loaded the package will load mathrsfs.  To disable this behavior pass the option \verb=norsfs=.  Furthermore, it also needs access to a blackboard bold that works for lowercase symbols.  This isn't an issue using XITS but if unicode-math isn't loaded the package will load the mathbbm package to define certain symbols.  This behavior can be overridden by passing the option \verb=nobbm= and the package will do the best it can.
 
-Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These macros normalize the formating of mathscinet references for supported bibliography styles and ensure the MR numbers link to the mathscinet page of the article. 
 
 
 \section{Release Notes}
@@ -802,11 +812,11 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[4.0] Stripped out non-working compatibility code and removed previously depreciated features.  Removed mref helper.  Removed the ball command.  Removed undocumented hyphenation.   Changed the default compatibility symbol and added \verb=\ncompat= and added option midncompat to use old version.  
-
-	Added the \verb=\Searrow= symbol from MnSymbol and changed option from nodelim to nosymb.
+	\item[4.0] Stripped out non-working compatibility code and removed previously depreciated features.  Removed mref helper.  Removed the ball command.  Removed undocumented hyphenation.  Removed the recursive/computably terminology commands.   Removed lots of unnecessary syntax commands and reworked the code to be simpler.  Added option not to load rsfs.  Added the commands \verb=\succprec=, \verb=\precsucc=, \verb=\csuccprec=, \verb=\cprecsucc= for stacked succ/prec symbols and added the option altcompat to use these instead of the standard mid and not mid compatibility symbols.  Added the \verb=\Searrow= symbol from MnSymbol and changed option from nodelim to nosymb.
 	%TODO handle the double definition of the degree structures stuff and add strcE/strcL doc
-	Changed commands for \verb=\StrcR= and \verb=\StrcD= to be \verb=\strcR= and \verb=\strcD= for consistency and added \verb=\strcRa= and \verb=\strcDa= as synonyms for \verb=\Adegrees= and \verb=\AREAdegrees=.  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.  Fixed \verb=\nconv= to be the symbol from MnSymbol, fixed \verb=\concat= to not be so far above the line.  Adjusted spacing for \verb=\compat=, added abbreviations for \verb=\O= and extra options to indicate limit, successor etc.. sets of notations.  Added \verb=\Ofunc= as the effective limit for a notation.  Fixed errors in the pfcases environment and eliminated some old compatibility code that wasn't being used by anyone.  Added \verb=\maps= helper for normal math stuff.  Fixed BeamerRequirements.  Added the \verb=\bpfuncs= command.
+	Changed commands for \verb=\StrcR= and \verb=\StrcD= to be \verb=\strcR= and \verb=\strcD= for consistency and added \verb=\strcRa= and \verb=\strcDa= as synonyms for \verb=\Adegrees= and \verb=\AREAdegrees=.  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.  Fixed \verb=\nconv= to be the symbol from MnSymbol if the nosymb option isn't passed, fixed \verb=\concat= to not be so far above the line.  Adjusted spacing for \verb=\compat=, added abbreviations.  Complete renaming and of the commands for ordinal notations and extra options to indicate limit, successor and unique sets of notations.  Added \verb=\Ofunc= as the effective limit for a notation.  Fixed errors in the pfcases environment and eliminated some old compatibility code that wasn't being used by anyone.  Added \verb=\maps= helper for normal math stuff.  Fixed BeamerRequirements.  Added the \verb=\bpfuncs= command and \verb=\cbstrs=.
+
+	Adjusted a number of other command names/conventions and deleted redundant commands.  Large scale simplification and deduplication.  Made substantial changes to documentation to reflect this.
 	\item[3.8.2] Removed option to put the set at the end of an \verb=\REset= operation to avoid capturing later parenthesized arguments, e.g. \verb=\REset{i}(A)= no longer works to avoid confusion with \verb=\REset{i}(x)=.  Fixed failed pdf doc update.
 	\item[3.8.1] Fixed issues displaying the prime for jump operations.
 	\item[3.8] Adjusted \verb=\Tdeg= to be more beamer friendly and fixed it not to dumbly underline \verb=0^n=.  Fixed BeamerRequirements to work with differing values of \verb=\abovedisplayskip=.  Removed a few typos in docs for the requirements assistance.  Added BeamerRequire and BeamerRequire* that put the requirements in a block and offer overlay specifications.
@@ -818,7 +828,7 @@ Finally to enable the mrref helper macros pass the option \verb=mrref=.\\  These
 	\item[3.3]  - Fixed/added tweak to overline so it looks correct.  Also added real symbols so that \verb=\subfunneq= and \verb=\supfunneq= can be defined appropriately.  Added \verb=\floor= and \verb=\ceil=.  Note these aren't yet shown off in package doc.  Fixed incorrect use of tiny in math mode.
 	\item[3.2]	- Removed \verb=\reaop=, \verb=\alphaREAop=, \verb=\aREAop= in favor of using the single form \verb=\REAop=.  Removed \verb=\functo=, \verb=\map= and \verb=funcomp=, \verb=\hgtO= as useless synonyms and removed \verb=\KleeneOBelow= and \verb=KleeneOLess= as beyond what the package should define. Added package option compat31 to ensure package compatibility with version 3.1.  An optional parentheses delimited argument specifying the base has been added to  \verb=\REAop=.  Both \verb=\REAop= and the pair \verb=\REA=/\verb=\CEA= have been updated to ignore order of optional arguments.  The square brackets used to delimit the argument to the use command are now auto-sized.  Added \verb=\pmapsto=, \verb=\pmapsfrom=, \verb=\kleeneZero=, \verb=\kleeneNum=, \verb=\entersat=.  Also Misc typesetting fixes.  
 	\item[3.1]  02/26/2019 - Fixed \verb=\wck= to be \( \wck \), i.e., have capitalized roman CK.
-	\item[3.01] 02/17/2019 - Fixed \verb=\RE= \verb=\CE= \verb=\Re= and \verb=\Ce= for the various capitalized versions.  Fixed weird bug with \verb=\recfnl= no longer working based on let.  Removed \verb=\interior= and \\verb=\closure= as not really appropriate commands for the package and having bugs.  Also fixed package to have correct version.
+	\item[3.01] 02/17/2019 - Fixed \verb=\RE= \verb=\CE= \verb=\Re= and \verb=\Ce= for the various capitalized versions.  Fixed weird bug with \verb=\recfnl= no longer working based on let.  Removed \verb=\interior= and \verb=\closure= as not really appropriate commands for the package and having bugs.  Also fixed package to have correct version.
 	\item[3.0] 02/16/2019 - Added requirements environment for multiple requirements.  Changed the \verb=\req= and \verb=\require= commands to take their optional argument after the first mandatory arguments as well as before.  Added the commands \verb=\module= and \verb=\modof= and \verb=\xor=.  Improved the corner quotes. Added \verb=\leftofeq=, \verb=\rightof=, \verb=\rightofeq=.  Added \verb=\RE=, \verb=\CE=, \verb=\Ce=, \verb=\Re= and  \verb=\Tincompat=, \verb=\Tincomp=, \verb=\Tcompat=.  Changed the way strings are symbolized and coded.  Fixed suffix commands to work with unicode-math.  Also added \verb=\require*= inside \verb=\requirements=. Added \verb=\nleftofeq=, \verb=\nrightof=, \verb=\nrightofeq=, \verb=\nleftof=.  The commands \verb=\ancestor=, \verb=\descendant= etc... \verb=\reqof=, \verb=\Astages= and \verb=\Vstages=now require the option suppPriorityTrees be passed to the class to use and should be viewed as depreciated.  Fixed the options system so different symbols can be correctly passed to the class.    Changed the way \verb=\recf= works to comply with the usual syntax.
 	\item[2.4.3] 11/29/2018 - Rendered compatible with beamer by removing enumitem requirement if beamer is loaded.
 	\item[2.4.2] 11/29/2018 - Fixed horrible bugs introduced in last version and fixed many symbols to work even in pdflatex mode.  Also have everything compiling again.
