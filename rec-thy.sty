@@ -17,7 +17,7 @@
 \def\recthyVersion{4.0}
 \ProvidesExplPackage
   {rec-thy}
-  {2024/03/28}
+  {2024/03/29}
   {\recthyVersion}
   {Provides commands for writing up recursion theory papers}
 
@@ -57,7 +57,6 @@
   % \ltx@ifpackageloaded{mathtools}{}{\RequirePackage{mathtools}}
   \ltx@ifpackageloaded{unicode-math}{
     \def\@recthy@tpathSYM{\mathbb{f}}
-    \Umathchardef\@recthy@xnot="3 \symoperators "0338
   }{
     \ltx@ifpackageloaded{bbm}{\def\@recthy@tpathSYM{\mathbbm{f}}}{\mathbf{f}}
   }
@@ -119,7 +118,7 @@
 \newif\ifrecthy@nodoubleangles \recthy@nodoubleanglesfalse
 \newif\ifrecthy@stepsenv \recthy@stepsenvfalse
 \newif\ifrecthy@shortO \recthy@shortOtrue
-\newif\ifrecthy@midincompat \recthy@midincompattrue
+\newif\ifrecthy@midincompat \recthy@midincompatfalse
 \newif\ifrecthy@norsfs \recthy@norsfsfalse
 \newif\ifrecthy@nobbm \recthy@nobbmfalse
 
@@ -149,7 +148,7 @@
 \DeclareOptionX{nodoubleangles}{\recthy@nodoubleanglestrue}
 \DeclareOptionX{steps}{\recthy@stepsenvtrue}
 \DeclareOptionX{noshortO}{\recthy@shortOfalse}
-\DeclareOptionX{altcompat}{\recthy@midincompattrue}
+\DeclareOptionX{midcompat}{\recthy@midincompattrue}
 \DeclareOptionX{norsfs}{\recthy@norsfstrue}
 \DeclareOptionX{nobbm}{\recthy@nobbmtrue}
 
@@ -360,8 +359,8 @@
   \newcommand{\succprec@recthy}{\mathrel{\mathpalette\succ@prec@recthy{\succ\prec}}}
   \newcommand{\precsucc@recthy}{\mathrel{\mathpalette\succ@prec@recthy{\prec\succ}}}
 
-  \newcommand{\nsuccprec@recthy}{\ltx@ifpackageloaded{unicode-math}{\succprec@recthy\!\@recthy@xnot}{\not\succprec@recthy}}
-  \newcommand{\nprecsucc@recthy}{\ltx@ifpackageloaded{unicode-math}{\precsucc@recthy\!\@recthy@xnot}{\not\precsucc@recthy}}
+  \newcommand{\nsuccprec@recthy}{\ltx@ifpackageloaded{unicode-math}{\mathrel{\notaccent{\succprec@recthy}}}{\not\succprec@recthy}}
+  \newcommand{\nprecsucc@recthy}{\ltx@ifpackageloaded{unicode-math}{\mathrel{\notaccent{\precsucc@recthy}}}{\not\precsucc@recthy}}
 
     \newcommand{\succ@prec@recthy}[2]{\succ@@prec@recthy#1#2}
     \newcommand{\succ@@prec@recthy}[3]{%
@@ -371,17 +370,19 @@
       }%
     }
 
-    \def\defaultincompatsymb@recthy{\mathrel{\mid}}
-    \def\defaulcompatSymb@recthy{\mathrel{\,\not|\,}}
+    \def\defaultincompatsymb@recthy{\mathrel{\bot}}
+    \def\midincompatsymb@recthy{\mathrel{\mid}}
+    \def\defaulcompatsymb@recthy{\mathrel{\,\not|\,}}
     \let\ncompatsymb@recthy=\nsuccprec@recthy
     \ifrecthy@midincompat
       \@packinfo{Using mid as incompat symbol}
-      \let\compatsymb@recthy=\defaulcompatSymb@recthy
-      \let\incompatsymb@recthy=\defaultincompatsymb@recthy
+      \let\compatsymb@recthy=\defaulcompatsymb@recthy
+      \let\incompatsymb@recthy=\midincompatsymb@recthy
     \else
       \@packinfo{Using precc over succ as compat symbol}
       \let\compatsymb@recthy=\succprec@recthy
-      \let\incompatsymb@recthy=\nsuccprec@recthy
+      \let\incompatsymb@recthy=\defaultincompatsymb@recthy
+      % \let\incompatsymb@recthy=\nsuccprec@recthy
     \fi
 
 
@@ -454,6 +455,7 @@
     \providecommand{\tpath}[1][]{\ifthenelse{\isempty{#1}}{\@recthy@tpathSYM}{\@recthy@tpathSYM_{#1}}}
     \providecommand{\leftof}{\mathbin{<_L}}
     \providecommand{\leftofeq}{\mathbin{\leq_L}}
+    \providecommand{\leftofneq}{\mathbin{\lneq_L}}
     \providecommand{\rightof}{\mathbin{>_L}}
     \providecommand{\rightofeq}{\mathbin{\geq_L}}
     \providecommand{\nleftof}{\mathbin{\nless_L}}
@@ -474,20 +476,22 @@
     \@packinfo{Loading Proof Cases Helper.}
     \RequirePackage{enumitem}
 
-  \ltx@ifpackageloaded{cleveref}{
-    \crefformat{pfcasesnonumi}{#2case~#1#3}
-    \Crefformat{pfcasesnonumi}{#2Case~#1#3}
-    \crefformat{pfcasesnonumii}{#2subcase~#1#3}
-    \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
-    \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
-    \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
-    \crefformat{pfcasesnumberedi}{#2case~#1#3}
-    \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
-    \crefformat{pfcasesnumberedii}{#2case~#1#3}
-    \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
-    \crefformat{pfcasesnumberediii}{#2case~#1#3}
-    \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
-  }{}
+  \AtBeginDocument{
+    \ltx@ifpackageloaded{cleveref}{
+      \crefformat{pfcasesnonumi}{#2case~#1#3}
+      \Crefformat{pfcasesnonumi}{#2Case~#1#3}
+      \crefformat{pfcasesnonumii}{#2subcase~#1#3}
+      \Crefformat{pfcasesnonumii}{#2Subcase~#1#3}
+      \crefformat{pfcasesnonumiii}{#2subsubcase~#1#3}
+      \Crefformat{pfcasesnonumiii}{#2Subsubcase~#1#3}
+      \crefformat{pfcasesnumberedi}{#2case~#1#3}
+      \Crefformat{pfcasesnumberedi}{#2Case~#1#3}
+      \crefformat{pfcasesnumberedii}{#2case~#1#3}
+      \Crefformat{pfcasesnumberedii}{#2Case~#1#3}
+      \crefformat{pfcasesnumberediii}{#2case~#1#3}
+      \Crefformat{pfcasesnumberediii}{#2Case~#1#3}
+    }{}
+  }
 
     \newlist{pfcasesnonum}{enumerate}{3}
     \setlist[pfcasesnonum]{
@@ -563,9 +567,9 @@
 
 
 \ifrecthy@nosubfun
-    \@packinfo{Not loading subfun defs.}
+    \@packinfo{Not loading relation defs.}
 \else
-    \@packinfo{Loading subfun defs.}
+    \@packinfo{Loading relation defs.}
     %DOCUMENT ME
   \newcommand{\@pnrelbar}{%
     \linethickness{\dimen2}%
@@ -625,6 +629,79 @@
   \NewDocumentCommand{\supfunneq}{o}{\@succneq\IfNoValueTF{#1}{}{_{#1}}}
   \NewDocumentCommand{\nsubfuneq}{o}{\npreceq\IfNoValueTF{#1}{}{_{#1}}}
   \NewDocumentCommand{\nsupfuneq}{o}{\nsucceq\IfNoValueTF{#1}{}{_{#1}}}
+
+ \newcommand{\@nggrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\gg$}%
+    \newdimen\pmg@width@
+    \pmg@width@=0.8\wd\z@\relax
+    \begin{picture}(\pmg@width@,.4ex)
+     \linethickness{0.6pt}
+    \roundcap
+    \put(0,.2ex){\line(1,0){\pmg@width@}}
+    \put(\dimexpr 0.5\pmg@width@-.2ex\relax,-.1ex){\line(1,1){.6ex}}
+    \end{picture}%
+  }
+
+    \newcommand{\@ggrelbar}{%
+    \linethickness{\dimen2}%
+    \sbox\z@{$\m@th\gg$}%
+    \newdimen\pmg@width@
+    \pmg@width@=0.8\wd\z@\relax
+    \begin{picture}(\pmg@width@,.4ex)
+     \linethickness{0.6pt}
+    \roundcap
+    \put(0,.2ex){\line(1,0){\pmg@width@}}
+    \end{picture}%
+  }
+
+
+
+
+  \providecommand{\ggneq}{\mathrel{\vcenter{\hbox{\text{\gg@neq}}}}}
+  \newcommand{\gg@neq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
+      $\m@th\gg$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@nggrelbar\hidewidth\cr
+    }%
+  }
+  \providecommand{\llneq}{\mathrel{\vcenter{\hbox{\text{\ll@neq}}}}}
+  \newcommand{\ll@neq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
+      $\m@th\ll$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@nggrelbar\hidewidth\cr
+    }%
+  }
+  \providecommand{\ggeq}{\mathrel{\vcenter{\hbox{\text{\gg@eq}}}}}
+  \newcommand{\gg@eq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.1ex-.5\dimen2\relax}
+      $\m@th\gg$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@ggrelbar\hidewidth\cr
+    }%
+  }
+  \providecommand{\lleq}{\mathrel{\vcenter{\hbox{\text{\ll@eq}}}}}
+  \newcommand{\ll@eq}{%
+    \dimen2=\f@size\dimexpr.04pt\relax
+    \oalign{%
+      \noalign{\kern\dimexpr.1ex-.5\dimen2\relax}
+      $\m@th\ll$\cr
+      \noalign{\kern-.5\dimen2}
+      \hidewidth\@ggrelbar\hidewidth\cr
+    }%
+  }
+
+  \newcommand\nll{\mathrel{\not\ll}}
+\newcommand\ngg{\mathrel{\not\gg}}
+
 \fi
 
 
@@ -1165,7 +1242,7 @@
       \@packinfo{No syntax abbreviations loading.}
       \let\pizn=\PiZeroN
       \let\deltazn=\DeltaZeroN
-      \let\sigmazn=\SigmaOneN
+      \let\sigmazn=\SigmaZerN
       \let\piin=\PiOneN
       \let\deltain=\DeltaOneN
       \let\sigmain=\SigmaOneN
@@ -1233,11 +1310,19 @@
     \@packinfo{Trees loading.}
     \newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
     \newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
-    \newcommand*{\hgt}[1]{\lVert #1 \rVert}
+    \newcommand*{\hgt}[2][]{\lVert #2 \rVert_{#1}}
     \let\TreeMod=\quotient@recthy
     \newcommand*{\TreeMul}{\mathbin{\ast}}
     \newcommand*{\TreeExt}{\mathrel{\triangleleft}}
     \newcommand*{\TreeExtNeq}{\mathrel{\unlhdneq@recthy}}
+    \newcommand*{\KBless}{\mathrel{<_{\mathrm{KB}}}}
+    \newcommand*{\KBgtr}{\mathrel{>_{\mathrm{KB}}}}
+    \newcommand*{\KBleq}{\mathrel{\leq_{\mathrm{KB}}}}
+    \newcommand*{\KBgeq}{\mathrel{\geq_{\mathrm{KB}}}}
+    \newcommand*{\nKBless}{\mathrel{\nless_{\mathrm{KB}}}}
+    \newcommand*{\nKBgtr}{\mathrel{\ngtr_{\mathrm{KB}}}}
+    \newcommand*{\nKBleq}{\mathrel{\nleq_{\mathrm{KB}}}}
+    \newcommand*{\nKBgeq}{\mathrel{\ngeq_{\mathrm{KB}}}}
 \fi
 
 
@@ -1331,7 +1416,11 @@
 \else
     \@packinfo{ordinal notations loading.}
 
-\providecommand*{\wck}{\ensuremath{\omega^{\mathrm{CK}}_1}}
+    \NewDocumentCommand{\omegaCK}{o}{\omega^{\mathrm{CK\IfValueT{#1}{, #1}}}_1}
+    \WithSuffix\def\omegaCK(#1){\omegaCK[{#1}]}
+    \let\wck=\omegaCK
+
+% \providecommand*{\wck}[1][]{\ensuremath{\omega^{\mathrm{CK}}_1}}
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
     % \newcommand*{\ordzero}{\ensuremath{0}}
   \def\kleeneOSYM{\mathcal{O}}
@@ -1533,6 +1622,7 @@
 \else
     \DeclareMathOperator{\@recthy@HYP}{HYP}
     \NewDocumentCommand{\HYP}{o}{\@recthy@HYP\IfValueTF{#1}{\left(#1\right)}{}}
+    \WithSuffix\def\HYP(#1){\HYP[#1]}
     \let\hyp=\HYP
     \newcommand*{\@recthy@TSYM}{\symbf{T}}
     \newcommand*{\@recthy@ASYM}{\symbf{a}}
@@ -1558,6 +1648,9 @@
     \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
     \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
     \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
+    \newcommand*{\GLn}[1]{\operatorname{\mathbf{GL}}_{#1}}
+    \newcommand*{\GHn}[1]{\operatorname{\mathbf{GH}}_{#1}}
+    \newcommand*{\GIn}[1]{\operatorname{\mathbf{GI}}_{#1}}
 
     %%%%%%Turing Degrees
     \def\firsttokof@pmg#1{\first@pmg@rdmxs(#1)}
@@ -1706,14 +1799,19 @@
   \setlist[pmg@steps,2]{label={Step \arabic{pmg@stepsi}\alph*}, ref={\arabic{pmg@stepsi}\alph*}}
   \setlist[pmg@steps,3]{label={Step \arabic{pmg@stepsi}\alph{pmg@stepsii}.\Roman*}, ref={\arabic{pmg@stepsi}\alph{pmg@stepsii}.\Roman*}}
   \setlist[pmg@steps,4]{label={Step \arabic{pmg@stepsi}\alph{pmg@stepsii}.\Roman{pmg@stepsiii}\Alph*}, ref={\arabic{pmg@stepsi}\alph{pmg@stepsii}.\Roman{pmg@stepsiii}\Alph*}}
-  \crefname{pmg@stepsi}{step}{steps}
-  \Crefname{pmg@stepsi}{Step}{Steps}
-  \crefname{pmg@stepsii}{step}{steps}
-  \Crefname{pmg@stepsii}{Step}{Steps}
-  \crefname{pmg@stepsiii}{step}{steps}
-  \Crefname{pmg@stepsiii}{Step}{Steps}
-  \crefname{pmg@stepsiiii}{step}{steps}
-  \Crefname{pmg@stepsiiii}{Step}{Steps}
+  \AtBeginDocument{
+    \ltx@ifpackageloaded{cleveref}
+    {
+      \crefname{pmg@stepsi}{step}{steps}
+      \Crefname{pmg@stepsi}{Step}{Steps}
+      \crefname{pmg@stepsii}{step}{steps}
+      \Crefname{pmg@stepsii}{Step}{Steps}
+      \crefname{pmg@stepsiii}{step}{steps}
+      \Crefname{pmg@stepsiii}{Step}{Steps}
+      \crefname{pmg@stepsiiii}{step}{steps}
+      \Crefname{pmg@stepsiiii}{Step}{Steps}
+    }{}
+  }
   \NewDocumentEnvironment{steps}{o}{
       \begingroup
       \ProvideDocumentCommand{\step}{o}{\IfValueTF{##1}{\item\textbf{##1}:}{\item}}
