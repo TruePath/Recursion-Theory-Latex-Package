@@ -119,12 +119,15 @@ While computability theory is now the more popular name for the subject also kno
 Comments, patches, suggestions etc.. are all welcome.  This project is hosted on github at \href{https://github.com/TruePath/Recursion-Theory-Latex-Package}{https://github.com/TruePath/Recursion-Theory-Latex-Package}.
 
 \section{Usage}
-Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX{ } can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.  The commands in each subsection along with their results are listed below and the options to disable the commands in each grouping or modify their behavior are listed in that subsection.  Aliases and variants of a command are listed below the initial version of a command and aliases are indented.
+Include the package in your document by placing \verb=\usepackage{rec-thy}= into your preamble after placing rec-thy.sty somewhere \TeX{ } can find it.  The commands in this package have been divided into related groups.  The commands in a given section can be disabled by passing the appropriate package option.  For instance to disable the commands in the general mathematics section and the delimiters section you would include the following in your preamble \verb=\usepackage[nomath,nodelim]{rec-thy}=.
 
-Significant use is made in this package of optional arguments delimited either by square brackets or parenthesis.  Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.
+\subsection{Versioning}
 
-\section{Alternate Symbols}
-While the symbols used by default in the package are suggested for adoption to achieve greater consistency users may wish to specify their own symbols and options have been provided to enable this.  The following parameters may be specified.
+Over time the package may evolve in incompatible ways to improve usability.  To guarantee that your documents continue to produce the same output \textbf{always} include a package option setting the version, e.g., \verb=\usepackage[version=4.0]{rec-thy}=.  You can always find the version of the package you are using by either looking in your log files during compilation or opening up this documentation and seeing the version number displayed.
+
+
+\subsection{Alternate Symbols}
+While the symbols used by default in the package are suggested for adoption to achieve greater consistency users may wish to specify their own symbols. The following package options enable such changes.
 
 \makeatletter
 \let\useSYMdefault=\@recthy@useSYM@default
@@ -142,7 +145,7 @@ While the symbols used by default in the package are suggested for adoption to a
 	\item[lstrdelim,rstrdelim] Left and right delimiters for \verb=\str=
 	\item[lcodedelim,rcodedelim] Left and right delimiters for \verb=\code=
 	\item[lpairdelim,rpairlim,pairsup] Left and right delimiters for \verb=\pair= and superscript.
-	\item[altcompat] Uses the \verb=\succprec= and \verb=\nsuccprec= commands for \verb=\compat= and \verb=\incompat= respectively.
+	\item[midincompat] No argument is taken.  Chooses to use the vertical bar for the incompatibility symbol. 
 
 \end{itemize}
 
@@ -158,9 +161,9 @@ While the symbols used by default in the package are suggested for adoption to a
 \section{Commands}
 A few general conventions are usually followed in the commands.  Whenever an operator can be used as a binary operator (as in \( X \union Y \)) and as an operation on some collection \( \Union_{i \in \omega} X_i \) the binary operator will begin with a lowercase letter \verb=\union= and the operation on the collection will begin with a capital letter \verb=\Union=.  If the first letter is already capitalized then the second letter is used instead.
 
-Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \). An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  For the formula classes square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \) while parenthesis place the value in parenthesises after the symbol as in \( \pizn(X){2} \).  To give boldcase versions of formulas classes a star should be used immediately following the command as in \( \pizn*(X){2} \).
+Objects that have a natural stagewise approximation generally admit an optional argument in brackets to specify a stage.  For instance \( \verb=\REset[s]{e}= \) yields \( \REset[s]{e} \). An optional argument in parenthesis is used for relativization.  For instance \( \verb=\REset(X){e}= \) produces \( \REset(X){e} \).  For the formula classes square brackets are used to indicate an oracle to be placed in the superscript, e.g.,  \( \verb=\pizn[X]{2}= \) yields \( \pizn[X]{2} \) while parenthesis place the value in parenthesises after the symbol as in \( \pizn(X){2} \).  To give boldcase versions of formulas classes a star should be used immediately following the command as in \( \pizn*(X){2} \).    Users of the package should take care to wrap arguments that may themselves include brackets or parenthesis in braces.  For example \verb=\REset(\REset(X){e}){i}= should be fixed to \verb=\REset({\REset(X){e}}){i}=.
 
-Unless indicated otherwise all macros are to be used inside math mode.  Indented commands indicate an alias for the command on the line above. 
+Unless indicated otherwise all macros are to be used inside math mode. 
 
 
 \subsection{Priority Trees}
@@ -370,6 +373,7 @@ To disable these commands pass the option \verb=nomath=. \\
 	\verb=\iffdef= 					& \( \iffdef \) & Definitional equivalence\\	\midrule
 	\verb=\aut= 					& \( \aut \)  & Automorphisms of some structure\\ \midrule
 	\verb=\Ord= 					& \( \Ord \) & Set of ordinals\\\midrule
+	\verb=\id= 					& \( \id \) & identity function \\ \midrule
 	\verb=\abs{x}= 					& \( \abs{x} \) & Absolute value\\ \midrule
 	\verb=\dom= 					& \( \dom \) & Domain \\ \midrule
 	\verb=\rng= 					& \( \rng \) & Range\\ \midrule
@@ -589,11 +593,12 @@ To disable these commands pass the option \verb=noordinalnotations=.  Note the n
 	\verb=\kleeneO=                        & \( 	\kleeneO                   \)  & Set of ordinal notations \\
 	\tab \verb=\kleeneO-=                        & \( 	\kleeneO-                   \)  & Set of limit notations \\
 	\tab \verb=\kleeneO+=                        & \( 	\kleeneO+                   \)  & Set of successor notations \\
-	\tab \verb=\kleeneO*= or   \verb=\Ouniq=    & \( 	\kleeneO*                  \)        & Canonical unique set of ordinal notations \\
+	\tab \verb=\kleeneO1=   & \( 	\kleeneO1                 \)        & Canonical unique set of ordinal notations \\
+	\tab \verb=\kleeneO*=   & \( 	\kleeneO*                \)        & Set of apparent ordinal notations, i.e., includes non-standard notations  \\
 	% \tab \verb=\Ouniq= & & Alternate command \\ 
 	\tab \verb=\kleeneO(X)=                     & \( 	\kleeneO(X)                \)                          & Relativized ordinal notations \\
 	\tab \verb=\kleeneO[\alpha]=                & \( 	\kleeneO[\alpha]  \)  & Ordinal notations for ordinals \( < \abs{\alpha} \)\\
-	\tab \verb=\kleeneO*(X)[\alpha]=            & \( 	\kleeneO*(X)[\alpha]       \)  & Multiple options work together \\ \midrule
+	\tab \verb=\kleeneO1(X)[\alpha]=            & \( 	\kleeneO1(X)[\alpha]       \)  & Multiple options work together \\ \midrule
 	\verb=\alpha \Oless \beta=        & \( 	\alpha \Oless \beta   \) & less than on the ordering on notations \\   
 	\tab \verb=\alpha \Oleq  \beta=        & \( 	\alpha \Oleq  \beta   \) & \\ \midrule
 	\tab \verb=\alpha \Ogtr  \beta=        & \( 	\alpha \Ogtr  \beta   \)                          & \\ 
@@ -812,7 +817,7 @@ The package is designed to work with both XITS fonts using unicode-math under lu
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[4.1] Added \verb=\leftofneq=, improved \verb=\succprec=, \verb=\precsucc= and made them the default compatibility symbols, removed old not hack for unicode-math.  Supplemented \verb=\gg= \verb=\ll= with \verb=\ggneq= \verb=\ggeq= and like.  Added relations \verb=\KBless= \verb=\KBgtr= and so on.  Improved command \verb=\wck= to take a relativization argument in parens as well as brackets for greater uniformity.  Added generalized low/high/intermediate degree class symbols \verb=\GHn= \verb=\GLn= \verb=\GIn= and improved interaction between cleverref and the steps command.  Added an optional argument to the \verb=\hgt= command to specify the ordering.
+	\item[4.1] Added versioning interface.  Finally fixed references to cases.  At least largely.  \textbf{Breaking} change to \verb=\kleeneO= in arguments.  Added \verb=\leftofneq=, and \verb=\rightofneq= improved \verb=\succprec=, \verb=\precsucc= and made them the default compatibility symbols, removed old not hack for unicode-math.  Supplemented \verb=\gg= \verb=\ll= with \verb=\ggneq= \verb=\ggeq= and like.  Added relations \verb=\KBless= \verb=\KBgtr= and so on.  Improved command \verb=\wck= to take a relativization argument in parens as well as brackets for greater uniformity.  Added generalized low/high/intermediate degree class symbols \verb=\GHn= \verb=\GLn= \verb=\GIn= and improved interaction between cleverref and the steps command.  Added an optional argument to the \verb=\hgt= command to specify the ordering.  Improved spacing for \verb=\deltain{1}=, fixed \verb=\wck[g]=.  Added operator \verb=\id=
 	\item[4.0] Stripped out non-working compatibility code and removed previously depreciated features.  Removed mref helper.  Removed the ball command.  Removed undocumented hyphenation.  Removed the recursive/computably terminology commands.   Removed lots of unnecessary syntax commands and reworked the code to be simpler.  Added option not to load rsfs.  Added the commands \verb=\succprec=, \verb=\precsucc=, \verb=\csuccprec=, \verb=\cprecsucc= for stacked succ/prec symbols and added the option altcompat to use these instead of the standard mid and not mid compatibility symbols.  Added the \verb=\Searrow= symbol from MnSymbol and changed option from nodelim to nosymb.
 	%TODO handle the double definition of the degree structures stuff and add strcE/strcL doc
 	Changed commands for \verb=\StrcR= and \verb=\StrcD= to be \verb=\strcR= and \verb=\strcD= for consistency and added \verb=\strcRa= and \verb=\strcDa= as synonyms for \verb=\Adegrees= and \verb=\AREAdegrees=.  Added \verb=\Adegrees= and \verb=\AREAdegrees= and the relations for arithmetic degrees.  Merged the degree symbols into the degrees option and depreciated some alternate spellings.  Added \verb=\TreeMul=, \verb=\TreeMod=, \verb=\TreeExt=, \verb=\wforces=, \verb=\HYP=, depreciated the computable classes of sentences and simplified the standard ones.  Fixed \verb=\nconv= to be the symbol from MnSymbol if the nosymb option isn't passed, fixed \verb=\concat= to not be so far above the line.  Adjusted spacing for \verb=\compat=, added abbreviations.  Complete renaming and of the commands for ordinal notations and extra options to indicate limit, successor and unique sets of notations.  Added \verb=\Ofunc= as the effective limit for a notation.  Fixed errors in the pfcases environment and eliminated some old compatibility code that wasn't being used by anyone.  Added \verb=\maps= helper for normal math stuff.  Fixed BeamerRequirements.  Added the \verb=\bpfuncs= command and \verb=\cbstrs=.  Removed dependency on mathtools for compatibility with asl.cls

@@ -14,10 +14,10 @@
 \RequirePackage{pict2e,picture}
 \RequirePackage{xparse}
 % \RequirePackage{amsmath} required below if not already loaded and we aren't using asl.cls
-\def\recthyVersion{4.0}
+\def\recthyVersion{4.1}
 \ProvidesExplPackage
   {rec-thy}
-  {2024/03/29}
+  {2025/02/27}
   {\recthyVersion}
   {Provides commands for writing up recursion theory papers}
 
@@ -229,7 +229,73 @@
 \DeclareOptionX{lpairdelim}[@recthy@llangle]{\letcs{\@recthy@lpairdelim}{#1}}
 \DeclareOptionX{rpairdelim}[@recthy@rrangle]{\letcs{\@recthy@rpairdelim}{#1}}
 
+\ExplSyntaxOn
+% Declare integer variables for version components
+\int_new:N \l_version_major_int
+\int_new:N \l_version_minor_int
+% Declare integer variables for version components...default to bigger than we will every use
+\int_set:Nn \l_version_major_int { 9999 }
+\int_set:Nn \l_version_minor_int { 9999 }
 
+\newif\ifrecthy@versiongreater
+
+\cs_new_protected:Npn \ifRecthyVersionGreater #1 #2 {%
+  % First compare the major version:
+  \ifnum \int_use:N \l_version_major_int > #1\relax
+    \recthy@versiongreatertrue
+  \else
+    % If major versions are equal, compare the minor version:
+    \ifnum \int_use:N \l_version_major_int = #1\relax
+      \ifnum \int_use:N \l_version_minor_int > #2\relax
+        \recthy@versiongreatertrue
+      \else
+        \recthy@versiongreaterfalse
+      \fi
+    \else
+      \recthy@versiongreaterfalse
+    \fi
+  \fi
+  % Now expand to the proper conditional branch:
+  \ifrecthy@versiongreater
+}
+
+% Define the \ifVersionGreater conditional BEFORE \ProcessOptionsX
+\cs_new_protected:Npn \ifVersionGreater #1 #2 {
+  \int_compare:nNnTF {\l_version_major_int} > {#1} {
+    \prg_return_true:
+  } {
+    \int_compare:nNnTF {\l_version_major_int} = {#1} &&
+      {\l_version_minor_int} > {#2} {
+      \prg_return_true:
+    } {
+      \prg_return_false:
+    }
+  }
+}
+
+% Function to process the version number
+\cs_new_protected:Nn \version_process:n
+ {
+  \str_if_in:nnTF {#1}{.}
+    {
+      % Split the argument at the period into a sequence
+      \seq_set_split:Nnn \l_tmpa_seq {.} {#1}
+      % Set the major version to the first item
+      \int_set:Nn \l_version_major_int { \seq_item:Nn \l_tmpa_seq {1} }
+      % Set the minor version to the second item
+      \int_set:Nn \l_version_minor_int { \seq_item:Nn \l_tmpa_seq {2} }
+    }
+    {
+      % No period: set the major version and make minor version 0
+      \int_set:Nn \l_version_major_int {#1}
+      \int_zero:N \l_version_minor_int
+    }
+ }
+% Declare the package option using DeclareOptionX
+\DeclareOptionX{version}{\version_process:n{#1}}
+
+
+\ExplSyntaxOff
 
 
   % \AtBeginDocument{\@ifundefined{hyperref}{\newcommand*{\texorpdfstring}[2]{#1}}{}}
@@ -458,6 +524,7 @@
     \providecommand{\leftofneq}{\mathbin{\lneq_L}}
     \providecommand{\rightof}{\mathbin{>_L}}
     \providecommand{\rightofeq}{\mathbin{\geq_L}}
+    \providecommand{\rightofneq}{\mathbin{\gneq_L}}
     \providecommand{\nleftof}{\mathbin{\nless_L}}
     \providecommand{\nleftofeq}{\mathbin{\nleq_L}}
     \providecommand{\nrightof}{\mathbin{\ngtr_L}}
@@ -496,9 +563,11 @@
     \newlist{pfcasesnonum}{enumerate}{3}
     \setlist[pfcasesnonum]{
       label={\pmg@casefont{Case}},
+      % ref={\thepfcasesnonumi},
       align=left,
       left=0pt .. 1.5em,
-      itemindent=* 
+      itemindent=*,
+      % after=\vspace{\baselineskip}
     }
     \setlist[pfcasesnonum,1]{
         before=\def\pfcasecounter@pmg{pfcasesnonumi},
@@ -513,7 +582,8 @@
     \setlist[pfcasesnumbered]{
       align=left,
       left=0pt .. 1.5em,
-      itemindent=* 
+      itemindent=*,
+      % after=\vspace{\baselineskip}
     }
     % \setlist[pfcasesnumbered]{
     %   align=left,
@@ -524,7 +594,7 @@
     %   labelwidth=0pt
     % }
     \setlist[pfcasesnumbered,1]{
-        before=\def\pfcasecounter@pmg{pfcasesnumberedi},
+      before=\def\pfcasecounter@pmg{pfcasesnumberedi},
       label={{\pmg@casefont{Case}}~\arabic*},
       ref={\arabic*},
     }
@@ -546,10 +616,27 @@
         \ProvideDocumentCommand{\case}{r[]}{
                 \def\thiscase{~##1}%
             \item~##1\textbf{:} %
+            \protected@edef\@currentlabel{##1}%
             \ltx@ifpackageloaded{cleveref}{%
-            \cref@constructprefix{pfcases}{\cref@result}%
-            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]##1}}{}  \protected@edef\@currentlabel{##1}\ignorespaces}
-        \begin{pfcasesnonum}\def\@recthy@cases@labelindent{1em}\ignorespaces}{\end{pfcasesnonum}\ignorespacesafterend}
+              \def\label####1{\cref@old@label{####1}
+                    \@bsphack%
+                    \cref@constructprefix{pfcases}{\@recthy@cref@result}%
+                    \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][\@recthy@cref@result][] {##1}}
+                    % \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][2][] {foo}}
+                    \edef\@tempa{{page}{\the\c@page}}%
+                    \setcounter{page}{1}%
+                    \edef\@tempb{\thepage}%
+                    \expandafter\setcounter\@tempa%
+                    \cref@constructprefix{page}{\cref@result}%
+                    \protected@write\@auxout{}%
+                    {\string\newlabel{####1@cref}{{\cref@currentlabel}%
+                    {[\@tempb][\arabic{page}][\cref@result]\thepage}{}{}{}}}%
+                    \@esphack%
+              }%
+            }{}%
+            \ignorespaces}
+        \begin{pfcasesnonum}\def\@recthy@cases@labelindent{1em}\ignorespaces}%
+    {\end{pfcasesnonum}\ignorespacesafterend}
 
     \newenvironment{pfcases}{
         \ProvideDocumentCommand{\case}{o}{
@@ -558,9 +645,7 @@
             }{
                 \def\thiscase{~##1}\item~##1\textbf{:} \allowbreak%\linebreak[1]%
             }
-            \ltx@ifpackageloaded{cleveref}{%
-            \cref@constructprefix{\pfcasecounter@pmg}{\cref@result}%
-            \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][][\cref@result]\csname the\pfcasecounter@pmg \endcsname}}{}\ignorespaces}
+            \ignorespaces}
     
     \begin{pfcasesnumbered}[labelindent=\@recthy@cases@labelindent]\def\@recthy@cases@labelindent{-1em}\ignorespaces}{\end{pfcasesnumbered}\ignorespacesafterend}
 \fi
@@ -905,6 +990,7 @@
     \@packinfo{math loading.}
     \providecommand*{\eqdef}{\overset{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
     \providecommand*{\iffdef}{\stackrel{\text{\tiny def}}{\iff}}
+    \DeclareMathOperator{\id}{id}
     \ifdefined\aut
     \else
         \DeclareMathOperator{\aut}{Aut}
@@ -1233,7 +1319,7 @@
     \NewDocumentCommand{\PiZeroN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Pi}}{\Pi}}^{0\IfValueT{#2}{, #2}}_{#4}\IfValueT{#3}{\!\left(#3\right)}}
     \NewDocumentCommand{\SigmaZeroN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Sigma}}{\Sigma}}^{0\IfValueT{#2}{, #2}}_{#4}\IfValueT{#3}{\!\left(#3\right)}}
 
-    \NewDocumentCommand{\DeltaOneN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Delta}}{\Delta}}^{1\IfValueT{#2}{, #2}}_{#4}\IfValueT{#3}{\!\left(#3\right)}}
+    \NewDocumentCommand{\DeltaOneN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Delta}}{\Delta}}^{1\IfValueT{#2}{, #2}}_{\ifnum1=0#4\relax\!\fi#4}\IfValueT{#3}{\!\left(#3\right)}}
     \NewDocumentCommand{\PiOneN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Pi}}{\Pi}}^{1\IfValueT{#2}{, #2}}_{#4}\IfValueT{#3}{\!\left(#3\right)}}
     \NewDocumentCommand{\SigmaOneN}{sod()m}{{\IfBooleanTF{#1}{\symbf{\Sigma}}{\Sigma}}^{1\IfValueT{#2}{, #2}}_{#4}\IfValueT{#3}{\!\left(#3\right)}}
 
@@ -1242,7 +1328,7 @@
       \@packinfo{No syntax abbreviations loading.}
       \let\pizn=\PiZeroN
       \let\deltazn=\DeltaZeroN
-      \let\sigmazn=\SigmaZerN
+      \let\sigmazn=\SigmaZeroN
       \let\piin=\PiOneN
       \let\deltain=\DeltaOneN
       \let\sigmain=\SigmaOneN
@@ -1310,7 +1396,7 @@
     \@packinfo{Trees loading.}
     \newcommand*{\CBderiv}[2][1]{#2^{\langle#1\rangle}}
     \newcommand*{\pruneTree}[1]{\CBderiv[\infty]{#1}}
-    \newcommand*{\hgt}[2][]{\lVert #2 \rVert_{#1}}
+    \NewDocumentCommand{\hgt}{om}{\lVert #2 \rVert\IfValueT{#1}{_{#1}}}
     \let\TreeMod=\quotient@recthy
     \newcommand*{\TreeMul}{\mathbin{\ast}}
     \newcommand*{\TreeExt}{\mathrel{\triangleleft}}
@@ -1416,17 +1502,32 @@
 \else
     \@packinfo{ordinal notations loading.}
 
-    \NewDocumentCommand{\omegaCK}{o}{\omega^{\mathrm{CK\IfValueT{#1}{, #1}}}_1}
+    \NewDocumentCommand{\omegaCK}{o}{\omega^{\IfValueTF{#1}{#1}{\mathrm{CK}}}_1}
     \WithSuffix\def\omegaCK(#1){\omegaCK[{#1}]}
     \let\wck=\omegaCK
 
 % \providecommand*{\wck}[1][]{\ensuremath{\omega^{\mathrm{CK}}_1}}
   % \newcommand*{\ordtype}[1]{\ensuremath{\@recthy@abs{#1}_{\kleeneO}}}
     % \newcommand*{\ordzero}{\ensuremath{0}}
-  \def\kleeneOSYM{\mathcal{O}}
-     \NewDocumentCommand{\kleeneO}{st+t-D(){}o}{\IfBooleanTF{#2}{\vphantom{\kleeneOSYM}^{+}{\kleeneOSYM}}{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}}^{#4}_{\IfBooleanTF{#1}{1\IfValueTF{#5}{,\, #5}{}}{\IfValueTF{#5}{#5}{}}}}
-     \newcommand*{\Ouniq}{\kleeneO*}
 
+    \ifRecthyVersionGreater{4}{0}
+      \def\kleeneOSYM{\mathcal{O}}
+      \NewDocumentCommand{\kleeneO}{t1t+t-sod()}{
+        \IfBooleanTF{#2}{%
+          \vphantom{\kleeneOSYM}^{+}{\kleeneOSYM}%
+        }{%
+          \IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}
+        }^%
+         {\IfBooleanTF{#4}{*\IfValueT{#6}{, #6}}{\IfValueT{#6}{#6}}%
+         }%
+         _{\IfBooleanTF{#1}{1}{\IfValueTF{#5}{#5}{}}%
+         }
+      }
+    \else
+      \def\kleeneOSYM{\mathcal{O}}
+         \NewDocumentCommand{\kleeneO}{st+t-D(){}o}{\IfBooleanTF{#2}{\vphantom{\kleeneOSYM}^{+}{\kleeneOSYM}}{\IfBooleanTF{#3}{\overrightarrow{\kleeneOSYM}}{\kleeneOSYM}}^{#4}_{\IfBooleanTF{#1}{1\IfValueTF{#5}{,\, #5}{}}{\IfValueTF{#5}{#5}{}}}}
+         \newcommand*{\Ouniq}{\kleeneO*}
+     \fi
     % \newcommand*{\kleeneO}{\let\@PMG@parenarg\@PMG@undefined\let\@PMG@braketarg\@PMG@undefined\@kleeneObody}
     % \newcommand*{\@kleeneObody}{\kleeneOSYM\ifdefined\@PMG@parenarg
     % ^{\@PMG@parenarg}%
@@ -1460,12 +1561,12 @@
     % \let\kleeneng=\kleenengtr
     \NewDocumentCommand{\Ongeq}{o}{\ngeq_{\kleeneO\IfNoValueTF{#1}{}{,#1}}}
     \newcommand*{\Oadd}{\mathbin{+_{\kleeneOSYM}}}
-    \newcommand*{\Omul}{\times_{\kleeneOSYM}}
+    \newcommand*{\Omul}{\cdot_{\kleeneOSYM}}
     \NewDocumentCommand{\Ohgt}{sm}{\IfBooleanT{#1}{\left}\lVert #2 \IfBooleanT{#1}{\right}\rVert_{\kleeneOSYM}}
     % \newcommand*{\Ohgt}[1]{\lVert #1\rVert_{\kleeneOSYM}}
     \let\Oabs=\Ohgt
     % \let\hgtO=\kleenehgt
-    \newcommand*{\Olim}[2]{{#1}_{[#2]}}
+    \newcommand*{\Olim}[2]{\vec{#1}_{#2}}
     \newcommand*{\Opred}[1]{{#1}^{-}}
     \NewDocumentCommand{\Ofunc}{mod()}{{\left\{ #1 \right\}}^{\kleeneOSYM}\IfValueTF{#2}{_{#2}}{}\IfValueTF{#3}{\left(#3\right)}{}}
 
@@ -1645,9 +1746,10 @@
     \newcommand*{\AREAdegrees}{\ensuremath{\mathscr{R}_\@recthy@ASYM}}
     \let\strcRa=\AREAdegrees
     % \WithSuffix\def\AREdegrees(#1){\AREdegrees\left(#1\right)}
-    \newcommand{\Low}[1][]{\ensuremath{ \text{Low}^{#1} }}
-    \newcommand{\LowN}[2][]{\ensuremath{ \text{Low}^{#1}_{#2} }}
-    \newcommand{\lowN}[2][]{\ensuremath{ \mathcal{L}^{#1}_{#2} }}
+    % \newcommand{\Low}[1][]{\ensuremath{\text{Low}^{#1} }}
+    % \newcommand{\LowN}[2][]{\ensuremath{\text{Low}^{#1}_{#2} }}
+    \newcommand{\highN}[2][]{\ensuremath{\mathcal{H}^{#1}_{#2} }}
+    \newcommand{\lowN}[2][]{\ensuremath{\mathcal{L}^{#1}_{#2} }}
     \newcommand*{\GLn}[1]{\operatorname{\mathbf{GL}}_{#1}}
     \newcommand*{\GHn}[1]{\operatorname{\mathbf{GH}}_{#1}}
     \newcommand*{\GIn}[1]{\operatorname{\mathbf{GI}}_{#1}}
@@ -1719,6 +1821,8 @@
     \let\join=\@recthy@join
     \let\Join=\@recthy@Join
     \let\Meet=\@recthy@Meet
+    \newcommand*{\Tjoin}{\mathbin{\@recthy@join_{\@recthy@TSYM}}}
+    \newcommand*{\Tmeet}{\mathbin{\@recthy@meet_{\@recthy@TSYM}}}
     % \let\Tjoin=\degjoin
     % \let\Tjoin=\degJoin
     % \let\Tmeet=\degmeet
