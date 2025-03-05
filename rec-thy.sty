@@ -618,7 +618,7 @@
             \item~##1\textbf{:} %
             \protected@edef\@currentlabel{##1}%
             \ltx@ifpackageloaded{cleveref}{%
-              \def\label####1{\cref@old@label{####1}
+              \def\label####1{\cref@old@label{####1} %Have to override cleverref's label...don't support the optional argtype
                     \@bsphack%
                     \cref@constructprefix{pfcases}{\@recthy@cref@result}%
                     \protected@xdef\cref@currentlabel{[\pfcasecounter@pmg][\@recthy@cref@result][] {##1}}
