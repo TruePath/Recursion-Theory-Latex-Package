@@ -14,10 +14,10 @@
 \RequirePackage{pict2e,picture}
 \RequirePackage{xparse}
 % \RequirePackage{amsmath} required below if not already loaded and we aren't using asl.cls
-\def\recthyVersion{4.1}
+\def\recthyVersion{4.5}
 \ProvidesExplPackage
   {rec-thy}
-  {2025/02/27}
+  {2025/04/19}
   {\recthyVersion}
   {Provides commands for writing up recursion theory papers}
 
@@ -121,6 +121,7 @@
 \newif\ifrecthy@midincompat \recthy@midincompatfalse
 \newif\ifrecthy@norsfs \recthy@norsfsfalse
 \newif\ifrecthy@nobbm \recthy@nobbmfalse
+\newif\ifrecthy@nocourse \recthy@nocoursetrue
 
 \DeclareOptionX{nomath}{\recthy@nomathtrue}
 \DeclareOptionX{nosymb}{\recthy@nosymbtrue}
@@ -151,6 +152,7 @@
 \DeclareOptionX{midcompat}{\recthy@midincompattrue}
 \DeclareOptionX{norsfs}{\recthy@norsfstrue}
 \DeclareOptionX{nobbm}{\recthy@nobbmtrue}
+\DeclareOptionX{course}{\recthy@nocoursefalse}
 
 
 % \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
@@ -439,6 +441,7 @@
     \def\defaultincompatsymb@recthy{\mathrel{\bot}}
     \def\midincompatsymb@recthy{\mathrel{\mid}}
     \def\defaulcompatsymb@recthy{\mathrel{\,\not|\,}}
+    \def\compat@succprec@recthy{\mathrel{\succprec@recthy}}
     \let\ncompatsymb@recthy=\nsuccprec@recthy
     \ifrecthy@midincompat
       \@packinfo{Using mid as incompat symbol}
@@ -456,8 +459,8 @@
 
 
 
-\NewDocumentCommand{\incompat@recthy}{o}{\incompatsymb@recthy\IfValueTF{#1}{_{#1}}{}}
-\NewDocumentCommand{\compat@recthy}{o}{{\compatsymb@recthy\IfValueTF{#1}{_{#1}}{}}}
+\NewDocumentCommand{\incompat@recthy}{o}{\mathrel{\incompatsymb@recthy\IfValueTF{#1}{_{#1}}{}}}
+\NewDocumentCommand{\compat@recthy}{o}{\mathrel{\compatsymb@recthy\IfValueTF{#1}{_{#1}}{}}}
 
 
 \ifrecthy@nostrings
@@ -697,7 +700,7 @@
     \dimen2=\f@size\dimexpr.04pt\relax
     \oalign{%
       \noalign{\kern\dimexpr.2ex-.5\dimen2\relax}
-      $\m@th\prec$\cr
+      $\m@th\succ$\cr
       \noalign{\kern-.5\dimen2}
       \hidewidth\@snrelbar\hidewidth\cr
     }%
@@ -990,7 +993,6 @@
     \@packinfo{math loading.}
     \providecommand*{\eqdef}{\overset{\text{\tiny def}}{=}} %\newcommand*{\eqdef}{\ensuremath{=\limits_{\text{\tiny def}}}}
     \providecommand*{\iffdef}{\stackrel{\text{\tiny def}}{\iff}}
-    \DeclareMathOperator{\id}{id}
     \ifdefined\aut
     \else
         \DeclareMathOperator{\aut}{Aut}
@@ -999,10 +1001,10 @@
     \else
         \DeclareMathOperator{\Ord}{Ord}
     \fi
-    \NewDocumentCommand{\ceil}{sm}{\IfBooleanT{#1}{\left}\lceil #2 \IfBooleanT{#1}{\right}\rceil}
+    \NewDocumentCommand{\ceil}{sm}{\IfBooleanF{#1}{\left}\lceil #2 \IfBooleanF{#1}{\right}\rceil}
     % \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
     % \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
-    \NewDocumentCommand{\floor}{sm}{\IfBooleanT{#1}{\left}\lfloor #2 \IfBooleanT{#1}{\right}\rfloor}
+    \NewDocumentCommand{\floor}{sm}{\IfBooleanF{#1}{\left}\lfloor #2 \IfBooleanF{#1}{\right}\rfloor}
 
     \recthy@strip{abs}
     \ifdefined\dom
@@ -1081,80 +1083,141 @@
   \newcommand*{\ndownarrow}{\mathpunct{\mkern-4mu{\arrownot\mkern 4mu \downarrow}}}
 \else
     \ltx@ifpackageloaded{MnSymbol}{}{ 
-    \DeclareFontFamily{OMX}{MnSymbolE}{}
-    \DeclareFontFamily{U} {MnSymbolB}{}
-    \DeclareSymbolFont{MnSyB}         {U}  {MnSymbolB}{m}{n}
-    \DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
-    \SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
-    \DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
-        <-6>  MnSymbolE5
-       <6-7>  MnSymbolE6
-       <7-8>  MnSymbolE7
-       <8-9>  MnSymbolE8
-       <9-10> MnSymbolE9
-      <10-12> MnSymbolE10
-      <12->   MnSymbolE12
-    }{}
-    \DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
-        <-6>  MnSymbolE-Bold5
-       <6-7>  MnSymbolE-Bold6
-       <7-8>  MnSymbolE-Bold7
-       <8-9>  MnSymbolE-Bold8
-       <9-10> MnSymbolE-Bold9
-      <10-12> MnSymbolE-Bold10
-      <12->   MnSymbolE-Bold12
-    }{}
-      \DeclareFontShape{U}{MnSymbolB}{m}{n}{
-      <-6>  MnSymbolB5
-     <6-7>  MnSymbolB6
-     <7-8>  MnSymbolB7
-     <8-9>  MnSymbolB8
-     <9-10> MnSymbolB9
-    <10-12> MnSymbolB10
-    <12->   MnSymbolB12}{}
-  \DeclareFontShape{U}{MnSymbolB}{b}{n}{
-      <-6>  MnSymbolB-Bold5
-     <6-7>  MnSymbolB-Bold6
-     <7-8>  MnSymbolB-Bold7
-     <8-9>  MnSymbolB-Bold8
-     <9-10> MnSymbolB-Bold9
-    <10-12> MnSymbolB-Bold10
-    <12->   MnSymbolB-Bold12}{}
-    \DeclareSymbolFont{MnSyA} {U} {MnSymbolA}{m}{n}
-    \DeclareFontFamily{U} {MnSymbolA}{}
-    \DeclareFontShape{U}{MnSymbolA}{m}{n}{
-      <-6> MnSymbolA5
-      <6-7> MnSymbolA6
-      <7-8> MnSymbolA7
-      <8-9> MnSymbolA8
-      <9-10> MnSymbolA9
-      <10-12> MnSymbolA10
-      <12-> MnSymbolA12}{}
-    \DeclareFontShape{U}{MnSymbolA}{b}{n}{
-      <-6> MnSymbolA-Bold5
-      <6-7> MnSymbolA-Bold6
-      <7-8> MnSymbolA-Bold7
-      <8-9> MnSymbolA-Bold8
-      <9-10> MnSymbolA-Bold9
-      <10-12> MnSymbolA-Bold10
-      <12-> MnSymbolA-Bold12}{}
+      \DeclareFontFamily{OMX}{MnSymbolE}{}
+      \DeclareFontFamily{U} {MnSymbolB}{}
+      \DeclareFontFamily{U} {MnSymbolC}{}
+      \DeclareFontFamily{U} {MnSymbolA}{}
+      % \DeclareFontFamily{U} {MnSymbolD}{}
+      % \DeclareFontFamily{U} {MnSymbolF}{}
+      \DeclareSymbolFont{MnSyB}         {U}  {MnSymbolB}{m}{n}
+      \DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+      \DeclareSymbolFont{MnSyC} {U} {MnSymbolC}{m}{n}
+      % \DeclareSymbolFont{MnSyD} {U} {MnSymbolD}{m}{n}
+      % \DeclareSymbolFont{symbols} {U} {MnSymbolF}{m}{n}
+      \DeclareSymbolFont{MnSyA} {U} {MnSymbolA}{m}{n}
+      \SetSymbolFont{MnSyA} {bold}{U} {MnSymbolA}{b}{n}
+      \SetSymbolFont{MnSyB} {bold}{U} {MnSymbolB}{b}{n}
+      \SetSymbolFont{MnSyC} {bold}{U} {MnSymbolC}{b}{n}
+      % \SetSymbolFont{MnSyD} {bold}{U} {MnSymbolD}{b}{n}
+      % \SetSymbolFont{symbols} {bold}{U} {MnSymbolF}{b}{n}
+      \SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+      \DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+          <-6>  MnSymbolE5
+         <6-7>  MnSymbolE6
+         <7-8>  MnSymbolE7
+         <8-9>  MnSymbolE8
+         <9-10> MnSymbolE9
+        <10-12> MnSymbolE10
+        <12->   MnSymbolE12
+      }{}
+      \DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+          <-6>  MnSymbolE-Bold5
+         <6-7>  MnSymbolE-Bold6
+         <7-8>  MnSymbolE-Bold7
+         <8-9>  MnSymbolE-Bold8
+         <9-10> MnSymbolE-Bold9
+        <10-12> MnSymbolE-Bold10
+        <12->   MnSymbolE-Bold12
+      }{}
+        \DeclareFontShape{U}{MnSymbolB}{m}{n}{
+        <-6>  MnSymbolB5
+       <6-7>  MnSymbolB6
+       <7-8>  MnSymbolB7
+       <8-9>  MnSymbolB8
+       <9-10> MnSymbolB9
+      <10-12> MnSymbolB10
+      <12->   MnSymbolB12}{}
+    \DeclareFontShape{U}{MnSymbolB}{b}{n}{
+        <-6>  MnSymbolB-Bold5
+       <6-7>  MnSymbolB-Bold6
+       <7-8>  MnSymbolB-Bold7
+       <8-9>  MnSymbolB-Bold8
+       <9-10> MnSymbolB-Bold9
+      <10-12> MnSymbolB-Bold10
+      <12->   MnSymbolB-Bold12}{}
+
+      \DeclareFontShape{U}{MnSymbolC}{m}{n}{
+        <-6> MnSymbolC5
+        <6-7> MnSymbolC6
+        <7-8> MnSymbolC7
+        <8-9> MnSymbolC8
+        <9-10> MnSymbolC9
+        <10-12> MnSymbolC10
+        <12-> MnSymbolC12}{}
+      \DeclareFontShape{U}{MnSymbolC}{b}{n}{
+        <-6> MnSymbolC-Bold5
+        <6-7> MnSymbolC-Bold6
+        <7-8> MnSymbolC-Bold7
+        <8-9> MnSymbolC-Bold8
+        <9-10> MnSymbolC-Bold9
+        <10-12> MnSymbolC-Bold10
+        <12-> MnSymbolC-Bold12}{}
+      % \DeclareFontShape{U}{MnSymbolD}{m}{n}{
+      % <-6> MnSymbolD5
+      % <6-7> MnSymbolD6
+      % <7-8> MnSymbolD7
+      % <8-9> MnSymbolD8
+      % <9-10> MnSymbolD9
+      % <10-12> MnSymbolD10
+      % <12-> MnSymbolD12}{}
+      % \DeclareFontShape{U}{MnSymbolD}{b}{n}{
+      % <-6> MnSymbolD-Bold5
+      % <6-7> MnSymbolD-Bold6
+      % <7-8> MnSymbolD-Bold7
+      % <8-9> MnSymbolD-Bold8
+      % <9-10> MnSymbolD-Bold9
+      % <10-12> MnSymbolD-Bold10
+      % <12-> MnSymbolD-Bold12}{}
+
+      % \DeclareFontShape{U}{MnSymbolF}{m}{n}{
+      %   <-6> MnSymbolF5
+      %   <6-7> MnSymbolF6
+      %   <7-8> MnSymbolF7
+      %   <8-9> MnSymbolF8
+      %   <9-10> MnSymbolF9
+      %   <10-12> MnSymbolF10
+      %   <12-> MnSymbolF12}{}
+      % \DeclareFontShape{U}{MnSymbolF}{b}{n}{
+      %   <-6> MnSymbolF-Bold5
+      %   <6-7> MnSymbolF-Bold6
+      %   <7-8> MnSymbolF-Bold7
+      %   <8-9> MnSymbolF-Bold8
+      %   <9-10> MnSymbolF-Bold9
+      %   <10-12> MnSymbolF-Bold10
+      %   <12-> MnSymbolF-Bold12}{}
 
 
-    \DeclareMathDelimiter{\@recthy@ulcorner}
-        {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
-    \DeclareMathDelimiter{\@recthy@urcorner}
-        {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
-        \let\ulcorner=\@recthy@ulcorner
-        \let\urcorner=\@recthy@urcorner
-    \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
-    \DeclareMathDelimiter{\@recthy@ulcorner}
-        {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
-    \DeclareMathDelimiter{\@recthy@urcorner}
-        {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
-    \DeclareMathSymbol{\Searrow}{\mathrel}{MnSyA}{15}
-    \DeclareMathSymbol{\nSearrow}{\mathrel}{MnSyB}{15}
-}
-  \ifrecthy@nodoubleangles
+      \DeclareFontShape{U}{MnSymbolA}{m}{n}{
+        <-6> MnSymbolA5
+        <6-7> MnSymbolA6
+        <7-8> MnSymbolA7
+        <8-9> MnSymbolA8
+        <9-10> MnSymbolA9
+        <10-12> MnSymbolA10
+        <12-> MnSymbolA12}{}
+      \DeclareFontShape{U}{MnSymbolA}{b}{n}{
+        <-6> MnSymbolA-Bold5
+        <6-7> MnSymbolA-Bold6
+        <7-8> MnSymbolA-Bold7
+        <8-9> MnSymbolA-Bold8
+        <9-10> MnSymbolA-Bold9
+        <10-12> MnSymbolA-Bold10
+        <12-> MnSymbolA-Bold12}{}
+
+
+      \DeclareMathDelimiter{\@recthy@ulcorner}
+          {\mathopen}{MnLargeSymbols}{'036}{MnLargeSymbols}{'036}
+      \DeclareMathDelimiter{\@recthy@urcorner}
+          {\mathclose}{MnLargeSymbols}{'043}{MnLargeSymbols}{'043}
+      \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
+      \DeclareMathSymbol{\Searrow}{\mathrel}{MnSyA}{15}
+      \DeclareMathSymbol{\nSearrow}{\mathrel}{MnSyB}{15}
+      \DeclareMathSymbol{\doublewedge}{\mathbin}{MnSyC}{48}
+      \DeclareMathSymbol{\doublevee}{\mathbin}{MnSyC}{49}
+    }
+    \let\ulcorner=\@recthy@ulcorner
+    \let\urcorner=\@recthy@urcorner
+    \ifrecthy@nodoubleangles
   \else
         \let\llangle=\@recthy@llangle
         \let\rrangle=\@recthy@rrangle
@@ -1164,7 +1227,7 @@
 
 
 
-\NewDocumentCommand{\REA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{REA}\IfValueTF{#1}{(#1)}{}}}
+\NewDocumentCommand{\REA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{REA}\IfValueTF{#1}{(#1)}{}} }
 \NewDocumentCommand{\CEA}{d()o}{\ensuremath{\IfValueTF{#2}{#2 \@recthy@mhyphen}{}\text{CEA}\IfValueTF{#1}{(#1)}{}}}
 
 
@@ -1668,10 +1731,11 @@
     %\newcommand*{\brecf}[3][]{\brecfSYM^{#1}_{#2}\ifthenelse{\isempty{#3}}{}{\left(#3\right)}}
     %\recfnl[d]{i}{Y}{x} gives i-th d-recursive functional operating on set Y and integer x
 
-    \NewDocumentCommand{\recfnl}{oD(){}m!G{#2}!g!d()}{{
-      \def\temp@pmg@arg{}
-      \IfValueTF{#5}{\ifthenelse{\isempty{#5}}{}{\def\temp@pmg@arg{; #5}}}{\IfValueTF{#6}{\ifthenelse{\isempty{#6}}{}{\def\temp@pmg@arg{; #6}}}}
-        \@recthy@recfnlSYM_{#3\IfValueT{#1}{, #1}}\ifthenelse{\isempty{#4}}{}{\!\left(#4\temp@pmg@arg \right)}
+    \NewDocumentCommand{\recfnl}{oD(){}m!G{#2}!g!D(){#5}}{{
+        \@recthy@recfnlSYM_{#3\IfValueT{#1}{, #1}}%
+          \ifthenelse{\isempty{#4}}{
+            \ifthenelse{\isempty{#6}}{}{{\left(#6\right)}}
+          }{{\left(#4\ifthenelse{\isempty{#6}}{}{; #6}\right)}}
     }}
 
 
@@ -1713,10 +1777,84 @@
     
 \fi
 
-\newcommand*{\@recthy@join}{\mathbin{\vee}}
-\newcommand*{\@recthy@meet}{\mathbin{\wedge}}
+\newcommand{\@recthy@smallwedge}{\mathrel{\text{\raisebox{0.25ex}{\scalebox{0.8}{$\wedge$}}}}}
+\newcommand{\@recthy@smallvee}{\mathrel{\text{\raisebox{0.25ex}{\scalebox{0.8}{$\vee$}}}}}
+\ifRecthyVersionGreater{4}{0}
+    \newcommand*{\@recthy@join}{\mathbin{\@recthy@smallvee}}
+    \newcommand*{\@recthy@meet}{\mathbin{\@recthy@smallwedge}}
+\else
+    \newcommand*{\@recthy@join}{\mathbin{\vee}}
+    \newcommand*{\@recthy@meet}{\mathbin{\wedge}}
+\fi
 \newcommand*{\@recthy@Meet}{\mathop{\bigwedge}}
 \newcommand*{\@recthy@Join}{\mathop{\bigvee}}
+\newcommand*{\@recthy@TSYM}{\symbf{T}}
+\newcommand*{\@recthy@ASYM}{\symbf{a}}
+\newcommand*{\@recthy@ucSYM}{\symbf{uc}}
+\newcommand*{\@recthy@ncSYM}{\symbf{nc}}
+\newcommand*{\@recthy@nedSYM}{\symbf{ned}}
+\newcommand*{\@recthy@uedSYM}{\symbf{ued}}
+
+\ifrecthy@nocourse
+    \@packinfo{No course degree symbols loading}
+\else
+    \NewDocumentCommand{\udensity}{O{}O{}d()}{\overbar{\rho}_{#1}^{#2}\IfValueTF{#3}{{\left(#3\right)}}{}}
+    \NewDocumentCommand{\ldensity}{O{}O{}d()}{\underline{\rho}_{#1}^{#2}\IfValueTF{#3}{{\left(#3\right)}}{}}
+    \NewDocumentCommand{\density}{d()}{\underline{\rho}\IfValueTF{#1}{{\left(#1\right)}}{}}
+
+    %Uniformly Course degrees
+    \providecommand*{\UCeq}{\mathrel{\equiv_{\@recthy@ucSYM}}}
+    \let\UCequiv=\UCeq
+    \providecommand*{\nUCeq}{\mathrel{\ncong_{\@recthy@ucSYM}}}
+    \providecommand*{\UClneq}{\lneq_{\@recthy@ucSYM}}
+    \providecommand*{\UCleq}{\leq_{\@recthy@ucSYM}}
+    \providecommand*{\UCgneq}{\gneq_{\@recthy@ucSYM}}
+    \providecommand*{\UCgeq}{\geq_{\@recthy@ucSYM}}
+    \providecommand*{\UCgtr}{>_{\@recthy@ucSYM}}
+    \providecommand*{\UCless}{<_{\@recthy@ucSYM}}
+    \providecommand*{\nUCleq}{\nleq_{\@recthy@ucSYM}}
+    \providecommand*{\nUCgeq}{\ngeq_{\@recthy@ucSYM}}
+
+    %Course degrees
+    \providecommand*{\NCeq}{\mathrel{\equiv_{\@recthy@ncSYM}}}
+    \let\NCequiv=\NCeq
+    \providecommand*{\nNCeq}{\mathrel{\ncong_{\@recthy@ncSYM}}}
+    \providecommand*{\NClneq}{\lneq_{\@recthy@ncSYM}}
+    \providecommand*{\NCleq}{\leq_{\@recthy@ncSYM}}
+    \providecommand*{\NCgneq}{\gneq_{\@recthy@ncSYM}}
+    \providecommand*{\NCgeq}{\geq_{\@recthy@ncSYM}}
+    \providecommand*{\NCgtr}{>_{\@recthy@ncSYM}}
+    \providecommand*{\NCless}{<_{\@recthy@ncSYM}}
+    \providecommand*{\nNCleq}{\nleq_{\@recthy@ncSYM}}
+    \providecommand*{\nNCgeq}{\ngeq_{\@recthy@ncSYM}}
+
+    %Uniform effective dense reductions
+    \providecommand*{\UEDeq}{\mathrel{\equiv_{\@recthy@ncSYM}}}
+    \let\UEDequiv=\UEDeq
+    \providecommand*{\UEDlneq}{\lneq_{\@recthy@ncSYM}}
+    \providecommand*{\UEDleq}{\leq_{\@recthy@ncSYM}}
+    \providecommand*{\UEDgneq}{\gneq_{\@recthy@ncSYM}}
+    \providecommand*{\UEDgeq}{\geq_{\@recthy@ncSYM}}
+    \providecommand*{\UEDgtr}{>_{\@recthy@ncSYM}}
+    \providecommand*{\UEDless}{<_{\@recthy@ncSYM}}
+    \providecommand*{\nUEDleq}{\nleq_{\@recthy@ncSYM}}
+    \providecommand*{\nUEDgeq}{\ngeq_{\@recthy@ncSYM}}
+    \providecommand*{\nUEDeq}{\mathrel{\ncong_{\@recthy@ncSYM}}}
+
+    %Non-uniform effective dense reductions
+    \providecommand*{\NEDeq}{\mathrel{\equiv_{\@recthy@ncSYM}}}
+    \let\NEDequiv=\NEDeq
+    \providecommand*{\NEDlneq}{\lneq_{\@recthy@ncSYM}}
+    \providecommand*{\NEDleq}{\leq_{\@recthy@ncSYM}}
+    \providecommand*{\NEDgneq}{\gneq_{\@recthy@ncSYM}}
+    \providecommand*{\NEDgeq}{\geq_{\@recthy@ncSYM}}
+    \providecommand*{\NEDgtr}{>_{\@recthy@ncSYM}}
+    \providecommand*{\NEDless}{<_{\@recthy@ncSYM}}
+    \providecommand*{\nNEDleq}{\nleq_{\@recthy@ncSYM}}
+    \providecommand*{\nNEDgeq}{\ngeq_{\@recthy@ncSYM}}
+    \providecommand*{\nNEDeq}{\mathrel{\ncong_{\@recthy@ncSYM}}}
+
+\fi
 
 \ifrecthy@nodegrees
     \@packinfo{No degrees loading.}
@@ -1725,8 +1863,7 @@
     \NewDocumentCommand{\HYP}{o}{\@recthy@HYP\IfValueTF{#1}{\left(#1\right)}{}}
     \WithSuffix\def\HYP(#1){\HYP[#1]}
     \let\hyp=\HYP
-    \newcommand*{\@recthy@TSYM}{\symbf{T}}
-    \newcommand*{\@recthy@ASYM}{\symbf{a}}
+
     \newcommand*{\Tdegrees}{\ensuremath{\mathscr{D}}}
     \let\strcD=\Tdegrees
     \newcommand*{\Tdegreesjump}{\ensuremath{\mathscr{D}'}}
@@ -1814,6 +1951,7 @@
     \providecommand*{\nAleq}{\nleq_{\@recthy@ASYM}}
     \providecommand*{\nAgeq}{\ngeq_{\@recthy@ASYM}}
 
+
     % \providecommand*{\Tdegjoin}{\mathbin{\vee}}
     % \providecommand*{\Tdegmeet}{\mathbin{\wedge}}
     \let\MnJoin=\Join
@@ -1848,6 +1986,7 @@
     \newcommand*{\ttless}{<_{\@recthy@ttSYM}}
     \newcommand*{\ttnleq}{\nleq_{\@recthy@ttSYM}}
     \newcommand*{\ttngeq}{\ngeq_{\@recthy@ttSYM}}
+    \newcommand*{\tteq}{\equiv_{\@recthy@ttSYM}}
 
 %arithmetic comparisons
 
