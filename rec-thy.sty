@@ -121,7 +121,7 @@
 \newif\ifrecthy@midincompat \recthy@midincompatfalse
 \newif\ifrecthy@norsfs \recthy@norsfsfalse
 \newif\ifrecthy@nobbm \recthy@nobbmfalse
-\newif\ifrecthy@nocourse \recthy@nocoursetrue
+\newif\ifrecthy@nocoarse \recthy@nocoarsetrue
 
 \DeclareOptionX{nomath}{\recthy@nomathtrue}
 \DeclareOptionX{nosymb}{\recthy@nosymbtrue}
@@ -152,7 +152,7 @@
 \DeclareOptionX{midcompat}{\recthy@midincompattrue}
 \DeclareOptionX{norsfs}{\recthy@norsfstrue}
 \DeclareOptionX{nobbm}{\recthy@nobbmtrue}
-\DeclareOptionX{course}{\recthy@nocoursefalse}
+\DeclareOptionX{coarse}{\recthy@nocoarsefalse}
 
 
 % \DeclareOptionX{degjoin}{\def\Tjoin{\Tdegjoin}}
@@ -1212,6 +1212,8 @@
       \DeclareMathSymbol{\ndownarrow}{\mathpunct}{MnSyB}{3}
       \DeclareMathSymbol{\Searrow}{\mathrel}{MnSyA}{15}
       \DeclareMathSymbol{\nSearrow}{\mathrel}{MnSyB}{15}
+      \DeclareMathSymbol{\nsearrow}{\mathrel}{MnSyB}{7}
+      \DeclareMathSymbol{\nnwarrow}{\mathrel}{MnSyB}{5}
       \DeclareMathSymbol{\doublewedge}{\mathbin}{MnSyC}{48}
       \DeclareMathSymbol{\doublevee}{\mathbin}{MnSyC}{49}
     }
@@ -1221,6 +1223,9 @@
   \else
         \let\llangle=\@recthy@llangle
         \let\rrangle=\@recthy@rrangle
+        \def\nsearrow{{\not\searrow}}
+        \def\nwearrow{{\not\nwarrow}}
+
   \fi
 \fi
 
@@ -1486,47 +1491,20 @@
 \else
     \@packinfo{setrels loading.}
     \AtBeginDocument{
-        \providecommand*{\nsupset}{\not\supset@recthy@orig}
-        \providecommand*{\nsubset}{\not\subset@recthy@orig}
-        \let\nsubset@recthy@orig=\nsubset
-        \let\nsupset@recthy@orig=\nsupset
-        \let\subset@recthy@orig=\subset
-        \let\supset@recthy@orig=\supset
-        \let\subseteq@recthy@orig=\subseteq
-        \let\supseteq@recthy@orig=\supseteq
-        \let\subsetneq@recthy@orig=\subsetneq
-        \let\supsetneq@recthy@orig=\supsetneq
+        \providecommand*{\nsupset}{\not\supset}
+        \providecommand*{\nsubset}{\not\subset}
+        \WithSuffix\def\subset*{\subset^{*}}
+        \WithSuffix\def\supset*{\supset^{*}}
+        \WithSuffix\def\subseteq*{\subseteq^{*}}
+        \WithSuffix\def\supseteq*{\supseteq^{*}}
+        \WithSuffix\def\subsetneq*{\subsetneq^{*}}
+        \WithSuffix\def\supsetneq*{\supsetneq^{*}}
+        \WithSuffix\def\nsubset*{\nsubset^{*}}
+        \WithSuffix\def\nsupset*{\nsupset^{*}}
+        \WithSuffix\def\nsubseteq*{\nsubseteq^{*}}
+        \WithSuffix\def\nsupseteq*{\nsupseteq^{*}}
+
     }
-        \newcommand*{\subset@recthy}{\subset@recthy@orig}
-        \newcommand*{\supset@recthy}{\supset@recthy@orig}
-        \newcommand*{\subseteq@recthy}{\subseteq@recthy@orig}
-        \newcommand*{\supseteq@recthy}{\supseteq@recthy@orig}
-        \newcommand*{\nsubset@recthy}{\nsubset@recthy@orig}
-        \newcommand*{\nsupset@recthy}{\nsupset@recthy@orig}
-        \newcommand*{\nsubseteq@recthy}{\nsubseteq@recthy@orig}
-        \newcommand*{\nsupseteq@recthy}{\nsupseteq@recthy@orig}
-        \WithSuffix\def\subset@recthy*{\subset@recthy@orig^{*}}
-        \WithSuffix\def\supset@recthy*{\supset@recthy@orig^{*}}
-        \WithSuffix\def\subseteq@recthy*{\subseteq@recthy@orig^{*}}
-        \WithSuffix\def\supseteq@recthy*{\supseteq@recthy@orig^{*}}
-        \WithSuffix\def\subsetneq@recthy*{\subsetneq@recthy@orig^{*}}
-        \WithSuffix\def\supsetneq@recthy*{\supsetneq@recthy@orig^{*}}
-        \WithSuffix\def\nsubset@recthy*{\nsubset^{*}}
-        \WithSuffix\def\nsupset@recthy*{\nsupset^{*}}
-        \WithSuffix\def\nsubseteq@recthy*{\nsubseteq^{*}}
-        \WithSuffix\def\nsupseteq@recthy*{\nsupseteq^{*}}
-        \AtBeginDocument{
-          \let\subset=\subset@recthy
-          \let\supset=\supset@recthy
-          \let\subseteq=\subseteq@recthy
-          \let\supseteq=\supseteq@recthy
-          \let\subsetneq=\subsetneq@recthy
-          \let\supsetneq=\supsetneq@recthy
-          \let\nsubset=\nsubset@recthy
-          \let\nsupset=\nsupset@recthy
-          \let\nsubseteq=\nsubseteq@recthy
-          \let\nsupseteq=\nsupseteq@recthy
-        }
 
         \newcommand*{\eq}{=}
         \WithSuffix\def\eq*{=^{*}}
@@ -1686,12 +1664,15 @@
     \@packinfo{No forcing loading.}
 \else
     \@packinfo{forcing loading.}
-    \def\@PMG@curfrcsym{\Vdash}
-    \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\@forcesBody}
-    \newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
-    \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
-    \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
-    \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
+    % \def\@PMG@curfrcsym{\Vdash}
+    \NewDocumentCommand{\forces}{sD(){}O{}D(){#2}}{\mathrel{{\IfBooleanTF{#1}{\@PMG@VdashStar}{\Vdash}}^{#4}_{#3}}}
+    \NewDocumentCommand{\nforces}{sD(){}O{}D(){#2}}{\mathrel{{\IfBooleanTF{#1}{\not\@PMG@VdashStar}{\not\Vdash}}^{#4}_{#3}}}
+    % \providecommand*{\forces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\@forcesBody}
+    % \providecommand*{\nforces}{\def\@PMG@frcparenarg{}\def\@PMG@frcbraketarg{}\@forcesBody}
+    % \newcommand*{\@forcesBody}{\mathrel{{\@PMG@curfrcsym}^{\@PMG@frcparenarg}_{\@PMG@frcbraketarg}}}
+    % \WithSuffix\def\@forcesBody(#1){\def\@PMG@frcparenarg{#1}\@forcesBody}
+    % \WithSuffix\def\@forcesBody[#1]{\def\@PMG@frcbraketarg{#1}\@forcesBody}
+    % \WithSuffix\def\@forcesBody*{\let\@PMG@curfrcsym=\@PMG@VdashStar\@forcesBody}
     % \newcommand*{\wforces}[]{\forces(w)[#1]}
     \NewDocumentCommand{\wforces}{d()O{}}{{\forces(w\IfValueT{#1}{, #1})[#2]}}
     % \newcommand*{\wforces}[1][]{\forces(w)[#1]}
@@ -1760,7 +1741,7 @@
     % W_{#2\IfNoValueTF{#1}{}{, #1}}\IfNoValueTF{#3}{}{^{#3}}
     % }
     \NewDocumentCommand{\REset}{D(){}oD(){#1}mO{#2}}{{W_{#4\IfValueTF{#5}{, #5}{}}^{#3}}}
-
+    \NewDocumentCommand{\recset}{D(){}oD(){#1}m}{{R_{#4\IfValueTF{#2}{, #2}{}}^{#3}}}
     \NewDocumentCommand{\Hop}{oD(){}mD(){}}{\mathcal{H}_{#3\IfValueTF{#1}{, #1}{}}\left(\ifthenelse{\isempty{#2#4}}{\eset}{#2#4} \right)}
     \NewDocumentCommand{\REAop}{st+d()od()mm}{%
       {\IfBooleanTF{#1}%
@@ -1774,6 +1755,11 @@
      
 
     \newcommand*{\entersat}[1]{\mathbin{\searrow_{#1}}}
+    \newcommand*{\nentersat}[1]{\mathbin{\nsearrow_{#1}}} %check this works w/o MnSymbol
+    \newcommand*{\leavesat}[1]{\mathbin{\nwarrow_{#1}}}
+    \newcommand*{\nleavesat}[1]{\mathbin{\nnwarrow_{#1}}} %check this works w/o MnSymbol
+
+
     
 \fi
 
@@ -1789,18 +1775,19 @@
 \newcommand*{\@recthy@Meet}{\mathop{\bigwedge}}
 \newcommand*{\@recthy@Join}{\mathop{\bigvee}}
 \newcommand*{\@recthy@TSYM}{\symbf{T}}
+\newcommand*{\@recthy@HYPSYM}{\symbf{h}}
 \newcommand*{\@recthy@ASYM}{\symbf{a}}
 \newcommand*{\@recthy@ucSYM}{\symbf{uc}}
 \newcommand*{\@recthy@ncSYM}{\symbf{nc}}
 \newcommand*{\@recthy@nedSYM}{\symbf{ned}}
 \newcommand*{\@recthy@uedSYM}{\symbf{ued}}
 
-\ifrecthy@nocourse
-    \@packinfo{No course degree symbols loading}
+\ifrecthy@nocoarse
+    \@packinfo{No coarse degree symbols loading}
 \else
     \NewDocumentCommand{\udensity}{O{}O{}d()}{\overbar{\rho}_{#1}^{#2}\IfValueTF{#3}{{\left(#3\right)}}{}}
     \NewDocumentCommand{\ldensity}{O{}O{}d()}{\underline{\rho}_{#1}^{#2}\IfValueTF{#3}{{\left(#3\right)}}{}}
-    \NewDocumentCommand{\density}{d()}{\underline{\rho}\IfValueTF{#1}{{\left(#1\right)}}{}}
+    \NewDocumentCommand{\density}{d()}{\rho\IfValueTF{#1}{{\left(#1\right)}}{}}
 
     %Uniformly Course degrees
     \providecommand*{\UCeq}{\mathrel{\equiv_{\@recthy@ucSYM}}}
@@ -1950,6 +1937,19 @@
     \providecommand*{\Aless}{<_{\@recthy@ASYM}}
     \providecommand*{\nAleq}{\nleq_{\@recthy@ASYM}}
     \providecommand*{\nAgeq}{\ngeq_{\@recthy@ASYM}}
+
+    \providecommand*{\HYPequiv}{\mathrel{\equiv_{\@recthy@HYPSYM}}} %DEPRECIATED
+    \providecommand*{\HYPeq}{\HYPequiv}
+    \providecommand*{\nHYPequiv}{\mathrel{\ncong_{\@recthy@HYPSYM}}}
+    \providecommand*{\nHYPeq}{\nHYPequiv}
+    \providecommand*{\HYPlneq}{\lneq_{\@recthy@HYPSYM}}
+    \providecommand*{\HYPleq}{\leq_{\@recthy@HYPSYM}}
+    \providecommand*{\HYPgneq}{\gneq_{\@recthy@HYPSYM}}
+    \providecommand*{\HYPgeq}{\geq_{\@recthy@HYPSYM}}
+    \providecommand*{\HYPgtr}{>_{\@recthy@HYPSYM}}
+    \providecommand*{\HYPless}{<_{\@recthy@HYPSYM}}
+    \providecommand*{\nHYPleq}{\nleq_{\@recthy@HYPSYM}}
+    \providecommand*{\nHYPgeq}{\ngeq_{\@recthy@HYPSYM}}
 
 
     % \providecommand*{\Tdegjoin}{\mathbin{\vee}}

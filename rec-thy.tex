@@ -226,7 +226,11 @@ To disable these commands pass the option \verb=nocomputations=. \\  To specify 
 	% \verb=\iREAop{e}(\eset)=                               & \multirow{2}{*}{\( 	\iREAop{e}(\eset)                     	   \)}   &\multirow{2}{*}{1-REA operator} \\
 	% \tab \verb=\oneREAop{e}(\eset)=                               &    & \\ \midrule
 	% \verb=\alphaREAop{\alpha}(\eset)=                      & \multirow{2}{*}{\( 	\alphaREAop{\alpha}(\eset)            	   \)}   &\multirow{2}{*}{\( \alpha \)-REA operator} \\[6pt]
-	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\
+	\verb=\REAop{e}{\alpha}=                           &  \( \REAop{e}{\alpha} \)  & \\ \midrule
+	\verb=x \entersat{s} Y = 		& \( x \entersat{s} Y \) & \( x \) enters \( X \) at stage \( s \) \\  \midrule  
+	\verb=x \nentersat{s} Y = 		& \( x \nentersat{s} Y \) & \( x \) doesn't enter \( X \) at stage \( s \) \\  \midrule  
+	\verb=x \leavesat{s} Y = 		& \( x \leavesat{s} Y \) & \( x \) leaves \( X \) at stage \( s \) \\  \midrule  
+	\verb=x \nleavesat{s} Y = 		& \( x \nleavesat{s} Y \) & \( x \) doesn't leave \( X \) at stage \( s \) \\ 
 		\bottomrule
 	\end{xtabular}          \\
 
@@ -817,7 +821,7 @@ The package is designed to work with both XITS fonts using unicode-math under lu
 
 % TESTING: \verb=\fpmapsto=, \verb=\fpmapsfrom=, \verb=\ParFuncs{Y}{X}= and \verb=\FinParFuncs{Y}{X}=
 \begin{itemize}
-	\item[4.6] 2025/06/?  - Added Course computability relations enabled by the course flag.  TODO: update readme and add instructions
+	\item[4.6] 2025/06/?  - Added Course computability relations enabled by the coarse flag.  Added commands \verb=\nentersat=, \verb=\leavesat=, \verb=\nleavesat= and \verb=\recset=.  Added symbols for hyperarithmetic reducibility.  Cleaned up dumb code in set relations section and in forcing section. Added \verb=\nforces=  TODO: update readme and add instructions.  Also fixed the way that \verb=\recfnl= gets the right spacing.
 	\item[4.5] 2025/04/19 - Added versioning interface.  Finally fixed references to cases.  At least largely.  Fixed \verb=\supfunneq= to face the right direction. \textbf{Breaking} change to \verb=\kleeneO= in arguments.  Added \verb=\leftofneq=, and \verb=\rightofneq= improved \verb=\succprec=, \verb=\precsucc= and made them the default compatibility symbols, removed old not hack for unicode-math.  Supplemented \verb=\gg= \verb=\ll= with \verb=\ggneq= \verb=\ggeq= and like.  Added relations \verb=\KBless= \verb=\KBgtr= and so on.  Improved command \verb=\wck= to take a relativization argument in parens as well as brackets for greater uniformity.  Added generalized low/high/intermediate degree class symbols \verb=\GHn= \verb=\GLn= \verb=\GIn= and improved interaction between cleverref and the steps command.  Added an optional argument to the \verb=\hgt= command to specify the ordering.  Improved spacing for \verb=\deltain{1}=, fixed \verb=\wck[g]=.  Added operator \verb=\id=  Changed the size of the meet and join operators to distinguish them from and and or.  Improved \verb=recfnl= to work without an oracle argument.
 	\item[4.0] Stripped out non-working compatibility code and removed previously depreciated features.  Removed mref helper.  Removed the ball command.  Removed undocumented hyphenation.  Removed the recursive/computably terminology commands.   Removed lots of unnecessary syntax commands and reworked the code to be simpler.  Added option not to load rsfs.  Added the commands \verb=\succprec=, \verb=\precsucc=, \verb=\csuccprec=, \verb=\cprecsucc= for stacked succ/prec symbols and added the option altcompat to use these instead of the standard mid and not mid compatibility symbols.  Added the \verb=\Searrow= symbol from MnSymbol and changed option from nodelim to nosymb.
 	%TODO handle the double definition of the degree structures stuff and add strcE/strcL doc

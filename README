@@ -46,4 +46,4 @@ v3.8.2 Removed option to put the set at the end of an \REset operation to avoid 
 v3.8.3 Added bpfuncs.  Changed default for code to use double angle brackets.  Improved the indentation for the cases enviornment.
 
 03/29/2024 - v 4.0 Major release and refactor with many breaking changes.  See the pdf documenatation for details.
-[In progress] - v4.1 Minor improvements and a few commands added.  See pdf documentation for detailed changes.
+2025/04/19 - v 4.5 See pdf documentation for detailed changes.
